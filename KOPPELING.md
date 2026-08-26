@@ -1,4 +1,4 @@
-# Nova Stream: koppeling gratis proef, CRM en WhatsApp
+# Odysstream: koppeling gratis proef, CRM en WhatsApp
 
 De flow op de site: elke "Probeer gratis"-knop opent het formulier, "Probeer nu gratis" slaat de lead op in het CRM en stuurt de klant door naar WhatsApp met een voorgevuld bericht.
 
@@ -40,7 +40,7 @@ De functie `lead()` in `index.html` is de enige plek die met het CRM praat. Ande
 ## Wat de klant in WhatsApp ziet
 
 ```
-Hoi Nova Stream! Ik wil graag de 24 uur gratis proef starten.
+Hoi Odysstream! Ik wil graag de 24 uur gratis proef starten.
 Naam: Alan
 Apparaat: Smart-tv
 E-mail: alan@voorbeeld.nl
