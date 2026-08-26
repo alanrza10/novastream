@@ -338,6 +338,18 @@ h1.words.in span:nth-child(2){transition-delay:.1s}h1.words.in span:nth-child(3)
 @media (max-width:1024px){.calc{grid-template-columns:1fr}.calc-r{position:static}.channels{grid-template-columns:repeat(2,1fr)}.calc-grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:768px){.pstrip-track{font-size:36px;gap:32px}.calc-grid{grid-template-columns:1fr 1fr;gap:8px}.ck{padding:10px 10px;font-size:13px;gap:8px}.cc-save .big{font-size:56px}.calc-card{padding:24px}.channels{grid-template-columns:1fr}.tb-slide{min-width:0;width:100%;font-size:12px}.tb-slide span{text-overflow:ellipsis;overflow:hidden}.topbar{font-size:13px;padding:8px 16px;gap:4px}.logos{padding:16px 0}.lg{font-size:13px;padding:8px 14px}}
 @media (max-width:480px){.calc-grid{grid-template-columns:1fr}}
+
+/* auto-sliding rails */
+.rail.auto,.toprail.auto{display:block;overflow:hidden;scroll-snap-type:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+.rail-track{display:flex;gap:20px;width:max-content;animation:railslide var(--dur,60s) linear infinite;will-change:transform}
+.rail.auto .poster{width:200px;flex:none}
+.toprail.auto .top{width:240px;flex:none}
+.toprail.auto .rail-track{gap:8px}
+.rail.auto.rev .rail-track{animation-direction:reverse}
+.rail.auto:hover .rail-track,.toprail.auto:hover .rail-track,.rail.auto:focus-within .rail-track,.toprail.auto:focus-within .rail-track{animation-play-state:paused}
+@keyframes railslide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (max-width:768px){.rail.auto .poster{width:150px}.rail-track{gap:14px}.toprail.auto .top{width:190px}}
+@media (prefers-reduced-motion:reduce){.rail-track{animation:none}.rail.auto,.toprail.auto{overflow-x:auto}}
 /* responsive */
 @media (max-width:1024px){
   .hero{margin-top:0;min-height:auto;padding:64px 0 96px}
