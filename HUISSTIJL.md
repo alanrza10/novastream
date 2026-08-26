@@ -1,4 +1,4 @@
-# Nova Stream: huisstijl
+# Odysstream: huisstijl
 
 Dit document ligt vast voordat er een regel CSS wordt geschreven. Alles wat er gebouwd wordt, wordt hiertegen afgezet. Wijk je af: zeg in één zin waarom.
 
@@ -82,7 +82,7 @@ Eyebrow boven elke sectiekop: 12px caps, accentkleur is hier toegestaan als het 
 
 ## 7. Logo
 
-Woordmerk: NOVA in Archivo wdth 125 wght 800, STREAM ernaast in wdth 100 wght 400 in text-soft. Beeldmerk: een cirkel met een enkele felle punt rechtsboven (de nova), in accentkleur. Werkt monochroom op donker en op licht, en als favicon op 16px.
+Woordmerk: ODYS in Archivo wdth 125 wght 800, STREAM ernaast in wdth 100 wght 400 in text-soft. Beeldmerk: een cirkel met een enkele felle punt rechtsboven (de nova), in accentkleur. Werkt monochroom op donker en op licht, en als favicon op 16px.
 
 ## 8. Nooit
 
@@ -91,4 +91,4 @@ Em-dashes in interfacetekst. Emoji als icoon. Een tweede accentkleur. Glassmorph
 ## 9. Wat we van de referentie overnemen en wat niet
 
 Overnemen: de donkere basis, 24-uur-gratis als rode draad, drie prijsblokken met prijs per maand erbij, vooraf betaald en geen automatische verlenging, WhatsApp als support, iDEAL en Bancontact zichtbaar, een sectie die de cowboys in de markt afzet tegen ons.
-Niet overnemen: de rustige toon. Nova Stream is groter, meer cinema, meer sport, meer bewegend beeld. En geen kloon van de structuur: zelfde discipline, eigen ontwerp.
+Niet overnemen: de rustige toon. Odysstream is groter, meer cinema, meer sport, meer bewegend beeld. En geen kloon van de structuur: zelfde discipline, eigen ontwerp.
