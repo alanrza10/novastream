@@ -352,7 +352,7 @@ h1.words.in span:nth-child(2){transition-delay:.1s}h1.words.in span:nth-child(3)
 .rail-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .rail-btn.prev{left:-8px}.rail-btn.next{right:-8px}
 .rail-btn[disabled]{opacity:.25;cursor:default}
-.railwrap.top .rail-btn{top:50%}
+.railwrap-top .rail-btn{top:50%}
 @media (max-width:768px){.rail-btn{width:36px;height:36px}.rail-btn.prev{left:4px}.rail-btn.next{right:4px}}
 /* responsive */
 @media (max-width:1024px){
