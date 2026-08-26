@@ -15,6 +15,7 @@ window.NOVA_CONFIG = {
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0B0D12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2712%27 fill=%27none%27 stroke=%27%23F2F4F8%27 stroke-width=%273%27/%3E%3Ccircle cx=%2726%27 cy=%276%27 r=%275%27 fill=%27%231FD8FF%27/%3E%3C/svg%3E">
 <title>Nova Stream: alles kijken, vanavond nog. Probeer 24 uur gratis.</title>
 <meta name="description" content="Live sport, de nieuwste films en complete series op elk scherm. Probeer Nova Stream 24 uur gratis, zonder creditcard. Binnen 5 minuten actief.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,329 +23,11 @@ window.NOVA_CONFIG = {
 <link rel="preconnect" href="https://image.tmdb.org">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
 <!--FONT-INLINE-->
-<style>
-:root{
-  --bg:#0B0D12; --surface:#12151C; --surface-2:#1A1E27; --border:#262B36;
-  --text:#F2F4F8; --text-soft:#9AA3B2; --text-mute:#5F6878;
-  --accent:#1FD8FF; --accent-hover:#5CE4FF; --on-accent:#06121A; --live:#FF3B5C;
-  --r-sm:6px; --r-md:12px; --r-pill:999px;
-  --shadow-up:0 0 32px rgba(0,0,0,.45); --glow:0 0 32px rgba(31,216,255,.35);
-  --font:'Archivo','Archivo Variable',system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;
-  --wrap:1200px; --gutter:24px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-a{color:inherit;text-decoration:none}
-img{display:block;max-width:100%}
-ul{list-style:none}
-.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--gutter)}
-.eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-stretch:110%;color:var(--accent)}
-.eyebrow.soft{color:var(--text-mute)}
-h1,h2,h3{line-height:1.05}
-h1{font-size:84px;font-weight:800;font-stretch:125%;letter-spacing:-.035em;line-height:.92}
-h2{font-size:48px;font-weight:700;font-stretch:125%;letter-spacing:-.025em}
-h3{font-size:20px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
-p{color:var(--text-soft)}
-.lead{font-size:18px}
-section{padding:96px 0;position:relative}
-.sec-head{display:flex;flex-direction:column;gap:12px;margin-bottom:48px;max-width:720px}
-.sec-head p{font-size:18px}
-.row-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:32px}
-.row-head .sec-head{margin:0}
-.link{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;border-bottom:1px solid var(--border);padding-bottom:2px;transition:border-color .15s}
-.link:hover{border-color:var(--accent)}
-/* reveal */
-.rv{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
-.rv.in{opacity:1;transform:none}
-.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}.rv.d4{transition-delay:.32s}
-@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}*{animation:none!important}}
-/* buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:600;font-size:16px;line-height:1;padding:18px 30px;border-radius:var(--r-pill);border:1px solid transparent;cursor:pointer;color:var(--text);white-space:nowrap;transition:background .15s,transform .15s,box-shadow .15s;position:relative;overflow:hidden}
-.btn.primary{background:var(--accent);color:var(--on-accent);box-shadow:var(--glow)}
-.btn.primary::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-120%);transition:transform .6s}
-.btn.primary:hover::after{transform:translateX(120%)}
-.btn.primary:hover{background:var(--accent-hover);transform:translateY(-2px);box-shadow:0 0 48px rgba(31,216,255,.5)}
-.btn.secondary{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.04);backdrop-filter:blur(8px)}
-.btn.secondary:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
-.btn.sm{font-size:14px;padding:12px 20px}
-.btn.lg{font-size:18px;padding:22px 40px}
-.btn-row{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
-.sub{font-size:14px;color:var(--text-mute);margin-top:12px}
-/* nav */
-.topbar{background:var(--accent);color:var(--on-accent);font-size:14px;font-weight:600;text-align:center;padding:10px var(--gutter);position:relative;z-index:60}
-.topbar a{text-decoration:underline;text-underline-offset:3px}
-.nav{position:sticky;top:0;z-index:50;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
-.nav.scrolled{background:rgba(11,13,18,.82);backdrop-filter:blur(14px);border-color:var(--border)}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:76px;gap:24px}
-.logo{display:inline-flex;align-items:center;gap:10px}
-.logo .mark{width:28px;height:28px;border-radius:50%;border:2px solid var(--text);position:relative;flex:none}
-.logo .mark::after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:var(--accent);top:-3px;right:-3px;box-shadow:0 0 10px rgba(31,216,255,.8)}
-.logo .word{font-size:20px;letter-spacing:-.02em;line-height:1;white-space:nowrap}
-.logo .word b{font-weight:800;font-stretch:125%}
-.logo .word span{font-weight:400;color:var(--text-soft);margin-left:5px}
-.nav ul{display:flex;gap:32px;font-size:14px;font-weight:500;color:var(--text-soft)}
-.nav ul a{transition:color .15s}
-.nav ul a:hover{color:var(--text)}
-.nav .btn{flex:none}
-/* HERO: poster wall */
-.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;padding:80px 0 120px;margin-top:-76px}
-.wall{position:absolute;inset:-12% -8% -12% 32%;display:grid;grid-template-columns:repeat(5,1fr);gap:16px;transform:perspective(1400px) rotateY(-24deg) rotateX(8deg) rotateZ(4deg) scale(1.12);transform-origin:60% 50%;z-index:0;will-change:transform}
-.wcol{display:flex;flex-direction:column;gap:16px;animation:wall 60s linear infinite;animation-delay:calc(var(--i) * -9s)}
-.wcol:nth-child(even){animation-direction:reverse;animation-duration:74s}
-.wcol img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.6);opacity:.95;background:var(--surface-2)}
-@keyframes wall{from{transform:translateY(0)}to{transform:translateY(-50%)}}
-.hero .shade{position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(90deg,var(--bg) 0%,var(--bg) 28%,rgba(11,13,18,.85) 45%,rgba(11,13,18,.35) 70%,rgba(11,13,18,.55) 100%),
-             linear-gradient(180deg,rgba(11,13,18,.9) 0%,rgba(11,13,18,0) 25%,rgba(11,13,18,0) 60%,var(--bg) 100%)}
-.hero .glow{position:absolute;z-index:1;left:-10%;top:20%;width:900px;height:900px;background:radial-gradient(closest-side,rgba(31,216,255,.16),transparent 70%);pointer-events:none;animation:breathe 8s ease-in-out infinite}
-@keyframes breathe{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
-.hero .wrap{position:relative;z-index:2;width:100%}
-.hero .copy{max-width:760px}
-.hero h1{margin:20px 0 28px}
-.hero h1 .ac{color:var(--accent);text-shadow:0 0 40px rgba(31,216,255,.45)}
-.hero .lead{max-width:46ch;margin-bottom:36px;font-size:19px}
-.trust{display:flex;gap:24px;margin-top:28px;font-size:14px;color:var(--text-soft);flex-wrap:wrap}
-.trust span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:8px;vertical-align:middle;box-shadow:0 0 8px var(--accent)}
-.livepill{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--border);background:rgba(18,21,28,.7);backdrop-filter:blur(8px);border-radius:var(--r-pill);padding:8px 14px 8px 10px;font-size:13px;color:var(--text-soft)}
-.livepill b{color:var(--text);font-weight:600}
-.livepill i{width:8px;height:8px;border-radius:50%;background:var(--live);box-shadow:0 0 10px var(--live);animation:pulse 1.4s infinite;flex:none}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.scrollhint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);z-index:2;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-mute);display:flex;flex-direction:column;align-items:center;gap:8px}
-.scrollhint::after{content:"";width:1px;height:40px;background:linear-gradient(var(--accent),transparent);animation:drop 1.8s ease-in-out infinite}
-@keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
-/* ticker */
-.ticker{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface);overflow:hidden;padding:14px 0;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-soft);position:relative;z-index:2}
-.ticker .track{display:flex;gap:48px;width:max-content;animation:ticker 45s linear infinite;white-space:nowrap}
-.ticker .track span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:14px;vertical-align:middle}
-.ticker .track span.l::before{background:var(--live);box-shadow:0 0 8px var(--live)}
-@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-/* SPORT bento */
-.bento{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:minmax(150px,auto);gap:16px}
-.ev{position:relative;border-radius:var(--r-md);overflow:hidden;contain:paint;border:1px solid var(--border);background:var(--surface);padding:24px;display:flex;flex-direction:column;justify-content:flex-end;min-height:220px;transition:transform .3s,box-shadow .3s}
-.ev:hover{transform:translateY(-4px);box-shadow:var(--shadow-up)}
-.ev::before{content:"";position:absolute;inset:0;background:var(--art);z-index:0}
-.ev::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,18,0) 20%,rgba(11,13,18,.85) 100%);z-index:0}
-.ev>*{position:relative;z-index:1}
-.ev .badge{position:absolute;top:16px;left:16px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 10px;border-radius:var(--r-sm);background:rgba(11,13,18,.7);backdrop-filter:blur(6px);color:var(--text);border:1px solid rgba(255,255,255,.12)}
-.ev .badge.live{background:var(--live);color:#fff;border-color:transparent}
-.ev .badge.live::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#fff;margin-right:6px;vertical-align:middle;animation:pulse 1.4s infinite}
-.ev .comp{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-stretch:110%}
-.ev .teams{font-size:28px;font-weight:800;font-stretch:120%;letter-spacing:-.025em;line-height:1;text-transform:uppercase}
-.ev .teams em{font-style:normal;color:var(--text-soft);font-weight:400;font-stretch:100%;font-size:16px;letter-spacing:0;text-transform:none;margin:0 6px}
-.ev .when{margin-top:10px;font-size:14px;color:var(--text-soft)}
-.ev.big{grid-column:span 7;grid-row:span 2;min-height:440px;padding:40px}
-.ev.big .teams{font-size:64px}
-.ev.big .when{font-size:16px}
-.ev.big .btn{margin-top:24px;align-self:flex-start}
-.ev.m{grid-column:span 5}
-.ev.s{grid-column:span 4}
-.ev .crest{position:absolute;right:-30px;top:-30px;pointer-events:none;width:260px;height:260px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.08),transparent);z-index:0}
-.art-ajax{--art:linear-gradient(135deg,#7a0f1f 0%,#2a0810 45%,#0B0D12 100%)}
-.art-psv{--art:linear-gradient(135deg,#1a2a6b 0%,#b3122a 50%,#12151C 100%)}
-.art-ufc{--art:linear-gradient(135deg,#7a2d05 0%,#c4410f 40%,#1a0803 100%)}
-.art-f1{--art:linear-gradient(135deg,#8a0000 0%,#2b0505 50%,#0B0D12 100%)}
-.art-fey{--art:linear-gradient(135deg,#b00d1c 0%,#3a0508 50%,#0B0D12 100%)}
-.art-cl{--art:linear-gradient(135deg,#0a2a6e 0%,#061a44 50%,#0B0D12 100%)}
-.art-pl{--art:linear-gradient(135deg,#3d0b5e 0%,#170426 50%,#0B0D12 100%)}
-.art-ufc2{--art:linear-gradient(135deg,#b8860b 0%,#3d2c04 50%,#0B0D12 100%)}
-.agenda{margin-top:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.ag{border:1px solid var(--border);border-radius:var(--r-md);padding:16px 20px;background:var(--surface);display:flex;gap:16px;align-items:center;transition:border-color .2s}
-.ag:hover{border-color:rgba(31,216,255,.5)}
-.ag .d{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);width:64px;flex:none;line-height:1.3}
-.ag b{display:block;font-size:15px;font-weight:600}
-.ag small{color:var(--text-soft);font-size:13px}
-/* SPOTLIGHT */
-.spot{position:relative;overflow:hidden;padding:0;margin:96px 0 0}
-.spot .bd{position:absolute;inset:-15% 0;background-image:var(--bd);background-size:cover;background-position:center 30%;will-change:transform}
-.spot .sh{position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,13,18,.95) 0%,rgba(11,13,18,.7) 45%,rgba(11,13,18,.25) 100%),linear-gradient(180deg,var(--bg) 0%,transparent 20%,transparent 80%,var(--bg) 100%)}
-.spot .wrap{position:relative;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:center;padding-top:120px;padding-bottom:120px}
-.spot .pimg{border-radius:var(--r-md);overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.7);transform:rotate(-3deg);transition:transform .4s}
-.spot .pimg:hover{transform:rotate(0) scale(1.03)}
-.spot h2{font-size:64px;max-width:14ch}
-.spot .lead{max-width:52ch}
-.spot .meta{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0 28px;font-size:13px;color:var(--text-soft)}
-.spot .meta span{border:1px solid rgba(255,255,255,.15);border-radius:var(--r-sm);padding:6px 10px;background:rgba(11,13,18,.5);backdrop-filter:blur(6px)}
-/* RAILS */
-.rails{display:grid;gap:80px}
-.rails>div{min-width:0}
-.rail{display:grid;grid-auto-flow:column;grid-auto-columns:200px;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:12px 0 24px;scrollbar-width:none;margin:0 calc(var(--gutter) * -1);padding-left:var(--gutter);padding-right:var(--gutter)}
-.rail::-webkit-scrollbar{display:none}
-.poster{scroll-snap-align:start;display:block}
-.pimg{position:relative;aspect-ratio:2/3;border-radius:var(--r-md);overflow:hidden;background:var(--surface-2);border:1px solid var(--border);transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s}
-.pimg img{width:100%;height:100%;object-fit:cover}
-.poster:hover .pimg{transform:translateY(-8px) scale(1.04);box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 0 1px rgba(31,216,255,.5)}
-.poster .tag{position:absolute;z-index:2;top:10px;left:10px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 8px;border-radius:var(--r-sm);background:var(--accent);color:var(--on-accent)}
-.poster .play{position:absolute;z-index:2;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;background:linear-gradient(180deg,rgba(11,13,18,0),rgba(11,13,18,.7))}
-.poster .play::before{content:"";width:56px;height:56px;border-radius:50%;background:var(--accent);box-shadow:var(--glow);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2306121A'%3E%3Cpath d='M8 5v14l11-7z'/%3E%3C/svg%3E");background-size:28px;background-position:center;background-repeat:no-repeat}
-.poster:hover .play{opacity:1}
-.poster b{display:block;font-size:14px;font-weight:600;letter-spacing:-.01em;margin-top:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.poster small{font-size:12px;color:var(--text-soft)}
-/* top 10 */
-.toprail{display:grid;grid-auto-flow:column;grid-auto-columns:240px;gap:8px;overflow-x:auto;scrollbar-width:none;padding:12px 0 24px;margin:0 calc(var(--gutter) * -1);padding-left:var(--gutter);padding-right:var(--gutter)}
-.toprail::-webkit-scrollbar{display:none}
-.top{position:relative;display:grid;grid-template-columns:1fr 150px;align-items:end}
-.top .n{font-size:200px;font-weight:800;font-stretch:125%;letter-spacing:-.06em;line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.35);margin-right:-30px;transition:color .3s,-webkit-text-stroke-color .3s}
-.top:hover .n{color:var(--accent);-webkit-text-stroke-color:var(--accent)}
-.top .pimg{width:150px}
-/* platforms + stats */
-.platforms{display:flex;flex-wrap:wrap;gap:12px}
-.chip{border:1px solid var(--border);background:var(--surface);border-radius:var(--r-pill);padding:12px 20px;font-size:14px;font-weight:600;color:var(--text);transition:border-color .2s,transform .2s}
-.chip:hover{border-color:var(--accent);transform:translateY(-2px)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:48px}
-.stat{min-width:0;overflow:hidden;border:1px solid var(--border);border-radius:var(--r-md);padding:28px;background:linear-gradient(180deg,var(--surface),var(--bg))}
-.stat .v{font-size:56px;font-weight:800;font-stretch:125%;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
-.stat .v i{font-style:normal;color:var(--accent)}
-.stat p{font-size:14px;margin-top:10px}
-/* steps */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative}
-.steps::before{content:"";position:absolute;left:8%;right:8%;top:44px;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.5}
-.step{position:relative;padding:0 8px}
-.step .num{width:88px;height:88px;border-radius:50%;border:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;font-stretch:125%;color:var(--accent);margin-bottom:24px;position:relative;box-shadow:0 0 0 8px var(--bg)}
-.step .num::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid rgba(31,216,255,.4);animation:ring 3s ease-out infinite}
-.step:nth-child(2) .num::after{animation-delay:1s}.step:nth-child(3) .num::after{animation-delay:2s}
-@keyframes ring{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.6);opacity:0}}
-.step h3{margin-bottom:8px;font-size:22px}
-/* compare */
-.compare{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:32px}
-.compare .card h3{margin-bottom:16px;font-size:24px}
-.compare li{padding:12px 0;border-top:1px solid var(--border);font-size:15px;color:var(--text-soft);display:flex;gap:12px}
-.compare li::before{content:"";width:18px;height:18px;border-radius:50%;flex:none;margin-top:2px;background:var(--surface-2);border:1px solid var(--border)}
-.compare .us{border-color:rgba(31,216,255,.4);background:linear-gradient(180deg,rgba(31,216,255,.06),var(--surface) 40%)}
-.compare .us li{color:var(--text)}
-.compare .us li::before{background:var(--accent);border-color:transparent;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306121A' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");background-size:12px;background-position:center;background-repeat:no-repeat}
-.compare .them li::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239AA3B2' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M18 6L6 18M6 6l12 12'/%3E%3C/svg%3E");background-size:10px;background-position:center;background-repeat:no-repeat}
-/* pricing */
-.trialbar{border:1px solid var(--accent);border-radius:var(--r-md);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;gap:32px;background:linear-gradient(90deg,rgba(31,216,255,.12),transparent 60%);margin-bottom:24px;position:relative;overflow:hidden}
-.trialbar::before{content:"24";position:absolute;right:220px;top:-40px;font-size:220px;font-weight:800;font-stretch:125%;color:transparent;-webkit-text-stroke:1px rgba(31,216,255,.25);letter-spacing:-.06em;pointer-events:none}
-.trialbar h3{font-size:28px;margin-bottom:4px}
-.trialbar p{font-size:15px}
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.plan{display:flex;flex-direction:column;gap:16px;transition:transform .3s,border-color .3s}
-.plan:hover{transform:translateY(-4px);border-color:rgba(31,216,255,.5)}
-.plan .name{font-size:14px;font-weight:600;color:var(--text-soft);text-transform:uppercase;letter-spacing:.08em}
-.plan .amt{font-size:56px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
-.plan .per{font-size:14px;color:var(--text-soft);margin-top:-8px}
-.plan ul{display:grid;gap:8px;font-size:14px;color:var(--text-soft);padding:8px 0 8px}
-.plan ul li::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:10px;vertical-align:middle}
-.plan.featured{border-color:var(--accent);box-shadow:var(--shadow-up),0 0 40px rgba(31,216,255,.12);position:relative;background:linear-gradient(180deg,rgba(31,216,255,.06),var(--surface) 30%)}
-.plan .tag{position:absolute;top:-12px;left:32px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--accent);color:var(--on-accent);padding:6px 10px;border-radius:var(--r-sm)}
-.plan .btn{margin-top:auto}
-.pay{display:flex;gap:16px;align-items:center;margin-top:24px;font-size:13px;color:var(--text-mute);flex-wrap:wrap}
-.pay span{border:1px solid var(--border);border-radius:var(--r-sm);padding:6px 10px;color:var(--text-soft);font-weight:600}
-/* faq */
-.faqgrid{display:grid;grid-template-columns:1fr 1.4fr;gap:64px;align-items:start}
-.faq details{border-top:1px solid var(--border);padding:20px 0}
-.faq details:last-child{border-bottom:1px solid var(--border)}
-.faq summary{cursor:pointer;font-weight:600;font-size:18px;letter-spacing:-.01em;list-style:none;display:flex;justify-content:space-between;gap:24px}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";color:var(--accent);font-weight:400;font-size:24px;line-height:1;transition:transform .2s}
-.faq details[open] summary::after{transform:rotate(45deg)}
-.faq details p{margin-top:12px;font-size:15px;max-width:60ch}
-/* final */
-.final{position:relative;overflow:hidden;text-align:center;padding:160px 0}
-.final .bd{position:absolute;inset:-15% 0;background-image:var(--bd);background-size:cover;background-position:center;filter:blur(2px) brightness(.5)}
-.final .sh{position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 50%,rgba(11,13,18,.2),var(--bg) 100%)}
-.final .wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:24px}
-.final h2{font-size:72px;max-width:14ch;text-shadow:0 10px 40px rgba(0,0,0,.6)}
-.final p{max-width:44ch;font-size:18px;color:var(--text)}
-/* footer */
-footer{border-top:1px solid var(--border);padding:64px 0 32px;font-size:14px;color:var(--text-soft);position:relative;z-index:2;background:var(--bg)}
-footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:48px}
-footer h4{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-mute);margin-bottom:16px}
-footer li{margin-bottom:10px}
-footer li a:hover{color:var(--text)}
-footer .bottom{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:24px;font-size:13px;color:var(--text-mute)}
-.sticky{display:none}
-/* proef-modal */
-.modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:24px}
-.modal.open{display:flex}
-.modal .bg{position:absolute;inset:0;background:rgba(6,8,12,.78);backdrop-filter:blur(10px);animation:fade .25s}
-@keyframes fade{from{opacity:0}to{opacity:1}}
-.modal .box{position:relative;width:100%;max-width:520px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 0 1px rgba(31,216,255,.15);animation:rise .35s cubic-bezier(.2,.7,.2,1);max-height:calc(100vh - 48px);overflow:auto}
-@keyframes rise{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:none}}
-.modal .box::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
-.modal .x{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--text-soft);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit}
-.modal .x:hover{color:var(--text);border-color:var(--text-soft)}
-.modal h3{font-size:28px;font-weight:700;font-stretch:118%;letter-spacing:-.025em;margin:12px 0 8px}
-.modal .box>p{font-size:15px;margin-bottom:24px}
-.f{display:grid;gap:14px}
-.f label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--text-soft)}
-.f input,.f select{font:inherit;font-size:16px;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 16px;width:100%;outline:none;transition:border-color .15s,box-shadow .15s;appearance:none}
-.f select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239AA3B2' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:18px}
-.f input:focus,.f select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,216,255,.18)}
-.f input.err{border-color:var(--live)}
-.f .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.f .chk{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--text-soft);font-weight:400;line-height:1.4}
-.f .chk input{width:18px;height:18px;padding:0;margin-top:1px;accent-color:var(--accent);flex:none}
-.f .chk a{color:var(--text);text-decoration:underline;text-underline-offset:2px}
-.f .btn{width:100%;margin-top:6px}
-.f .msg{font-size:13px;color:var(--live);min-height:18px}
-.f .fine{font-size:12px;color:var(--text-mute);text-align:center;margin-top:4px}
-.modal .done{display:none;text-align:center;padding:16px 0}
-.modal .done .ok{width:72px;height:72px;border-radius:50%;background:var(--accent);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;box-shadow:var(--glow);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306121A' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");background-size:32px;background-position:center;background-repeat:no-repeat}
-.modal .done h3{margin-bottom:8px}
-.modal .done p{margin-bottom:20px}
-.modal.sent .f,.modal.sent .box>p{display:none}
-.modal.sent .done{display:block}
-.wa{display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#06121A}
-.wa:hover{background:#3ae07a}
-.wa::before{content:"";width:20px;height:20px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2306121A'%3E%3Cpath d='M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z'/%3E%3C/svg%3E") center/contain no-repeat}
-@media (max-width:768px){.modal{padding:12px;align-items:flex-end}.modal .box{padding:28px 20px;border-radius:16px 16px 12px 12px;max-height:calc(100vh - 24px)}.f .row{grid-template-columns:1fr}.modal h3{font-size:24px}}
-/* responsive */
-@media (max-width:1024px){
-  .hero{margin-top:0;min-height:auto;padding:64px 0 96px}
-  .wall{inset:-10% -20% -10% 10%;grid-template-columns:repeat(4,1fr);transform:perspective(1200px) rotateY(-18deg) rotateX(6deg) rotateZ(3deg) scale(1.15);opacity:.55}
-  .hero .shade{background:linear-gradient(180deg,rgba(11,13,18,.7) 0%,rgba(11,13,18,.85) 60%,var(--bg) 100%)}
-  .ev.big{grid-column:span 12}.ev.m{grid-column:span 6}.ev.s{grid-column:span 6}
-  .agenda{grid-template-columns:1fr 1fr}
-  .stats{grid-template-columns:1fr 1fr}
-  .faqgrid{grid-template-columns:1fr;gap:32px}
-  footer .cols{grid-template-columns:1fr 1fr}
-  .spot .wrap{grid-template-columns:1fr}
-  .spot .pimg{width:160px}
-}
-@media (max-width:768px){
-  h1{font-size:54px}
-  h2{font-size:34px}
-  section{padding:64px 0}
-  .hero{padding:48px 0 80px}
-  .hero .lead{font-size:17px}
-  .nav ul{display:none}
-  .nav .wrap{height:64px;gap:12px}
-  .nav .btn{padding:10px 14px;font-size:13px}
-  .logo .word{font-size:18px}
-  .ev.big{min-height:360px;padding:24px}
-  .ev.big .teams{font-size:40px}
-  .ev.m,.ev.s{grid-column:span 12}
-  .ev .teams{font-size:24px;overflow-wrap:anywhere}
-  .agenda{grid-template-columns:1fr}
-  .spot h2{font-size:40px}
-  .rail{grid-auto-columns:150px;gap:14px}
-  .toprail{grid-auto-columns:190px}
-  .top{grid-template-columns:1fr 120px}.top .n{font-size:150px}.top .pimg{width:120px}
-  .steps{grid-template-columns:1fr;gap:40px}.steps::before{display:none}
-  .compare,.plans{grid-template-columns:1fr}
-  .trialbar{flex-direction:column;align-items:flex-start;padding:24px}
-  .trialbar::before{display:none}
-  .final{padding:96px 0}.final h2{font-size:42px}
-  .btn{white-space:normal;text-align:center}
-  .btn.lg{font-size:16px;padding:18px 28px}
-  .row-head{flex-direction:column;align-items:flex-start;gap:12px}
-  .stats{grid-template-columns:1fr 1fr;gap:12px}.stat{padding:20px;min-width:0}.stat .v{font-size:32px;letter-spacing:-.03em}
-  .scrollhint{display:none}
-  .sticky{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:60;background:rgba(11,13,18,.92);backdrop-filter:blur(12px);border-top:1px solid var(--border);padding:12px var(--gutter);gap:12px;align-items:center;justify-content:space-between}
-  .sticky small{font-size:12px;color:var(--text-soft);line-height:1.3}
-  .sticky .btn{flex:none}
-  body{padding-bottom:72px}
-  footer .cols{grid-template-columns:1fr}
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="topbar">Nieuw hier? <a href="#gratis" data-proef>Probeer Nova Stream 24 uur gratis</a>, geen creditcard nodig.</div>
+<div class="topbar"><span class="tb-slide"><span>Alles kijken voor <b>€99 per jaar</b>. Sport, films en series.</span><span>Probeer eerst <b>24 uur gratis</b>, het stopt vanzelf.</span><span>Vanaf <b>€8,25 per maand</b>. Geen automatische verlenging.</span></span> <a href="#gratis" data-proef>Probeer nu 24 uur gratis</a></div>
 
 <header class="nav" id="nav">
   <div class="wrap">
@@ -366,29 +49,27 @@ footer .bottom{display:flex;justify-content:space-between;gap:24px;flex-wrap:wra
   <div class="glow"></div>
   <div class="wrap">
     <div class="copy">
-      <span class="livepill rv"><i></i><b>Za 5 sep, 20:00</b> Ajax tegen PSV, live in HD</span>
-      <h1 class="rv d1">Alles kijken.<br><span class="ac">Vanavond</span> nog.</h1>
+      <div class="pills rv"><span class="livepill"><i></i><b>Za 5 sep, 20:00</b> Ajax tegen PSV, live in HD</span><span class="pricepill"><b>€99</b> per jaar voor alles</span></div>
+      <h1 class="rv d1 words"><span>Alles</span> <span>kijken.</span><br><span class="ac">Vanavond</span> <span>nog.</span></h1>
       <p class="lead rv d2">Live sport, de nieuwste films en complete series op elk scherm. Eén abonnement in plaats van vier. Probeer het een dag helemaal gratis en beslis daarna pas.</p>
       <div class="btn-row rv d3">
-        <a class="btn primary lg" href="#gratis" data-proef>Probeer 24 uur gratis</a>
+        <a class="btn primary lg" href="#gratis" data-proef>Probeer nu 24 uur gratis</a>
         <a class="btn secondary lg" href="#films">Bekijk het aanbod</a>
       </div>
-      <div class="trust rv d4"><span>Binnen 5 minuten actief</span><span>Geen creditcard</span><span>Stopt vanzelf</span></div>
+      <div class="trust rv d4"><span>Binnen 5 minuten actief</span><span>Daarna vanaf €8,25 per maand</span><span>Stopt vanzelf</span></div>
     </div>
   </div>
   <div class="scrollhint">Scroll</div>
 </section>
 
-<div class="ticker" aria-hidden="true">
-  <div class="track">
-    <span class="l">Zo 30 aug 16:45 Telstar tegen Ajax</span><span>Zo 30 aug 12:15 FC Utrecht tegen PSV</span><span>Nacht za op zo UFC Fight Night: Nurmagomedov tegen Song</span><span>Za 5 sep 20:00 Ajax tegen PSV</span><span>Zo 6 sep 15:00 Formule 1 GP van Italië, Monza</span><span>8 t/m 10 sep Champions League speelronde 1</span><span>Za 19 sep UFC 331: Van tegen Pantoja 2</span><span>Nieuw: Spider-Man Brand New Day, The Odyssey, Supergirl</span>
-    <span class="l">Zo 30 aug 16:45 Telstar tegen Ajax</span><span>Zo 30 aug 12:15 FC Utrecht tegen PSV</span><span>Nacht za op zo UFC Fight Night: Nurmagomedov tegen Song</span><span>Za 5 sep 20:00 Ajax tegen PSV</span><span>Zo 6 sep 15:00 Formule 1 GP van Italië, Monza</span><span>8 t/m 10 sep Champions League speelronde 1</span><span>Za 19 sep UFC 331: Van tegen Pantoja 2</span><span>Nieuw: Spider-Man Brand New Day, The Odyssey, Supergirl</span>
-  </div>
+<div class="logos" aria-label="Aanbod van alle grote platforms en providers">
+  <div class="logos-head"><span class="eyebrow soft">Alles van deze platforms en providers, in één abonnement</span></div>
+  <div class="logos-track"><span class="lg" style="--brand:#E50914"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-netflix"/></svg>Netflix</span><span class="lg wm">Disney+</span><span class="lg" style="--brand:#525252"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-hbomax"/></svg>HBO Max</span><span class="lg wm">Prime Video</span><span class="lg" style="--brand:#000000"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-appletv"/></svg>Apple TV+</span><span class="lg wm">Videoland</span><span class="lg" style="--brand:#FE365F"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-viaplay"/></svg>Viaplay</span><span class="lg wm">SkyShowtime</span><span class="lg" style="--brand:#0064FF"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-paramount"/></svg>Paramount+</span><span class="lg wm">ESPN</span><span class="lg" style="--brand:#F48C00"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-ziggo"/></svg>Ziggo Sport</span><span class="lg" style="--brand:#F8F8F5"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-dazn"/></svg>DAZN</span><span class="lg" style="--brand:#0072C9"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-sky"/></svg>Sky Sports</span><span class="lg wm">Eurosport</span><span class="lg wm">F1 TV</span><span class="lg" style="--brand:#D20A0A"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-ufc"/></svg>UFC</span><span class="lg" style="--brand:#253B73"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-nba"/></svg>NBA</span><span class="lg" style="--brand:#360D3A"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-premierleague"/></svg>Premier League</span><span class="lg wm">NPO</span><span class="lg" style="--brand:#FA002E"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-rtl"/></svg>RTL</span><span class="lg wm">SBS</span><span class="lg wm">KPN</span><span class="lg" style="--brand:#F48C00"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-ziggo"/></svg>Ziggo</span><span class="lg" style="--brand:#2C72FF"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-odido"/></svg>Odido</span><span class="lg wm">Telenet</span><span class="lg wm">Proximus</span><span class="lg wm">VRT</span><span class="lg wm">VTM</span><span class="lg wm">BBC</span><span class="lg" style="--brand:#CC0000"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-cnn"/></svg>CNN</span><span class="lg" style="--brand:#FF5E00"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-crunchyroll"/></svg>Crunchyroll</span><span class="lg" style="--brand:#FF0000"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-youtube"/></svg>YouTube</span><span class="lg" style="--brand:#E50914"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-netflix"/></svg>Netflix</span><span class="lg wm">Disney+</span><span class="lg" style="--brand:#525252"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-hbomax"/></svg>HBO Max</span><span class="lg wm">Prime Video</span><span class="lg" style="--brand:#000000"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-appletv"/></svg>Apple TV+</span><span class="lg wm">Videoland</span><span class="lg" style="--brand:#FE365F"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-viaplay"/></svg>Viaplay</span><span class="lg wm">SkyShowtime</span><span class="lg" style="--brand:#0064FF"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-paramount"/></svg>Paramount+</span><span class="lg wm">ESPN</span><span class="lg" style="--brand:#F48C00"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-ziggo"/></svg>Ziggo Sport</span><span class="lg" style="--brand:#F8F8F5"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-dazn"/></svg>DAZN</span><span class="lg" style="--brand:#0072C9"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-sky"/></svg>Sky Sports</span><span class="lg wm">Eurosport</span><span class="lg wm">F1 TV</span><span class="lg" style="--brand:#D20A0A"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-ufc"/></svg>UFC</span><span class="lg" style="--brand:#253B73"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-nba"/></svg>NBA</span><span class="lg" style="--brand:#360D3A"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-premierleague"/></svg>Premier League</span><span class="lg wm">NPO</span><span class="lg" style="--brand:#FA002E"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-rtl"/></svg>RTL</span><span class="lg wm">SBS</span><span class="lg wm">KPN</span><span class="lg" style="--brand:#F48C00"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-ziggo"/></svg>Ziggo</span><span class="lg" style="--brand:#2C72FF"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-odido"/></svg>Odido</span><span class="lg wm">Telenet</span><span class="lg wm">Proximus</span><span class="lg wm">VRT</span><span class="lg wm">VTM</span><span class="lg wm">BBC</span><span class="lg" style="--brand:#CC0000"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-cnn"/></svg>CNN</span><span class="lg" style="--brand:#FF5E00"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-crunchyroll"/></svg>Crunchyroll</span><span class="lg" style="--brand:#FF0000"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="logos.svg#i-youtube"/></svg>YouTube</span></div>
 </div>
 
 <section id="sport">
   <div class="wrap">
-    <div class="row-head rv">
+    <div class="row-head rv-l">
       <div class="sec-head"><span class="eyebrow">Live sport</span><h2>Dit weekend en volgende week live</h2><p>Eredivisie, Champions League, Formule 1, UFC en meer. Alles in HD, zonder vertraging.</p></div>
       <a class="link" href="#gratis" data-proef>Kijk dit weekend al gratis mee</a>
     </div>
@@ -400,7 +81,7 @@ footer .bottom{display:flex;justify-content:space-between;gap:24px;flex-wrap:wra
       <a class="ev s art-f1 rv d2" href="#gratis" data-proef><span class="badge">Volgend weekend</span><span class="comp">Formule 1</span><span class="teams">GP Italië</span><span class="when">Zondag 6 september, 15:00 uur, Monza</span></a>
       <a class="ev s art-cl rv d3" href="#gratis" data-proef><span class="badge">Binnenkort</span><span class="comp">Champions League</span><span class="teams">Speelronde 1</span><span class="when">8 tot en met 10 september, loting 27 augustus</span></a>
     </div>
-    <div class="agenda rv">
+    <div class="agenda rv stagger">
       <a class="ag" href="#gratis" data-proef><span class="d">Zo 30 aug</span><div><b>Feyenoord tegen ADO Den Haag</b><small>Eredivisie, 14:30 uur</small></div></a>
       <a class="ag" href="#gratis" data-proef><span class="d">Za 5 sep</span><div><b>UFC Fight Night: Hooker tegen Parnasse</b><small>Nacht van zaterdag op zondag</small></div></a>
       <a class="ag" href="#gratis" data-proef><span class="d">Zo 13 sep</span><div><b>Formule 1: GP van Madrid</b><small>Nieuw circuit, debuut op de kalender</small></div></a>
@@ -408,6 +89,8 @@ footer .bottom{display:flex;justify-content:space-between;gap:24px;flex-wrap:wra
     </div>
   </div>
 </section>
+
+<div class="pstrip" aria-hidden="true"><div class="pstrip-track"><span>Sport.</span><span>Films.</span><span>Series.</span><span>Live tv.</span><span class="ac">€99 per jaar.</span><span>Alles.</span><span>Sport.</span><span>Films.</span><span>Series.</span><span>Live tv.</span><span class="ac">€99 per jaar.</span><span>Alles.</span></div></div>
 
 <section class="spot" style="--bd:url('https://image.tmdb.org/t/p/w1280/RMXG8myu1aGlNUsRjtxzmpdMK0.jpg')">
   <div class="bd" data-parallax></div>
@@ -427,41 +110,76 @@ footer .bottom{display:flex;justify-content:space-between;gap:24px;flex-wrap:wra
 <section id="films">
   <div class="wrap rails">
     <div>
-      <div class="row-head rv">
+      <div class="row-head rv-l">
         <div class="sec-head"><span class="eyebrow">Nieuw deze maand</span><h2>De nieuwste films</h2></div>
         <a class="link" href="#gratis" data-proef>Gratis uitproberen</a>
       </div>
-      <div class="rail rv"><a class="poster" href="#gratis"><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/iPOn6DinuVyLY17YM9mKuPofV08.jpg" srcset="https://image.tmdb.org/t/p/w342/iPOn6DinuVyLY17YM9mKuPofV08.jpg 342w, https://image.tmdb.org/t/p/w500/iPOn6DinuVyLY17YM9mKuPofV08.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Spider-Man: Brand New Day" loading="lazy"><span class="play"></span></div><b>Spider-Man: Brand New Day</b><small>Actie, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg" srcset="https://image.tmdb.org/t/p/w342/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg 342w, https://image.tmdb.org/t/p/w500/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="The Odyssey" loading="lazy"><span class="play"></span></div><b>The Odyssey</b><small>Avontuur, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/1QCWdqzTfh2x9UylVpspIU6QTuM.jpg" srcset="https://image.tmdb.org/t/p/w342/1QCWdqzTfh2x9UylVpspIU6QTuM.jpg 342w, https://image.tmdb.org/t/p/w500/1QCWdqzTfh2x9UylVpspIU6QTuM.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Supergirl" loading="lazy"><span class="play"></span></div><b>Supergirl</b><small>Actie, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/sfQtVlIHljToOwYjhe21KPGzZWK.jpg" srcset="https://image.tmdb.org/t/p/w342/sfQtVlIHljToOwYjhe21KPGzZWK.jpg 342w, https://image.tmdb.org/t/p/w500/sfQtVlIHljToOwYjhe21KPGzZWK.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Toy Story 5" loading="lazy"><span class="play"></span></div><b>Toy Story 5</b><small>Familie, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/zKVgiv5qHCvCLT4A2ymJi5QeXDH.jpg" srcset="https://image.tmdb.org/t/p/w342/zKVgiv5qHCvCLT4A2ymJi5QeXDH.jpg 342w, https://image.tmdb.org/t/p/w500/zKVgiv5qHCvCLT4A2ymJi5QeXDH.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Moana" loading="lazy"><span class="play"></span></div><b>Moana</b><small>Familie, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/nz7i42yhLIJ4ve9JKgM6NthoLHO.jpg" srcset="https://image.tmdb.org/t/p/w342/nz7i42yhLIJ4ve9JKgM6NthoLHO.jpg 342w, https://image.tmdb.org/t/p/w500/nz7i42yhLIJ4ve9JKgM6NthoLHO.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Minions &amp; Monsters" loading="lazy"><span class="play"></span></div><b>Minions &amp; Monsters</b><small>Familie, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/AnJ8IQJI23hNpYXVNaythu061Ru.jpg" srcset="https://image.tmdb.org/t/p/w342/AnJ8IQJI23hNpYXVNaythu061Ru.jpg 342w, https://image.tmdb.org/t/p/w500/AnJ8IQJI23hNpYXVNaythu061Ru.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Disclosure Day" loading="lazy"><span class="play"></span></div><b>Disclosure Day</b><small>Sciencefiction, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/rhGx6E3qRNMgj3i5su2oukNHwIQ.jpg" srcset="https://image.tmdb.org/t/p/w342/rhGx6E3qRNMgj3i5su2oukNHwIQ.jpg 342w, https://image.tmdb.org/t/p/w500/rhGx6E3qRNMgj3i5su2oukNHwIQ.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Backrooms" loading="lazy"><span class="play"></span></div><b>Backrooms</b><small>Horror, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg" srcset="https://image.tmdb.org/t/p/w342/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg 342w, https://image.tmdb.org/t/p/w500/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Obsession" loading="lazy"><span class="play"></span></div><b>Obsession</b><small>Thriller, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/7JFVcU1uzv9zCfyMzLrsU04t8BU.jpg" srcset="https://image.tmdb.org/t/p/w342/7JFVcU1uzv9zCfyMzLrsU04t8BU.jpg 342w, https://image.tmdb.org/t/p/w500/7JFVcU1uzv9zCfyMzLrsU04t8BU.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Evil Dead Burn" loading="lazy"><span class="play"></span></div><b>Evil Dead Burn</b><small>Horror, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/znHT8peERZRWG1ME3r0Db0EV8k8.jpg" srcset="https://image.tmdb.org/t/p/w342/znHT8peERZRWG1ME3r0Db0EV8k8.jpg 342w, https://image.tmdb.org/t/p/w500/znHT8peERZRWG1ME3r0Db0EV8k8.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Scary Movie" loading="lazy"><span class="play"></span></div><b>Scary Movie</b><small>Komedie, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/uEk5QnmWN8t8t0rZ8gvOITg2yuR.jpg" srcset="https://image.tmdb.org/t/p/w342/uEk5QnmWN8t8t0rZ8gvOITg2yuR.jpg 342w, https://image.tmdb.org/t/p/w500/uEk5QnmWN8t8t0rZ8gvOITg2yuR.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Michael" loading="lazy"><span class="play"></span></div><b>Michael</b><small>Biografie, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg" srcset="https://image.tmdb.org/t/p/w342/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg 342w, https://image.tmdb.org/t/p/w500/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Avatar Aang: The Last Airbender" loading="lazy"><span class="play"></span></div><b>Avatar Aang: The Last Airbender</b><small>Animatie, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/dpcDnatuJlRUldshZkZoqdJDijg.jpg" srcset="https://image.tmdb.org/t/p/w342/dpcDnatuJlRUldshZkZoqdJDijg.jpg 342w, https://image.tmdb.org/t/p/w500/dpcDnatuJlRUldshZkZoqdJDijg.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="The Death of Robin Hood" loading="lazy"><span class="play"></span></div><b>The Death of Robin Hood</b><small>Drama, 2026</small></a></div>
+      <div class="rail rv stagger"><a class="poster" href="#gratis" data-proef><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/iPOn6DinuVyLY17YM9mKuPofV08.jpg" srcset="https://image.tmdb.org/t/p/w342/iPOn6DinuVyLY17YM9mKuPofV08.jpg 342w, https://image.tmdb.org/t/p/w500/iPOn6DinuVyLY17YM9mKuPofV08.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Spider-Man: Brand New Day" loading="lazy"><span class="play"></span></div><b>Spider-Man: Brand New Day</b><small>Actie, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg" srcset="https://image.tmdb.org/t/p/w342/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg 342w, https://image.tmdb.org/t/p/w500/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="The Odyssey" loading="lazy"><span class="play"></span></div><b>The Odyssey</b><small>Avontuur, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/1QCWdqzTfh2x9UylVpspIU6QTuM.jpg" srcset="https://image.tmdb.org/t/p/w342/1QCWdqzTfh2x9UylVpspIU6QTuM.jpg 342w, https://image.tmdb.org/t/p/w500/1QCWdqzTfh2x9UylVpspIU6QTuM.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Supergirl" loading="lazy"><span class="play"></span></div><b>Supergirl</b><small>Actie, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/sfQtVlIHljToOwYjhe21KPGzZWK.jpg" srcset="https://image.tmdb.org/t/p/w342/sfQtVlIHljToOwYjhe21KPGzZWK.jpg 342w, https://image.tmdb.org/t/p/w500/sfQtVlIHljToOwYjhe21KPGzZWK.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Toy Story 5" loading="lazy"><span class="play"></span></div><b>Toy Story 5</b><small>Familie, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/zKVgiv5qHCvCLT4A2ymJi5QeXDH.jpg" srcset="https://image.tmdb.org/t/p/w342/zKVgiv5qHCvCLT4A2ymJi5QeXDH.jpg 342w, https://image.tmdb.org/t/p/w500/zKVgiv5qHCvCLT4A2ymJi5QeXDH.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Moana" loading="lazy"><span class="play"></span></div><b>Moana</b><small>Familie, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/nz7i42yhLIJ4ve9JKgM6NthoLHO.jpg" srcset="https://image.tmdb.org/t/p/w342/nz7i42yhLIJ4ve9JKgM6NthoLHO.jpg 342w, https://image.tmdb.org/t/p/w500/nz7i42yhLIJ4ve9JKgM6NthoLHO.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Minions &amp; Monsters" loading="lazy"><span class="play"></span></div><b>Minions &amp; Monsters</b><small>Familie, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/AnJ8IQJI23hNpYXVNaythu061Ru.jpg" srcset="https://image.tmdb.org/t/p/w342/AnJ8IQJI23hNpYXVNaythu061Ru.jpg 342w, https://image.tmdb.org/t/p/w500/AnJ8IQJI23hNpYXVNaythu061Ru.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Disclosure Day" loading="lazy"><span class="play"></span></div><b>Disclosure Day</b><small>Sciencefiction, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/rhGx6E3qRNMgj3i5su2oukNHwIQ.jpg" srcset="https://image.tmdb.org/t/p/w342/rhGx6E3qRNMgj3i5su2oukNHwIQ.jpg 342w, https://image.tmdb.org/t/p/w500/rhGx6E3qRNMgj3i5su2oukNHwIQ.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Backrooms" loading="lazy"><span class="play"></span></div><b>Backrooms</b><small>Horror, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg" srcset="https://image.tmdb.org/t/p/w342/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg 342w, https://image.tmdb.org/t/p/w500/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Obsession" loading="lazy"><span class="play"></span></div><b>Obsession</b><small>Thriller, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/7JFVcU1uzv9zCfyMzLrsU04t8BU.jpg" srcset="https://image.tmdb.org/t/p/w342/7JFVcU1uzv9zCfyMzLrsU04t8BU.jpg 342w, https://image.tmdb.org/t/p/w500/7JFVcU1uzv9zCfyMzLrsU04t8BU.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Evil Dead Burn" loading="lazy"><span class="play"></span></div><b>Evil Dead Burn</b><small>Horror, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/znHT8peERZRWG1ME3r0Db0EV8k8.jpg" srcset="https://image.tmdb.org/t/p/w342/znHT8peERZRWG1ME3r0Db0EV8k8.jpg 342w, https://image.tmdb.org/t/p/w500/znHT8peERZRWG1ME3r0Db0EV8k8.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Scary Movie" loading="lazy"><span class="play"></span></div><b>Scary Movie</b><small>Komedie, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/uEk5QnmWN8t8t0rZ8gvOITg2yuR.jpg" srcset="https://image.tmdb.org/t/p/w342/uEk5QnmWN8t8t0rZ8gvOITg2yuR.jpg 342w, https://image.tmdb.org/t/p/w500/uEk5QnmWN8t8t0rZ8gvOITg2yuR.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Michael" loading="lazy"><span class="play"></span></div><b>Michael</b><small>Biografie, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg" srcset="https://image.tmdb.org/t/p/w342/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg 342w, https://image.tmdb.org/t/p/w500/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Avatar Aang: The Last Airbender" loading="lazy"><span class="play"></span></div><b>Avatar Aang: The Last Airbender</b><small>Animatie, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/dpcDnatuJlRUldshZkZoqdJDijg.jpg" srcset="https://image.tmdb.org/t/p/w342/dpcDnatuJlRUldshZkZoqdJDijg.jpg 342w, https://image.tmdb.org/t/p/w500/dpcDnatuJlRUldshZkZoqdJDijg.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="The Death of Robin Hood" loading="lazy"><span class="play"></span></div><b>The Death of Robin Hood</b><small>Drama, 2026</small></a></div>
     </div>
     <div>
-      <div class="row-head rv">
+      <div class="row-head rv-l">
         <div class="sec-head"><span class="eyebrow">Nieuwe seizoenen</span><h2>Series die iedereen kijkt</h2></div>
         <a class="link" href="#gratis" data-proef>Gratis uitproberen</a>
       </div>
-      <div class="rail rv"><a class="poster" href="#gratis"><div class="pimg"><span class="tag">Nieuw seizoen</span><img src="https://image.tmdb.org/t/p/w342/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg" srcset="https://image.tmdb.org/t/p/w342/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg 342w, https://image.tmdb.org/t/p/w500/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="House of the Dragon" loading="lazy"><span class="play"></span></div><b>House of the Dragon</b><small>Fantasy, nieuw seizoen</small></a><a class="poster" href="#gratis"><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/876V23IJpddyLcO1wvJUdSft585.jpg" srcset="https://image.tmdb.org/t/p/w342/876V23IJpddyLcO1wvJUdSft585.jpg 342w, https://image.tmdb.org/t/p/w500/876V23IJpddyLcO1wvJUdSft585.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="The Shards" loading="lazy"><span class="play"></span></div><b>The Shards</b><small>Thriller, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg" srcset="https://image.tmdb.org/t/p/w342/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg 342w, https://image.tmdb.org/t/p/w500/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Dutton Ranch" loading="lazy"><span class="play"></span></div><b>Dutton Ranch</b><small>Western, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg" srcset="https://image.tmdb.org/t/p/w342/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg 342w, https://image.tmdb.org/t/p/w500/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Silo" loading="lazy"><span class="play"></span></div><b>Silo</b><small>Sciencefiction</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg" srcset="https://image.tmdb.org/t/p/w342/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg 342w, https://image.tmdb.org/t/p/w500/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Lioness" loading="lazy"><span class="play"></span></div><b>Lioness</b><small>Actie</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg" srcset="https://image.tmdb.org/t/p/w342/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg 342w, https://image.tmdb.org/t/p/w500/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Ted Lasso" loading="lazy"><span class="play"></span></div><b>Ted Lasso</b><small>Komedie</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg" srcset="https://image.tmdb.org/t/p/w342/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg 342w, https://image.tmdb.org/t/p/w500/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="The Pitt" loading="lazy"><span class="play"></span></div><b>The Pitt</b><small>Drama</small></a><a class="poster" href="#gratis"><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/3ZLy3cfQa9prahoRq1teMmr5pvW.jpg" srcset="https://image.tmdb.org/t/p/w342/3ZLy3cfQa9prahoRq1teMmr5pvW.jpg 342w, https://image.tmdb.org/t/p/w500/3ZLy3cfQa9prahoRq1teMmr5pvW.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Cape Fear" loading="lazy"><span class="play"></span></div><b>Cape Fear</b><small>Thriller, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg" srcset="https://image.tmdb.org/t/p/w342/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg 342w, https://image.tmdb.org/t/p/w500/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Arcane" loading="lazy"><span class="play"></span></div><b>Arcane</b><small>Animatie</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg" srcset="https://image.tmdb.org/t/p/w342/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg 342w, https://image.tmdb.org/t/p/w500/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Star Trek: Strange New Worlds" loading="lazy"><span class="play"></span></div><b>Star Trek: Strange New Worlds</b><small>Sciencefiction</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/pRtJagIxpfODzzb0T0NAvZSzErC.jpg" srcset="https://image.tmdb.org/t/p/w342/pRtJagIxpfODzzb0T0NAvZSzErC.jpg 342w, https://image.tmdb.org/t/p/w500/pRtJagIxpfODzzb0T0NAvZSzErC.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="FROM" loading="lazy"><span class="play"></span></div><b>FROM</b><small>Horror</small></a><a class="poster" href="#gratis"><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg" srcset="https://image.tmdb.org/t/p/w342/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg 342w, https://image.tmdb.org/t/p/w500/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Rick and Morty" loading="lazy"><span class="play"></span></div><b>Rick and Morty</b><small>Animatie</small></a><a class="poster" href="#gratis"><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg" srcset="https://image.tmdb.org/t/p/w342/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg 342w, https://image.tmdb.org/t/p/w500/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Lucky" loading="lazy"><span class="play"></span></div><b>Lucky</b><small>Misdaad, 2026</small></a><a class="poster" href="#gratis"><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg" srcset="https://image.tmdb.org/t/p/w342/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg 342w, https://image.tmdb.org/t/p/w500/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Sterling Point" loading="lazy"><span class="play"></span></div><b>Sterling Point</b><small>Drama, 2026</small></a></div>
+      <div class="rail rv stagger"><a class="poster" href="#gratis" data-proef><div class="pimg"><span class="tag">Nieuw seizoen</span><img src="https://image.tmdb.org/t/p/w342/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg" srcset="https://image.tmdb.org/t/p/w342/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg 342w, https://image.tmdb.org/t/p/w500/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="House of the Dragon" loading="lazy"><span class="play"></span></div><b>House of the Dragon</b><small>Fantasy, nieuw seizoen</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/876V23IJpddyLcO1wvJUdSft585.jpg" srcset="https://image.tmdb.org/t/p/w342/876V23IJpddyLcO1wvJUdSft585.jpg 342w, https://image.tmdb.org/t/p/w500/876V23IJpddyLcO1wvJUdSft585.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="The Shards" loading="lazy"><span class="play"></span></div><b>The Shards</b><small>Thriller, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg" srcset="https://image.tmdb.org/t/p/w342/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg 342w, https://image.tmdb.org/t/p/w500/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Dutton Ranch" loading="lazy"><span class="play"></span></div><b>Dutton Ranch</b><small>Western, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg" srcset="https://image.tmdb.org/t/p/w342/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg 342w, https://image.tmdb.org/t/p/w500/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Silo" loading="lazy"><span class="play"></span></div><b>Silo</b><small>Sciencefiction</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg" srcset="https://image.tmdb.org/t/p/w342/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg 342w, https://image.tmdb.org/t/p/w500/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Lioness" loading="lazy"><span class="play"></span></div><b>Lioness</b><small>Actie</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg" srcset="https://image.tmdb.org/t/p/w342/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg 342w, https://image.tmdb.org/t/p/w500/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Ted Lasso" loading="lazy"><span class="play"></span></div><b>Ted Lasso</b><small>Komedie</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg" srcset="https://image.tmdb.org/t/p/w342/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg 342w, https://image.tmdb.org/t/p/w500/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="The Pitt" loading="lazy"><span class="play"></span></div><b>The Pitt</b><small>Drama</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/3ZLy3cfQa9prahoRq1teMmr5pvW.jpg" srcset="https://image.tmdb.org/t/p/w342/3ZLy3cfQa9prahoRq1teMmr5pvW.jpg 342w, https://image.tmdb.org/t/p/w500/3ZLy3cfQa9prahoRq1teMmr5pvW.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Cape Fear" loading="lazy"><span class="play"></span></div><b>Cape Fear</b><small>Thriller, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg" srcset="https://image.tmdb.org/t/p/w342/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg 342w, https://image.tmdb.org/t/p/w500/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Arcane" loading="lazy"><span class="play"></span></div><b>Arcane</b><small>Animatie</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg" srcset="https://image.tmdb.org/t/p/w342/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg 342w, https://image.tmdb.org/t/p/w500/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Star Trek: Strange New Worlds" loading="lazy"><span class="play"></span></div><b>Star Trek: Strange New Worlds</b><small>Sciencefiction</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/pRtJagIxpfODzzb0T0NAvZSzErC.jpg" srcset="https://image.tmdb.org/t/p/w342/pRtJagIxpfODzzb0T0NAvZSzErC.jpg 342w, https://image.tmdb.org/t/p/w500/pRtJagIxpfODzzb0T0NAvZSzErC.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="FROM" loading="lazy"><span class="play"></span></div><b>FROM</b><small>Horror</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg" srcset="https://image.tmdb.org/t/p/w342/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg 342w, https://image.tmdb.org/t/p/w500/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Rick and Morty" loading="lazy"><span class="play"></span></div><b>Rick and Morty</b><small>Animatie</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg" srcset="https://image.tmdb.org/t/p/w342/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg 342w, https://image.tmdb.org/t/p/w500/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Lucky" loading="lazy"><span class="play"></span></div><b>Lucky</b><small>Misdaad, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg" srcset="https://image.tmdb.org/t/p/w342/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg 342w, https://image.tmdb.org/t/p/w500/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Sterling Point" loading="lazy"><span class="play"></span></div><b>Sterling Point</b><small>Drama, 2026</small></a></div>
     </div>
     <div>
-      <div class="row-head rv">
+      <div class="row-head rv-l">
         <div class="sec-head"><span class="eyebrow">Top 10</span><h2>Best beoordeeld, ooit</h2></div>
       </div>
-      <div class="toprail rv"><a class="top" href="#gratis"><span class="n">1</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg" alt="Breaking Bad" loading="lazy"></div></a><a class="top" href="#gratis"><span class="n">2</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg" alt="Game of Thrones" loading="lazy"></div></a><a class="top" href="#gratis"><span class="n">3</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/zjg4jpK1Wp2kiRvtt5ND0kznako.jpg" alt="Better Call Saul" loading="lazy"></div></a><a class="top" href="#gratis"><span class="n">4</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg" alt="Chernobyl" loading="lazy"></div></a><a class="top" href="#gratis"><span class="n">5</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg" alt="Arcane" loading="lazy"></div></a><a class="top" href="#gratis"><span class="n">6</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg" alt="House of the Dragon" loading="lazy"></div></a><a class="top" href="#gratis"><span class="n">7</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg" alt="The Pitt" loading="lazy"></div></a><a class="top" href="#gratis"><span class="n">8</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg" alt="Silo" loading="lazy"></div></a><a class="top" href="#gratis"><span class="n">9</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/dqZENchTd7lp5zht7BdlqM7RBhD.jpg" alt="Frieren: Beyond Journey&#x27;s End" loading="lazy"></div></a><a class="top" href="#gratis"><span class="n">10</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/hTP1DtLGFamjfu8WqjnuQdP1n4i.jpg" alt="Attack on Titan" loading="lazy"></div></a></div>
+      <div class="toprail rv"><a class="top" href="#gratis" data-proef><span class="n">1</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg" alt="Breaking Bad" loading="lazy"></div></a><a class="top" href="#gratis" data-proef><span class="n">2</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg" alt="Game of Thrones" loading="lazy"></div></a><a class="top" href="#gratis" data-proef><span class="n">3</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/zjg4jpK1Wp2kiRvtt5ND0kznako.jpg" alt="Better Call Saul" loading="lazy"></div></a><a class="top" href="#gratis" data-proef><span class="n">4</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg" alt="Chernobyl" loading="lazy"></div></a><a class="top" href="#gratis" data-proef><span class="n">5</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg" alt="Arcane" loading="lazy"></div></a><a class="top" href="#gratis" data-proef><span class="n">6</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg" alt="House of the Dragon" loading="lazy"></div></a><a class="top" href="#gratis" data-proef><span class="n">7</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg" alt="The Pitt" loading="lazy"></div></a><a class="top" href="#gratis" data-proef><span class="n">8</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg" alt="Silo" loading="lazy"></div></a><a class="top" href="#gratis" data-proef><span class="n">9</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/dqZENchTd7lp5zht7BdlqM7RBhD.jpg" alt="Frieren: Beyond Journey&#x27;s End" loading="lazy"></div></a><a class="top" href="#gratis" data-proef><span class="n">10</span><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/hTP1DtLGFamjfu8WqjnuQdP1n4i.jpg" alt="Attack on Titan" loading="lazy"></div></a></div>
+    </div>
+    <div>
+      <div class="row-head rv-l"><div class="sec-head"><span class="eyebrow">Voor het hele gezin</span><h2>Kids en familie</h2></div><a class="link" href="#gratis" data-proef>Gratis uitproberen</a></div>
+      <div class="rail rv stagger"><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/sfQtVlIHljToOwYjhe21KPGzZWK.jpg" srcset="https://image.tmdb.org/t/p/w342/sfQtVlIHljToOwYjhe21KPGzZWK.jpg 342w, https://image.tmdb.org/t/p/w500/sfQtVlIHljToOwYjhe21KPGzZWK.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Toy Story 5" loading="lazy"><span class="play"></span></div><b>Toy Story 5</b><small>Familie, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/zKVgiv5qHCvCLT4A2ymJi5QeXDH.jpg" srcset="https://image.tmdb.org/t/p/w342/zKVgiv5qHCvCLT4A2ymJi5QeXDH.jpg 342w, https://image.tmdb.org/t/p/w500/zKVgiv5qHCvCLT4A2ymJi5QeXDH.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Moana" loading="lazy"><span class="play"></span></div><b>Moana</b><small>Familie, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/nz7i42yhLIJ4ve9JKgM6NthoLHO.jpg" srcset="https://image.tmdb.org/t/p/w342/nz7i42yhLIJ4ve9JKgM6NthoLHO.jpg 342w, https://image.tmdb.org/t/p/w500/nz7i42yhLIJ4ve9JKgM6NthoLHO.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Minions &amp; Monsters" loading="lazy"><span class="play"></span></div><b>Minions &amp; Monsters</b><small>Familie, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg" srcset="https://image.tmdb.org/t/p/w342/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg 342w, https://image.tmdb.org/t/p/w500/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Avatar Aang: The Last Airbender" loading="lazy"><span class="play"></span></div><b>Avatar Aang: The Last Airbender</b><small>Animatie, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/acrtAy8gmxcsEvrDP09MpMSCeDZ.jpg" srcset="https://image.tmdb.org/t/p/w342/acrtAy8gmxcsEvrDP09MpMSCeDZ.jpg 342w, https://image.tmdb.org/t/p/w500/acrtAy8gmxcsEvrDP09MpMSCeDZ.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Miraculous: Tales of Ladybug &amp; Cat Noir" loading="lazy"><span class="play"></span></div><b>Miraculous</b><small>Kids</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/yaGt4GIutpbXHsv48tWceWg6s56.jpg" srcset="https://image.tmdb.org/t/p/w342/yaGt4GIutpbXHsv48tWceWg6s56.jpg 342w, https://image.tmdb.org/t/p/w500/yaGt4GIutpbXHsv48tWceWg6s56.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Avatar: The Last Airbender" loading="lazy"><span class="play"></span></div><b>Avatar: The Last Airbender</b><small>Kids</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/uWpG7GqfKGQqX4YMAo3nv5OrglV.jpg" srcset="https://image.tmdb.org/t/p/w342/uWpG7GqfKGQqX4YMAo3nv5OrglV.jpg 342w, https://image.tmdb.org/t/p/w500/uWpG7GqfKGQqX4YMAo3nv5OrglV.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="The Simpsons" loading="lazy"><span class="play"></span></div><b>The Simpsons</b><small>Familie</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/eM8bbTn8C8vUwwS6upzzm7gX31u.jpg" srcset="https://image.tmdb.org/t/p/w342/eM8bbTn8C8vUwwS6upzzm7gX31u.jpg 342w, https://image.tmdb.org/t/p/w500/eM8bbTn8C8vUwwS6upzzm7gX31u.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Futurama" loading="lazy"><span class="play"></span></div><b>Futurama</b><small>Animatie</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/zCHmmoqtLsIsou866osiWtIWmoA.jpg" srcset="https://image.tmdb.org/t/p/w342/zCHmmoqtLsIsou866osiWtIWmoA.jpg 342w, https://image.tmdb.org/t/p/w500/zCHmmoqtLsIsou866osiWtIWmoA.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Batman: Caped Crusader" loading="lazy"><span class="play"></span></div><b>Batman: Caped Crusader</b><small>Animatie</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/AthqHRKJFOIbLa459I3D5yHdrQL.jpg" srcset="https://image.tmdb.org/t/p/w342/AthqHRKJFOIbLa459I3D5yHdrQL.jpg 342w, https://image.tmdb.org/t/p/w500/AthqHRKJFOIbLa459I3D5yHdrQL.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Star Wars: Visions Presents - The Ninth Jedi" loading="lazy"><span class="play"></span></div><b>Star Wars: The Ninth Jedi</b><small>Animatie, 2026</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/7bAtBUQRC1M4zaIlihesBPTAJ8a.jpg" srcset="https://image.tmdb.org/t/p/w342/7bAtBUQRC1M4zaIlihesBPTAJ8a.jpg 342w, https://image.tmdb.org/t/p/w500/7bAtBUQRC1M4zaIlihesBPTAJ8a.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Your Name. - Gestern, heute und für immer" loading="lazy"><span class="play"></span></div><b>Your Name.</b><small>Anime film</small></a></div>
+    </div>
+    <div>
+      <div class="row-head rv-l"><div class="sec-head"><span class="eyebrow">Altijd goed</span><h2>Klassiekers en bekroonde films</h2></div><a class="link" href="#gratis" data-proef>Gratis uitproberen</a></div>
+      <div class="rail rv stagger"><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/z1DfRQf2CgnROyhVZ6ch8FbWt71.jpg" srcset="https://image.tmdb.org/t/p/w342/z1DfRQf2CgnROyhVZ6ch8FbWt71.jpg 342w, https://image.tmdb.org/t/p/w500/z1DfRQf2CgnROyhVZ6ch8FbWt71.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="The Dark Knight" loading="lazy"><span class="play"></span></div><b>The Dark Knight</b><small>2008</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/hHdhfkkzt0Mwec33Ux177Z7CO8w.jpg" srcset="https://image.tmdb.org/t/p/w342/hHdhfkkzt0Mwec33Ux177Z7CO8w.jpg 342w, https://image.tmdb.org/t/p/w500/hHdhfkkzt0Mwec33Ux177Z7CO8w.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Interstellar" loading="lazy"><span class="play"></span></div><b>Interstellar</b><small>2014</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/hoqe3leVhHBgboB6G1bv1kB8K4p.jpg" srcset="https://image.tmdb.org/t/p/w342/hoqe3leVhHBgboB6G1bv1kB8K4p.jpg 342w, https://image.tmdb.org/t/p/w500/hoqe3leVhHBgboB6G1bv1kB8K4p.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Parasite" loading="lazy"><span class="play"></span></div><b>Parasite</b><small>2019</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/frsZNikjMbp1gfidAl3zm1PAMHk.jpg" srcset="https://image.tmdb.org/t/p/w342/frsZNikjMbp1gfidAl3zm1PAMHk.jpg 342w, https://image.tmdb.org/t/p/w500/frsZNikjMbp1gfidAl3zm1PAMHk.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="The Green Mile" loading="lazy"><span class="play"></span></div><b>The Green Mile</b><small>1999</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/uumEbSnYqeV1oennyVx8DPVjujF.jpg" srcset="https://image.tmdb.org/t/p/w342/uumEbSnYqeV1oennyVx8DPVjujF.jpg 342w, https://image.tmdb.org/t/p/w500/uumEbSnYqeV1oennyVx8DPVjujF.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Der Pate" loading="lazy"><span class="play"></span></div><b>The Godfather</b><small>The Godfather, 1972</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/78Pb6FMLMfpm1jUOKTniwREYgAN.jpg" srcset="https://image.tmdb.org/t/p/w342/78Pb6FMLMfpm1jUOKTniwREYgAN.jpg 342w, https://image.tmdb.org/t/p/w500/78Pb6FMLMfpm1jUOKTniwREYgAN.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Die Verurteilten" loading="lazy"><span class="play"></span></div><b>The Shawshank Redemption</b><small>The Shawshank Redemption, 1994</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/lJiLP05Pm72fVEKVH3Z2bNNYHQv.jpg" srcset="https://image.tmdb.org/t/p/w342/lJiLP05Pm72fVEKVH3Z2bNNYHQv.jpg 342w, https://image.tmdb.org/t/p/w500/lJiLP05Pm72fVEKVH3Z2bNNYHQv.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Schindlers Liste" loading="lazy"><span class="play"></span></div><b>Schindler&#x27;s List</b><small>1993</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/uFjlP9U9UOZAzGB25HUtmlEpXbc.jpg" srcset="https://image.tmdb.org/t/p/w342/uFjlP9U9UOZAzGB25HUtmlEpXbc.jpg 342w, https://image.tmdb.org/t/p/w500/uFjlP9U9UOZAzGB25HUtmlEpXbc.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Der Herr der Ringe - Die Rückkehr des Königs" loading="lazy"><span class="play"></span></div><b>The Lord of the Rings</b><small>The Return of the King, 2003</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/wWNLsGvKqhi6cNWul0uvhqbQ4kl.jpg" srcset="https://image.tmdb.org/t/p/w342/wWNLsGvKqhi6cNWul0uvhqbQ4kl.jpg 342w, https://image.tmdb.org/t/p/w500/wWNLsGvKqhi6cNWul0uvhqbQ4kl.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Chihiros Reise ins Zauberland" loading="lazy"><span class="play"></span></div><b>Spirited Away</b><small>Spirited Away, 2001</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg" srcset="https://image.tmdb.org/t/p/w342/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg 342w, https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Spider-Man: No Way Home" loading="lazy"><span class="play"></span></div><b>Spider-Man: No Way Home</b><small>2021</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/nKspzM3rVJASkT4CvZvuj9KDT7l.jpg" srcset="https://image.tmdb.org/t/p/w342/nKspzM3rVJASkT4CvZvuj9KDT7l.jpg 342w, https://image.tmdb.org/t/p/w500/nKspzM3rVJASkT4CvZvuj9KDT7l.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Harry Potter und der Stein der Weisen" loading="lazy"><span class="play"></span></div><b>Harry Potter</b><small>Harry Potter, 2001</small></a></div>
+    </div>
+    <div>
+      <div class="row-head rv-l"><div class="sec-head"><span class="eyebrow">Anime en animatie</span><h2>Van One Piece tot Arcane</h2></div><a class="link" href="#gratis" data-proef>Gratis uitproberen</a></div>
+      <div class="rail rv stagger"><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/dB4EDhre2dsC2kxYDavyKWqLQwi.jpg" srcset="https://image.tmdb.org/t/p/w342/dB4EDhre2dsC2kxYDavyKWqLQwi.jpg 342w, https://image.tmdb.org/t/p/w500/dB4EDhre2dsC2kxYDavyKWqLQwi.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="One Piece" loading="lazy"><span class="play"></span></div><b>One Piece</b><small>Anime</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/hTP1DtLGFamjfu8WqjnuQdP1n4i.jpg" srcset="https://image.tmdb.org/t/p/w342/hTP1DtLGFamjfu8WqjnuQdP1n4i.jpg 342w, https://image.tmdb.org/t/p/w500/hTP1DtLGFamjfu8WqjnuQdP1n4i.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Attack on Titan" loading="lazy"><span class="play"></span></div><b>Attack on Titan</b><small>Anime</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><span class="tag">Nieuw</span><img src="https://image.tmdb.org/t/p/w342/cqlahADJmDdqQvLAPuEYD6EKPAN.jpg" srcset="https://image.tmdb.org/t/p/w342/cqlahADJmDdqQvLAPuEYD6EKPAN.jpg 342w, https://image.tmdb.org/t/p/w500/cqlahADJmDdqQvLAPuEYD6EKPAN.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Demon Slayer: Kimetsu no Yaiba Infinity Castle" loading="lazy"><span class="play"></span></div><b>Demon Slayer: Infinity Castle</b><small>Film, 2025</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/dqZENchTd7lp5zht7BdlqM7RBhD.jpg" srcset="https://image.tmdb.org/t/p/w342/dqZENchTd7lp5zht7BdlqM7RBhD.jpg 342w, https://image.tmdb.org/t/p/w500/dqZENchTd7lp5zht7BdlqM7RBhD.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Frieren: Beyond Journey&#x27;s End" loading="lazy"><span class="play"></span></div><b>Frieren: Beyond Journey&#x27;s End</b><small>Anime</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/5ZFUEOULaVml7pQuXxhpR2SmVUw.jpg" srcset="https://image.tmdb.org/t/p/w342/5ZFUEOULaVml7pQuXxhpR2SmVUw.jpg 342w, https://image.tmdb.org/t/p/w500/5ZFUEOULaVml7pQuXxhpR2SmVUw.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Fullmetal Alchemist: Brotherhood" loading="lazy"><span class="play"></span></div><b>Fullmetal Alchemist: Brotherhood</b><small>Anime</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/zgibwu2MWsUfwUwVPkRbOzGTxX2.jpg" srcset="https://image.tmdb.org/t/p/w342/zgibwu2MWsUfwUwVPkRbOzGTxX2.jpg 342w, https://image.tmdb.org/t/p/w500/zgibwu2MWsUfwUwVPkRbOzGTxX2.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Chainsaw Man - The Movie: Reze Arc" loading="lazy"><span class="play"></span></div><b>Chainsaw Man: Reze Arc</b><small>Film, 2025</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg" srcset="https://image.tmdb.org/t/p/w342/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg 342w, https://image.tmdb.org/t/p/w500/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Bleach" loading="lazy"><span class="play"></span></div><b>Bleach</b><small>Anime</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg" srcset="https://image.tmdb.org/t/p/w342/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg 342w, https://image.tmdb.org/t/p/w500/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Arcane" loading="lazy"><span class="play"></span></div><b>Arcane</b><small>Animatie</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg" srcset="https://image.tmdb.org/t/p/w342/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg 342w, https://image.tmdb.org/t/p/w500/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Rick and Morty" loading="lazy"><span class="play"></span></div><b>Rick and Morty</b><small>Animatie</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/2HKBc5UiFw8JrruHq8S1Y7TnlW0.jpg" srcset="https://image.tmdb.org/t/p/w342/2HKBc5UiFw8JrruHq8S1Y7TnlW0.jpg 342w, https://image.tmdb.org/t/p/w500/2HKBc5UiFw8JrruHq8S1Y7TnlW0.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="X-Men &#x27;97" loading="lazy"><span class="play"></span></div><b>X-Men &#x27;97</b><small>Animatie</small></a><a class="poster" href="#gratis" data-proef><div class="pimg"><img src="https://image.tmdb.org/t/p/w342/3PFsEuAiyLkWsP4GG6dIV37Q6gu.jpg" srcset="https://image.tmdb.org/t/p/w342/3PFsEuAiyLkWsP4GG6dIV37Q6gu.jpg 342w, https://image.tmdb.org/t/p/w500/3PFsEuAiyLkWsP4GG6dIV37Q6gu.jpg 500w" sizes="(max-width:768px) 150px, 200px" alt="Family Guy" loading="lazy"><span class="play"></span></div><b>Family Guy</b><small>Animatie</small></a></div>
+    </div>
+    <div>
+      <div class="row-head rv-l"><div class="sec-head"><span class="eyebrow">Live tv</span><h2>Meer dan 18.000 zenders</h2><p>Nederlandse en Belgische zenders, alle sport, nieuws uit de hele wereld en kinderzenders. Een greep:</p></div></div>
+      <div class="channels rv stagger">
+        <div class="chgroup"><b>Nederland</b><span>NPO 1</span><span>NPO 2</span><span>NPO 3</span><span>RTL 4</span><span>RTL 5</span><span>RTL 7</span><span>RTL 8</span><span>SBS6</span><span>SBS9</span><span>Net5</span><span>Veronica</span><span>Ziggo Sport</span><span>ESPN 1 t/m 6</span><span>Film1</span><span>Comedy Central</span><span>Discovery</span><span>Nat Geo</span><span>24Kitchen</span></div>
+        <div class="chgroup"><b>België</b><span>VRT 1</span><span>VRT Canvas</span><span>VTM</span><span>VTM 2</span><span>Play4</span><span>Play5</span><span>Play Sports</span><span>DAZN</span><span>Ketnet</span><span>RTL-TVI</span><span>La Une</span><span>Tipik</span></div>
+        <div class="chgroup"><b>Sport</b><span>Ziggo Sport Totaal</span><span>ESPN</span><span>Viaplay Sport</span><span>Eurosport 1 en 2</span><span>Sky Sports</span><span>DAZN</span><span>beIN Sports</span><span>F1 TV</span><span>NBA TV</span><span>NFL Network</span><span>UFC Fight Pass</span><span>TNT Sports</span></div>
+        <div class="chgroup"><b>Internationaal</b><span>BBC One</span><span>BBC Two</span><span>ITV</span><span>CNN</span><span>Sky News</span><span>Al Jazeera</span><span>ARD</span><span>ZDF</span><span>RTL Duitsland</span><span>TF1</span><span>Canal+</span><span>RAI 1</span><span>TRT</span><span>MBC</span></div>
+        <div class="chgroup"><b>Kids en film</b><span>Nickelodeon</span><span>Disney Channel</span><span>Cartoon Network</span><span>Nick Jr.</span><span>Boomerang</span><span>Film1 Premiere</span><span>Sky Cinema</span><span>HBO</span><span>Canal+ Cinema</span><span>Paramount Network</span></div>
+      </div>
     </div>
   </div>
 </section>
 
-<section style="padding-top:0">
+<section id="bespaar" style="padding-top:0">
   <div class="wrap">
-    <div class="sec-head rv"><span class="eyebrow">Alles op één plek</span><h2>Eén abonnement in plaats van vier</h2><p>Het aanbod van alle grote platforms, plus live tv en sport. Op je smart-tv, telefoon, tablet en laptop.</p></div>
-    <div class="platforms rv">
-      <span class="chip">Netflix</span><span class="chip">Disney+</span><span class="chip">HBO Max</span><span class="chip">Prime Video</span><span class="chip">Apple TV+</span><span class="chip">Videoland</span><span class="chip">Viaplay</span><span class="chip">ESPN</span><span class="chip">Ziggo Sport</span><span class="chip">DAZN</span><span class="chip">Sky Sports</span><span class="chip">NPO, RTL, SBS</span>
+    <div class="calc">
+      <div class="calc-l">
+        <span class="eyebrow rv">Rekentool</span>
+        <h2 class="rv d1">Wat betaal je nu per maand?</h2>
+        <p class="rv d2">Vink aan wat je nu hebt. Nova Stream vervangt ze allemaal, sport inbegrepen, voor €99 per jaar.</p>
+        <div class="calc-grid rv d3"><label class="ck"><input type="checkbox" value="15.99" checked><b>Netflix</b><small>€15,99</small></label><label class="ck"><input type="checkbox" value="11.99" checked><b>Videoland</b><small>€11,99</small></label><label class="ck"><input type="checkbox" value="10.99"><b>Disney+</b><small>€10,99</small></label><label class="ck"><input type="checkbox" value="11.99"><b>HBO Max</b><small>€11,99</small></label><label class="ck"><input type="checkbox" value="4.99"><b>Prime Video</b><small>€4,99</small></label><label class="ck"><input type="checkbox" value="9.99"><b>Apple TV+</b><small>€9,99</small></label><label class="ck"><input type="checkbox" value="21.99"><b>Viaplay</b><small>€21,99</small></label><label class="ck"><input type="checkbox" value="9.99"><b>SkyShowtime</b><small>€9,99</small></label><label class="ck"><input type="checkbox" value="9.95"><b>NLZIET</b><small>€9,95</small></label><label class="ck"><input type="checkbox" value="14.99" checked><b>ESPN Compleet</b><small>€14,99</small></label><label class="ck"><input type="checkbox" value="16.95"><b>Ziggo Sport Totaal</b><small>€16,95</small></label><label class="ck"><input type="checkbox" value="11.9"><b>F1 TV Pro</b><small>€11,90</small></label><label class="ck"><input type="checkbox" value="5.0"><b>Eurosport (via HBO Max)</b><small>€5,00</small></label><label class="ck"><input type="checkbox" value="9.99"><b>UFC Fight Pass</b><small>€9,99</small></label><label class="ck"><input type="checkbox" value="24.99"><b>DAZN</b><small>€24,99</small></label><label class="ck"><input type="checkbox" value="4.99"><b>Canal+</b><small>€4,99</small></label><label class="ck"><input type="checkbox" value="13.5" checked><b>Ziggo TV</b><small>€13,50</small></label><label class="ck"><input type="checkbox" value="12.75"><b>KPN TV</b><small>€12,75</small></label><label class="ck"><input type="checkbox" value="12.5"><b>Odido TV</b><small>€12,50</small></label><label class="ck"><input type="checkbox" value="15.0"><b>Delta TV</b><small>€15,00</small></label><label class="ck"><input type="checkbox" value="15.0"><b>Telenet TV (BE)</b><small>€15,00</small></label><label class="ck"><input type="checkbox" value="18.0"><b>Proximus Pickx (BE)</b><small>€18,00</small></label></div>
+        <p class="sub">Richtprijzen augustus 2026, standaardabonnement zonder reclame. Prijzen van providers verschillen per pakket.</p>
+      </div>
+      <div class="calc-r rv d2">
+        <div class="calc-card">
+          <div class="cc-row"><span>Nu betaal je</span><b><i>€</i><span id="c-now">0</span><small>per maand</small></b></div>
+          <div class="cc-row nova"><span>Bij Nova Stream</span><b><i>€</i><span>8,25</span><small>per maand</small></b></div>
+          <div class="cc-save"><span class="eyebrow">Je bespaart</span><div class="big"><i>€</i><span id="c-save">0</span></div><small>per jaar, dat is <b>€<span id="c-savem">0</span></b> per maand</small></div>
+          <a class="btn primary lg" href="#gratis" data-proef>Probeer nu 24 uur gratis</a>
+          <div class="fine">Daarna €99 per jaar. Stopt vanzelf, verlengt nooit automatisch.</div>
+        </div>
+      </div>
     </div>
-    <div class="stats rv">
+    <div class="stats rv stagger">
       <div class="stat"><div class="v"><span data-count="18000">18.000</span><i>+</i></div><p>Live zenders uit Nederland, België en de rest van de wereld</p></div>
       <div class="stat"><div class="v"><span data-count="60000">60.000</span><i>+</i></div><p>Films en series, van bioscooprelease tot complete boxset</p></div>
-      <div class="stat"><div class="v"><span data-count="5">5</span><i> min</i></div><p>Van aanmelden tot kijken, gemiddeld</p></div>
-      <div class="stat"><div class="v"><span data-count="24">24</span><i> uur</i></div><p>Gratis proberen, geen creditcard, stopt vanzelf</p></div>
+      <div class="stat"><div class="v"><i>€</i><span data-count="99">99</span></div><p>Per jaar voor alles, inclusief btw</p></div>
+      <div class="stat"><div class="v"><span data-count="24">24</span><i> uur</i></div><p>Gratis proberen, stopt vanzelf</p></div>
     </div>
-    <p class="sub">Merknamen dienen ter illustratie van het aanbod. Nova Stream is een officiële reseller van een gelicenseerd streamingplatform.</p>
   </div>
 </section>
 
@@ -469,17 +187,17 @@ footer .bottom{display:flex;justify-content:space-between;gap:24px;flex-wrap:wra
   <div class="wrap">
     <div class="sec-head rv" style="text-align:center;margin-left:auto;margin-right:auto;align-items:center"><span class="eyebrow">Hoe het werkt</span><h2>Binnen vijf minuten aan het kijken</h2></div>
     <div class="steps">
-      <div class="step rv"><div class="num">01</div><h3>Start je gratis dag</h3><p>Vul je e-mail of WhatsApp-nummer in. Geen creditcard, geen kleine lettertjes.</p></div>
+      <div class="step rv"><div class="num">01</div><h3>Probeer nu 24 uur gratis</h3><p>Vul je naam, e-mail en telefoonnummer in. Meer hebben we niet nodig.</p></div>
       <div class="step rv d1"><div class="num">02</div><h3>Ontvang je activatiecode</h3><p>Je krijgt direct een code en een korte uitleg voor je tv, telefoon of laptop.</p></div>
       <div class="step rv d2"><div class="num">03</div><h3>Kijk meteen</h3><p>Open de app, voer je code in en kijk. Bevalt het? Kies daarna pas een abonnement.</p></div>
     </div>
-    <div class="btn-row rv" style="margin-top:56px;justify-content:center"><a class="btn primary lg" href="#gratis" data-proef>Start je gratis dag</a></div>
+    <div class="btn-row rv" style="margin-top:56px;justify-content:center"><a class="btn primary lg" href="#gratis" data-proef>Probeer nu 24 uur gratis</a></div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <div class="sec-head rv"><span class="eyebrow">Waarom Nova Stream</span><h2>Wat je hier niet tegenkomt</h2><p>De markt zit vol aanbieders die prijzen alleen in een DM noemen en je onder druk zetten. Zo doen wij het niet.</p></div>
+    <div class="sec-head rv-l"><span class="eyebrow">Waarom Nova Stream</span><h2>Wat je hier niet tegenkomt</h2><p>De markt zit vol aanbieders die prijzen alleen in een DM noemen en je onder druk zetten. Zo doen wij het niet.</p></div>
     <div class="compare">
       <div class="card them rv"><h3>Elders</h3><ul>
         <li>Prijzen alleen op aanvraag via DM</li>
@@ -488,6 +206,7 @@ footer .bottom{display:flex;justify-content:space-between;gap:24px;flex-wrap:wra
         <li>Abonnement verlengt stiekem</li>
         <li>Geen voorwaarden, geen privacybeleid</li>
         <li>Eerst betalen, dan pas zien of het werkt</li>
+        <li>Vier abonnementen naast elkaar, €60 per maand of meer</li>
       </ul></div>
       <div class="card us rv d1"><h3>Bij Nova Stream</h3><ul>
         <li>Alle prijzen gewoon op de site</li>
@@ -496,6 +215,7 @@ footer .bottom{display:flex;justify-content:space-between;gap:24px;flex-wrap:wra
         <li>Vooraf betaald, verlengt nooit vanzelf</li>
         <li>Duidelijke voorwaarden en privacy</li>
         <li>Eerst 24 uur gratis, dan pas beslissen</li>
+        <li>€99 per jaar voor alles, sport inbegrepen</li>
       </ul></div>
     </div>
   </div>
@@ -503,12 +223,12 @@ footer .bottom{display:flex;justify-content:space-between;gap:24px;flex-wrap:wra
 
 <section id="prijzen" style="padding-top:0">
   <div class="wrap">
-    <div class="sec-head rv"><span class="eyebrow">Prijzen</span><h2>Begin met 24 uur gratis</h2><p>Daarna kies je zelf een periode. Vooraf betaald, inclusief btw, en er verlengt niets automatisch.</p></div>
+    <div class="sec-head rv-l"><span class="eyebrow">Prijzen</span><h2>Begin met 24 uur gratis</h2><p>Daarna kies je zelf een periode. Vooraf betaald, inclusief btw, en er verlengt niets automatisch.</p></div>
     <div class="trialbar rv" id="gratis">
-      <div><span class="eyebrow">Stap 1</span><h3>Probeer eerst 24 uur gratis</h3><p>Geen creditcard, geen verplichting. Binnen 5 minuten actief.</p></div>
-      <a class="btn primary lg" href="#gratis" data-proef>Probeer nu gratis</a>
+      <div><span class="eyebrow">Stap 1</span><h3>Probeer eerst 24 uur gratis</h3><p>Geen verplichting, binnen 5 minuten actief. Daarna alles voor €99 per jaar.</p></div>
+      <a class="btn primary lg" href="#gratis" data-proef>Probeer nu 24 uur gratis</a>
     </div>
-    <div class="plans">
+    <div class="plans stagger">
       <div class="card plan rv"><span class="name">3 maanden</span><div class="amt">€29,99</div><div class="per">€10,00 per maand</div><ul><li>Alle zenders, sport, films en series</li><li>Alle apparaten</li><li>Support via WhatsApp</li></ul><a class="btn secondary" href="#gratis" data-proef data-plan="3 maanden">Kies 3 maanden</a></div>
       <div class="card plan featured rv d1"><span class="tag">Meest gekozen</span><span class="name">6 maanden</span><div class="amt">€54,99</div><div class="per">€9,17 per maand</div><ul><li>Alle zenders, sport, films en series</li><li>Alle apparaten</li><li>Support via WhatsApp</li></ul><a class="btn primary" href="#gratis" data-proef data-plan="6 maanden">Kies 6 maanden</a></div>
       <div class="card plan rv d2"><span class="name">12 maanden</span><div class="amt">€99,00</div><div class="per">€8,25 per maand</div><ul><li>Alle zenders, sport, films en series</li><li>Alle apparaten</li><li>Support via WhatsApp</li></ul><a class="btn secondary" href="#gratis" data-proef data-plan="12 maanden">Kies 12 maanden</a></div>
@@ -521,7 +241,7 @@ footer .bottom{display:flex;justify-content:space-between;gap:24px;flex-wrap:wra
   <div class="wrap faqgrid">
     <div class="sec-head rv" style="margin:0"><span class="eyebrow">Vragen</span><h2>Even overleggen?</h2><p>Stuur een WhatsApp, meestal heb je binnen een paar minuten antwoord. Of lees eerst hiernaast.</p><div class="btn-row" style="margin-top:16px"><a class="btn secondary" href="#" data-wa>Stuur een WhatsApp</a></div></div>
     <div class="faq rv d1">
-      <details open><summary>Hoe werkt de gratis proefperiode?</summary><p>Je vult je e-mail of WhatsApp-nummer in en krijgt direct een code die 24 uur werkt. Geen creditcard, geen verplichting. Na 24 uur stopt hij vanzelf. Bevalt het, dan kies je een abonnement.</p></details>
+      <details open><summary>Hoe werkt de gratis proefperiode?</summary><p>Je vult je naam, e-mail en telefoonnummer in en krijgt direct een code die 24 uur werkt. Geen verplichting. Na 24 uur stopt hij vanzelf. Bevalt het, dan kies je een abonnement vanaf €8,25 per maand.</p></details>
       <details><summary>Hoe snel kan ik kijken?</summary><p>Meestal binnen vijf minuten. Je krijgt een activatiecode en een korte uitleg voor je apparaat.</p></details>
       <details><summary>Verlengt het abonnement automatisch?</summary><p>Nee. Je betaalt vooraf voor 3, 6 of 12 maanden. Daarna stopt het, tenzij je zelf verlengt.</p></details>
       <details><summary>Op welke apparaten werkt het?</summary><p>Smart-tv (Samsung, LG, Android TV), telefoon, tablet, laptop, Fire TV Stick en Apple TV, via de officiële app.</p></details>
@@ -534,10 +254,10 @@ footer .bottom{display:flex;justify-content:space-between;gap:24px;flex-wrap:wra
   <div class="bd" data-parallax></div>
   <div class="sh"></div>
   <div class="wrap">
-    <span class="eyebrow rv">Geen creditcard, geen verplichting</span>
+    <span class="eyebrow rv">Geen verplichting, stopt vanzelf</span>
     <h2 class="rv d1">Vanavond al kijken? Probeer 24 uur gratis.</h2>
-    <p class="rv d2">Sport, films en series op elk scherm. Binnen vijf minuten actief en het stopt vanzelf.</p>
-    <a class="btn primary lg rv d3" href="#gratis" data-proef>Probeer nu gratis</a>
+    <p class="rv d2">Daarna alles voor €99 per jaar. Sport, films en series op elk scherm, binnen vijf minuten actief.</p>
+    <a class="btn primary lg rv d3" href="#gratis" data-proef>Probeer nu 24 uur gratis</a>
   </div>
 </section>
 
@@ -560,96 +280,32 @@ footer .bottom{display:flex;justify-content:space-between;gap:24px;flex-wrap:wra
   <div class="bg" data-close></div>
   <div class="box">
     <button class="x" type="button" data-close aria-label="Sluiten">&times;</button>
-    <span class="eyebrow">24 uur gratis, geen creditcard</span>
-    <h3 id="proef-t">Start je gratis proefdag</h3>
-    <p>Vul je gegevens in. Daarna ga je direct naar WhatsApp en sturen we je binnen 5 minuten je activatiecode.</p>
+    <span class="eyebrow">24 uur gratis, stopt vanzelf</span>
+    <h3 id="proef-t">Probeer nu 24 uur gratis</h3>
+    <p>Vul je gegevens in, dan sturen we je binnen 5 minuten je activatiecode.</p>
     <form class="f" id="proef-form" novalidate>
       <label>Naam<input type="text" name="naam" autocomplete="name" placeholder="Je voornaam" required></label>
       <div class="row">
         <label>E-mail<input type="email" name="email" autocomplete="email" placeholder="naam@voorbeeld.nl" required></label>
         <label>Telefoon (WhatsApp)<input type="tel" name="telefoon" autocomplete="tel" placeholder="06 12345678" required></label>
       </div>
-      <label>Waarop wil je kijken?<select name="apparaat"><option>Smart-tv</option><option>Telefoon of tablet</option><option>Laptop of pc</option><option>Fire TV Stick of Apple TV</option><option>Meerdere apparaten</option></select></label>
       <input type="hidden" name="plan" value="Gratis proef 24 uur">
-      <label class="chk"><input type="checkbox" name="akkoord" required><span>Ik ga akkoord met de <a href="voorwaarden.html" target="_blank">voorwaarden</a> en het <a href="privacy.html" target="_blank">privacybeleid</a>. Geen automatische verlenging, geen creditcard.</span></label>
+      <label class="chk"><input type="checkbox" name="akkoord" required><span>Ik ga akkoord met de <a href="voorwaarden.html" target="_blank">voorwaarden</a> en het <a href="privacy.html" target="_blank">privacybeleid</a>. Geen automatische verlenging.</span></label>
       <div class="msg" id="proef-msg"></div>
-      <button class="btn primary lg" type="submit" id="proef-submit">Probeer nu gratis</button>
-      <div class="fine">Je wordt na het versturen doorgestuurd naar WhatsApp.</div>
+      <button class="btn primary lg" type="submit" id="proef-submit">Probeer nu 24 uur gratis</button>
     </form>
     <div class="done">
       <div class="ok"></div>
       <h3>Bijna klaar!</h3>
-      <p>We openen WhatsApp met je aanvraag. Verstuur het bericht en je code komt eraan.</p>
+      <p>Verstuur het bericht in WhatsApp en je code komt eraan.</p>
       <a class="btn wa lg" id="proef-wa" href="#" target="_blank" rel="noopener">Open WhatsApp</a>
       <div class="fine" style="margin-top:14px">Opent WhatsApp niet vanzelf? Klik op de knop hierboven.</div>
     </div>
   </div>
 </div>
 
-<div class="sticky"><small><b style="color:var(--text)">24 uur gratis</b><br>Geen creditcard nodig</small><a class="btn primary sm" href="#gratis" data-proef>Probeer nu gratis</a></div>
+<div class="sticky"><small><b style="color:var(--text)">24 uur gratis</b><br>Daarna €99 per jaar voor alles</small><a class="btn primary sm" href="#gratis" data-proef>Probeer nu gratis</a></div>
 
-<script>
-(function(){
-  // sticky nav
-  var nav=document.getElementById('nav');
-  var onS=function(){nav.classList.toggle('scrolled',window.scrollY>40)};onS();addEventListener('scroll',onS,{passive:true});
-  // reveal on scroll
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
-  document.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
-  // hero already in view
-  document.querySelectorAll('.hero .rv').forEach(function(el,i){setTimeout(function(){el.classList.add('in')},120+i*90)});
-  // count up
-  var co=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;co.unobserve(e.target);var el=e.target,t=+el.dataset.count,s=performance.now();(function f(n){var p=Math.min(1,(n-s)/1400),v=Math.round(t*(1-Math.pow(1-p,3)));el.textContent=v.toLocaleString('nl-NL');if(p<1)requestAnimationFrame(f)})(s)})},{threshold:.5});
-  document.querySelectorAll('[data-count]').forEach(function(el){co.observe(el)});
-  // parallax backdrops + hero wall tilt with mouse
-  var px=document.querySelectorAll('[data-parallax]'),wall=document.getElementById('wall');
-  var fine=matchMedia('(pointer:fine)').matches,mx=0,my=0;
-  function frame(){
-    var y=window.scrollY;
-    px.forEach(function(el){var r=el.parentElement.getBoundingClientRect();var o=(r.top+r.height/2-innerHeight/2)/innerHeight;el.style.transform='translateY('+(o*-60)+'px)'});
-    if(wall&&fine){wall.style.transform='perspective(1400px) rotateY('+(-24+mx*4)+'deg) rotateX('+(8+my*3)+'deg) rotateZ(4deg) scale(1.12) translateY('+(y*0.12)+'px)'}
-    requestAnimationFrame(frame)
-  }
-  requestAnimationFrame(frame);
-
-  /* ===== Gratis-proef flow: formulier -> CRM -> WhatsApp ===== */
-  var C=window.NOVA_CONFIG||{},modal=document.getElementById('proef'),form=document.getElementById('proef-form'),msg=document.getElementById('proef-msg'),waBtn=document.getElementById('proef-wa'),lastFocus=null;
-  function openModal(plan){modal.classList.remove('sent');form.reset();form.plan.value=plan||'Gratis proef 24 uur';document.getElementById('proef-submit').textContent=plan?'Ga verder via WhatsApp':'Probeer nu gratis';msg.textContent='';lastFocus=document.activeElement;modal.classList.add('open');document.body.style.overflow='hidden';setTimeout(function(){form.naam.focus()},50)}
-  function closeModal(){modal.classList.remove('open');document.body.style.overflow='';if(lastFocus)lastFocus.focus()}
-  document.querySelectorAll('[data-proef]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();openModal(a.dataset.plan?'Abonnement '+a.dataset.plan:'')})});
-  modal.querySelectorAll('[data-close]').forEach(function(el){el.addEventListener('click',closeModal)});
-  addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('open'))closeModal()});
-  function waUrl(text){return 'https://wa.me/'+(C.whatsapp||'').replace(/\D/g,'')+'?text='+encodeURIComponent(text)}
-  document.querySelectorAll('[data-wa]').forEach(function(a){a.href=waUrl('Hoi Nova Stream, ik heb een vraag.');a.target='_blank';a.rel='noopener'});
-  function lead(d){
-    var payload={naam:d.naam,email:d.email,telefoon:d.telefoon,apparaat:d.apparaat,plan:d.plan,bron:'website',pagina:location.href,tijd:new Date().toISOString()};
-    var jobs=[];
-    if(C.crm==='hubspot'&&C.hubspotPortalId&&C.hubspotFormId){
-      var hs={fields:[{name:'firstname',value:d.naam},{name:'email',value:d.email},{name:'phone',value:d.telefoon},{name:'message',value:'Bron: website gratis proef. Plan: '+d.plan+'. Apparaat: '+d.apparaat}],context:{pageUri:location.href,pageName:document.title},legalConsentOptions:{consent:{consentToProcess:true,text:'Ik ga akkoord met de algemene voorwaarden en het privacybeleid van Nova Stream (novastream.nl/voorwaarden, novastream.nl/privacy).'}}};
-      jobs.push(fetch('https://api'+(C.hubspotRegion?'-'+C.hubspotRegion:'')+'.hsforms.com/submissions/v3/integration/submit/'+C.hubspotPortalId+'/'+C.hubspotFormId,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(hs),keepalive:true}));
-    }
-    if(C.leadWebhook){jobs.push(fetch(C.leadWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}))}
-    if(!jobs.length){try{var l=JSON.parse(localStorage.getItem('nova_leads')||'[]');l.push(payload);localStorage.setItem('nova_leads',JSON.stringify(l))}catch(e){}console.log('[Nova] lead (CRM nog niet gekoppeld):',payload)}
-    return Promise.allSettled(jobs);
-  }
-  form.addEventListener('submit',function(e){
-    e.preventDefault();msg.textContent='';
-    var d={naam:form.naam.value.trim(),email:form.email.value.trim(),telefoon:form.telefoon.value.trim(),apparaat:form.apparaat.value,plan:form.plan.value};
-    var bad=[];form.querySelectorAll('input').forEach(function(i){i.classList.remove('err')});
-    if(d.naam.length<2){bad.push('naam')}
-    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)){bad.push('email')}
-    if(d.telefoon.replace(/\D/g,'').length<9){bad.push('telefoon')}
-    if(!form.akkoord.checked){bad.push('akkoord')}
-    if(bad.length){bad.forEach(function(n){form[n].classList.add('err')});msg.textContent=bad[0]==='akkoord'?'Vink de voorwaarden aan om verder te gaan.':'Controleer je '+({naam:'naam',email:'e-mailadres',telefoon:'telefoonnummer'})[bad[0]]+'.';form[bad[0]].focus();return}
-    var btn=document.getElementById('proef-submit');btn.disabled=true;btn.textContent='Even geduld...';
-    var text='Hoi Nova Stream! Ik wil graag '+(d.plan.indexOf('Abonnement')===0?'het '+d.plan.toLowerCase():'de 24 uur gratis proef')+' starten.\nNaam: '+d.naam+'\nApparaat: '+d.apparaat+'\nE-mail: '+d.email;
-    var url=waUrl(text);waBtn.href=url;
-    var win=null;try{win=window.open('',
-      '_blank')}catch(x){}
-    lead(d).then(function(){modal.classList.add('sent');btn.disabled=false;btn.textContent='Probeer nu gratis';if(win){win.location=url}else{location.href=url}});
-  });
-  if(fine)addEventListener('mousemove',function(e){mx=(e.clientX/innerWidth-.5)*2;my=(e.clientY/innerHeight-.5)*2},{passive:true});
-})();
-</script>
+<script src="app.js" defer></script>
 </body>
 </html>
