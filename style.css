@@ -159,8 +159,9 @@ section{padding:96px 0;position:relative}
 .toprail{display:grid;grid-auto-flow:column;grid-auto-columns:240px;gap:8px;overflow-x:auto;scrollbar-width:none;padding:12px 0 24px;margin:0 calc(var(--gutter) * -1);padding-left:var(--gutter);padding-right:var(--gutter)}
 .toprail::-webkit-scrollbar{display:none}
 .top{position:relative;display:grid;grid-template-columns:1fr 150px;align-items:end}
-.top .n{font-size:200px;font-weight:800;font-stretch:125%;letter-spacing:-.06em;line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.35);margin-right:-30px;transition:color .3s,-webkit-text-stroke-color .3s}
+.top .n{font-size:200px;font-weight:800;font-stretch:125%;letter-spacing:-.06em;line-height:.8;color:transparent;-webkit-text-stroke:2px #3A4150;margin-right:-30px;transition:color .3s,-webkit-text-stroke-color .3s,opacity .3s}
 .top:hover .n{color:var(--accent);-webkit-text-stroke-color:var(--accent)}
+.toprail:hover .top:not(:hover) .n{opacity:.5}
 .top .pimg{width:150px}
 /* platforms + stats */
 .platforms{display:flex;flex-wrap:wrap;gap:12px}
