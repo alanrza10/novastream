@@ -41,7 +41,7 @@
 
   /* ===== Gratis-proef flow: formulier -> CRM -> WhatsApp ===== */
   var C=window.NOVA_CONFIG||{},modal=document.getElementById('proef'),form=document.getElementById('proef-form'),msg=document.getElementById('proef-msg'),waBtn=document.getElementById('proef-wa'),lastFocus=null;
-  function openModal(plan){modal.classList.remove('sent');form.reset();form.plan.value=plan||'Gratis proef 24 uur';document.getElementById('proef-submit').textContent=plan?'Kies dit abonnement':'Probeer nu 24 uur gratis';msg.textContent='';lastFocus=document.activeElement;modal.classList.add('open');document.body.style.overflow='hidden';setTimeout(function(){form.naam.focus()},50)}
+  function openModal(plan){modal.classList.remove('sent');form.reset();form.plan.value=plan||'Gratis proef 24 uur';document.getElementById('proef-submit').textContent='Probeer nu 24 uur gratis';msg.textContent='';lastFocus=document.activeElement;modal.classList.add('open');document.body.style.overflow='hidden';setTimeout(function(){form.naam.focus()},50)}
   function closeModal(){modal.classList.remove('open');document.body.style.overflow='';if(lastFocus)lastFocus.focus()}
   document.querySelectorAll('[data-proef]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();openModal(a.dataset.plan?'Abonnement '+a.dataset.plan:'')})});
   modal.querySelectorAll('[data-close]').forEach(function(el){el.addEventListener('click',closeModal)});
