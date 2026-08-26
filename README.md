@@ -2,7 +2,7 @@
 
 Landingspagina voor Odysstream: live sport, films en series, 24 uur gratis proberen.
 
-- `index.html`: de site
+- `index.html`, `style.css`, `app.js`, `logos.svg`: de site
 - `voorwaarden.html`, `privacy.html`: juridische pagina's
 - `HUISSTIJL.md`: kleuren, fonts, regels
 - `KOPPELING.md`: HubSpot en WhatsApp instellen
