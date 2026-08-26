@@ -2,6 +2,12 @@
   /* rijen tikken elke paar seconden één item door, zelfde richting; handmatig scrollen pauzeert */
   document.querySelectorAll('.rail.tick,.toprail.tick').forEach(function(r){
     var vis=false,pauseUntil=0,timer=null;
+    /* pijlknoppen (ook voor muisgebruikers zonder horizontaal scrollen) */
+    var wrap=document.createElement('div');wrap.className='railwrap'+(r.classList.contains('toprail')?' top':'');r.parentNode.insertBefore(wrap,r);wrap.appendChild(r);
+    function mk(dir){var b=document.createElement('button');b.type='button';b.className='rail-btn '+dir;b.setAttribute('aria-label',dir==='prev'?'Vorige':'Volgende');b.innerHTML=dir==='prev'?'<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>':'<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>';b.addEventListener('click',function(){pause(10000);var k=r.children,w=k.length>1?k[1].offsetLeft-k[0].offsetLeft:240;var page=Math.max(w,Math.floor(r.clientWidth/w)*w);r.scrollBy({left:dir==='prev'?-page:page,behavior:'smooth'})});wrap.appendChild(b);return b}
+    var bp=mk('prev'),bn=mk('next');
+    function sync(){bp.disabled=r.scrollLeft<=2;bn.disabled=r.scrollLeft>=r.scrollWidth-r.clientWidth-2}
+    r.addEventListener('scroll',sync,{passive:true});addEventListener('resize',sync);setTimeout(sync,300);
     function step(){
       if(!vis||Date.now()<pauseUntil||document.hidden)return;
       var kids=r.children;if(kids.length<2)return;
