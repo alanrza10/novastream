@@ -1,6 +1,6 @@
-# Nova Stream
+# Odysstream
 
-Landingspagina voor Nova Stream: live sport, films en series, 24 uur gratis proberen.
+Landingspagina voor Odysstream: live sport, films en series, 24 uur gratis proberen.
 
 - `index.html`: de site
 - `voorwaarden.html`, `privacy.html`: juridische pagina's
