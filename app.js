@@ -1,4 +1,5 @@
 (function(){
+  document.querySelectorAll('.rail-track').forEach(function(t){t.innerHTML+=t.innerHTML});
   // sticky nav
   var nav=document.getElementById('nav');
   var onS=function(){nav.classList.toggle('scrolled',window.scrollY>40)};onS();addEventListener('scroll',onS,{passive:true});
@@ -46,12 +47,12 @@
   modal.querySelectorAll('[data-close]').forEach(function(el){el.addEventListener('click',closeModal)});
   addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('open'))closeModal()});
   function waUrl(text){return 'https://wa.me/'+(C.whatsapp||'').replace(/\D/g,'')+'?text='+encodeURIComponent(text)}
-  document.querySelectorAll('[data-wa]').forEach(function(a){a.href=waUrl('Hoi Nova Stream, ik heb een vraag.');a.target='_blank';a.rel='noopener'});
+  document.querySelectorAll('[data-wa]').forEach(function(a){a.href=waUrl('Hoi Odysstream, ik heb een vraag.');a.target='_blank';a.rel='noopener'});
   function lead(d){
     var payload={naam:d.naam,email:d.email,telefoon:d.telefoon,plan:d.plan,bron:'website',pagina:location.href,tijd:new Date().toISOString()};
     var jobs=[];
     if(C.crm==='hubspot'&&C.hubspotPortalId&&C.hubspotFormId){
-      var hs={fields:[{name:'firstname',value:d.naam},{name:'email',value:d.email},{name:'phone',value:d.telefoon},{name:'message',value:'Bron: website. Plan: '+d.plan}],context:{pageUri:location.href,pageName:document.title},legalConsentOptions:{consent:{consentToProcess:true,text:'Ik ga akkoord met de algemene voorwaarden en het privacybeleid van Nova Stream (novastream.nl/voorwaarden, novastream.nl/privacy).'}}};
+      var hs={fields:[{name:'firstname',value:d.naam},{name:'email',value:d.email},{name:'phone',value:d.telefoon},{name:'message',value:'Bron: website. Plan: '+d.plan}],context:{pageUri:location.href,pageName:document.title},legalConsentOptions:{consent:{consentToProcess:true,text:'Ik ga akkoord met de algemene voorwaarden en het privacybeleid van Odysstream (odysstream.nl/voorwaarden, odysstream.nl/privacy).'}}};
       jobs.push(fetch('https://api'+(C.hubspotRegion?'-'+C.hubspotRegion:'')+'.hsforms.com/submissions/v3/integration/submit/'+C.hubspotPortalId+'/'+C.hubspotFormId,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(hs),keepalive:true}));
     }
     if(C.leadWebhook){jobs.push(fetch(C.leadWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}))}
@@ -68,7 +69,7 @@
     if(!form.akkoord.checked){bad.push('akkoord')}
     if(bad.length){bad.forEach(function(n){form[n].classList.add('err')});msg.textContent=bad[0]==='akkoord'?'Vink de voorwaarden aan om verder te gaan.':'Controleer je '+({naam:'naam',email:'e-mailadres',telefoon:'telefoonnummer'})[bad[0]]+'.';form[bad[0]].focus();return}
     var btn=document.getElementById('proef-submit');btn.disabled=true;btn.textContent='Even geduld...';
-    var text='Hoi Nova Stream! Ik wil graag '+(d.plan.indexOf('Abonnement')===0?'het '+d.plan.toLowerCase():'de 24 uur gratis proef')+' starten.\nNaam: '+d.naam+'\nE-mail: '+d.email;
+    var text='Hoi Odysstream! Ik wil graag '+(d.plan.indexOf('Abonnement')===0?'het '+d.plan.toLowerCase():'de 24 uur gratis proef')+' starten.\nNaam: '+d.naam+'\nE-mail: '+d.email;
     var url=waUrl(text);waBtn.href=url;
     var win=null;try{win=window.open('',
       '_blank')}catch(x){}
