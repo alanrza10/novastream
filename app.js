@@ -1,5 +1,19 @@
 (function(){
-  document.querySelectorAll('.rail-track').forEach(function(t){t.innerHTML+=t.innerHTML});
+  /* rijen tikken elke paar seconden één item door, zelfde richting; handmatig scrollen pauzeert */
+  document.querySelectorAll('.rail.tick,.toprail.tick').forEach(function(r){
+    var vis=false,pauseUntil=0,timer=null;
+    function step(){
+      if(!vis||Date.now()<pauseUntil||document.hidden)return;
+      var kids=r.children;if(kids.length<2)return;
+      var w=kids[1].offsetLeft-kids[0].offsetLeft;
+      var max=r.scrollWidth-r.clientWidth;
+      if(r.scrollLeft>=max-4){r.scrollTo({left:0,behavior:'smooth'})}else{r.scrollBy({left:w,behavior:'smooth'})}
+    }
+    var pause=function(ms){pauseUntil=Date.now()+(ms||7000)};
+    ['touchstart','pointerdown','wheel'].forEach(function(ev){r.addEventListener(ev,function(){pause(8000)},{passive:true})});
+    r.addEventListener('mouseenter',function(){pause(60000)});r.addEventListener('mouseleave',function(){pauseUntil=0});
+    new IntersectionObserver(function(es){vis=es[0].isIntersecting;if(vis&&!timer){timer=setInterval(step,3500)}else if(!vis&&timer){clearInterval(timer);timer=null}},{threshold:.3}).observe(r);
+  });
   // sticky nav
   var nav=document.getElementById('nav');
   var onS=function(){nav.classList.toggle('scrolled',window.scrollY>40)};onS();addEventListener('scroll',onS,{passive:true});
