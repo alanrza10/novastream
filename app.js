@@ -32,7 +32,7 @@
   /* rekentool */
   var calc=document.getElementById('bespaar');
   if(calc){
-    var NOVA=99/12,now=document.getElementById('c-now'),save=document.getElementById('c-save'),savem=document.getElementById('c-savem'),big=save.parentElement;
+    var NOVA=99.99/12,now=document.getElementById('c-now'),save=document.getElementById('c-save'),savem=document.getElementById('c-savem'),big=save.parentElement;
     var fmt=function(n){return n.toLocaleString('nl-NL',{minimumFractionDigits:2,maximumFractionDigits:2})};
     var fmt0=function(n){return Math.round(n).toLocaleString('nl-NL')};
     var cur={now:0,save:0};
