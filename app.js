@@ -107,10 +107,7 @@
   var KEY=C.sportsApiKey||'123';
   /* Eredivisie, Belgian Pro League, UEFA Champions League, UFC, Formule 1 */
   var LEAGUES=[4337,4338,4480,4443,4370];
-  var ART=['art-ajax','art-psv','art-ufc','art-f1','art-fey','art-cl','art-pl','art-ufc2'];
-  /* vaste kleur per competitie, zodat kaarten consistent ogen */
-  var LEAGUE_ART={'Dutch Eredivisie':'art-ajax','Belgian Pro League':'art-fey','Belgian First Division A':'art-fey','UEFA Champions League':'art-cl','UFC':'art-ufc','Formula 1':'art-f1'};
-  var CACHE_KEY='nova_sport_cache_v2',CACHE_MS=60*60*1000; /* 1 uur cache */
+  var CACHE_KEY='nova_sport_cache_v3',CACHE_MS=60*60*1000; /* 1 uur cache */
   var DAGEN=['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
   var DAGEN_KORT=['zo','ma','di','wo','do','vr','za'];
   var MAANDEN=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
@@ -124,15 +121,20 @@
     var dag=DAGEN[d.getDay()];
     return dag.charAt(0).toUpperCase()+dag.slice(1)+' '+d.getDate()+' '+MAANDEN[d.getMonth()]+', '+pad(d.getHours())+':'+pad(d.getMinutes())+' uur';
   }
+  /* Het badge moet per kaart iets anders zeggen, anders is het ruis.
+     Daarom de echte dag in plaats van zes keer "Dit weekend". */
   function badgeInfo(ev){
-    var now=Date.now(),start=toDate(ev).getTime();
-    if(!isNaN(start)){
-      if(now>=start && now<=start+3*60*60*1000)return{cls:' live',txt:'Nu live'};
-      var days=(start-now)/86400000;
-      if(days<7)return{cls:'',txt:'Dit weekend'};
-      if(days<14)return{cls:'',txt:'Volgend weekend'};
-    }
-    return{cls:'',txt:'Binnenkort'};
+    var d=toDate(ev);
+    if(isNaN(d.getTime()))return{cls:'',txt:'Binnenkort'};
+    var now=new Date(),start=d.getTime();
+    if(now.getTime()>=start&&now.getTime()<=start+3*60*60*1000)return{cls:' live',txt:'Nu live'};
+    var dayOf=function(x){return new Date(x.getFullYear(),x.getMonth(),x.getDate()).getTime()};
+    var days=Math.round((dayOf(d)-dayOf(now))/86400000);
+    if(days<0)return{cls:'',txt:'Binnenkort'};
+    if(days===0)return{cls:'',txt:d.getHours()>=17?'Vanavond':'Vandaag'};
+    if(days===1)return{cls:'',txt:'Morgen'};
+    if(days<7){var n=DAGEN[d.getDay()];return{cls:'',txt:n.charAt(0).toUpperCase()+n.slice(1)}}
+    return{cls:'',txt:DAGEN_KORT[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()]};
   }
   function teamsHtml(ev){
     if(ev.strHomeTeam&&ev.strAwayTeam)return esc(ev.strHomeTeam)+'<em>tegen</em>'+esc(ev.strAwayTeam);
@@ -145,24 +147,18 @@
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
   function crestsHtml(ev){
     if(ev.strHomeTeamBadge&&ev.strAwayTeamBadge){
-      return '<span class="crests"><img src="'+ev.strHomeTeamBadge+'" alt="" loading="lazy" onerror="this.parentElement.remove()"><em>vs</em><img src="'+ev.strAwayTeamBadge+'" alt="" loading="lazy" onerror="this.parentElement.remove()"></span>';
+      return '<span class="crests"><img src="'+esc(ev.strHomeTeamBadge)+'" alt="" loading="lazy" onerror="this.parentElement.remove()"><em>vs</em><img src="'+esc(ev.strAwayTeamBadge)+'" alt="" loading="lazy" onerror="this.parentElement.remove()"></span>';
+    }
+    /* UFC, Formule 1 en andere events zonder twee clubs: het competitielogo als beeldanker */
+    if(ev.strLeagueBadge){
+      return '<span class="crests one"><img src="'+esc(ev.strLeagueBadge)+'" alt="" loading="lazy" onerror="this.parentElement.remove()"></span>';
     }
     return '';
   }
-  /* Teamwedstrijden krijgen ALTIJD het rustige kleurverloop met de teamlogo's erop:
-     de eventbanners van TheSportsDB hebben witte achtergronden en tekst en snijden lelijk af.
-     Alleen events zonder twee teams (UFC, F1) gebruiken een echte eventfoto, met een
-     stevige donkere overlay zodat de tekst leesbaar blijft. */
-  function artAttr(ev,sizeClass,artClass){
-    var isTeams=!!(ev.strHomeTeam&&ev.strAwayTeam);
-    if(!isTeams){
-      var img=ev.strThumb||ev.strFanart||ev.strBanner||ev.strSquare||ev.strPoster;
-      if(img){
-        return ' class="ev '+sizeClass+' rv" style="--art:linear-gradient(180deg,rgba(11,13,18,.5),rgba(11,13,18,.95)),url(&quot;'+img+'&quot;) center 25%/cover"';
-      }
-    }
-    return ' class="ev '+sizeClass+' '+artClass+' rv"';
-  }
+  /* Geen eventfoto's meer als achtergrond. De afbeeldingen van TheSportsDB zijn
+     promotieposters met tekst en logo's er al in gedrukt; die botsen met onze eigen
+     kop en snijden lelijk af. Elke kaart krijgt dezelfde rustige merkachtergrond
+     (zie style.css) en de club- of competitielogo's leveren het beeld. */
   function fetchLeague(id){
     return fetch('https://www.thesportsdb.com/api/v1/json/'+encodeURIComponent(KEY)+'/eventsnextleague.php?id='+id)
       .then(function(r){return r.ok?r.json():null})
@@ -176,7 +172,7 @@
     var top=events.slice(0,6);
     var sizeCls=['big','m','m','s','s','s'];
     bento.innerHTML=top.map(function(ev,i){
-      var attr=artAttr(ev,sizeCls[i],LEAGUE_ART[ev.strLeague]||ART[i%ART.length]);
+      var attr=' class="ev '+sizeCls[i]+' rv"';
       var b=badgeInfo(ev);
       var crest=i===0?'<span class="crest"></span>':'';
       var btn=i===0?'<span class="btn primary">Probeer nu 24 uur gratis</span>':'';
