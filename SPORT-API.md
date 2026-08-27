@@ -20,8 +20,8 @@ sportsApiKey: "123"
 
 Om echte data te krijgen:
 
-1. Ga naar [patreon.com/thesportsdb](https://www.patreon.com/thesportsdb) en word member (vanaf ongeveer $9-10/maand, prijzen kunnen wijzigen).
-2. Na het upgraden staat je persoonlijke API-key in je profiel op thesportsdb.com.
+1. Ga naar [thesportsdb.com/pricing](https://www.thesportsdb.com/pricing) en registreer een account via de "Single Developer"-optie, $9/maand. (De "Small Business"-optie op $20/maand is alleen nodig als je ooit meer dan 100 aanvragen per minuut nodig hebt; voor deze site is dat niet aan de orde.)
+2. Na het registreren en upgraden staat je persoonlijke API-key in je profiel op thesportsdb.com.
 3. Vervang in `index.html` `sportsApiKey: "123"` door jouw eigen sleutel.
 
 Zonder die stap blijft de sectie gewoon werken zoals nu: met de handmatig ingevulde wedstrijden.
