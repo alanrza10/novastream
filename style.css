@@ -412,3 +412,24 @@ h1.words.in span:nth-child(2){transition-delay:.1s}h1.words.in span:nth-child(3)
 /* live-sportkaarten: ruimte bovenin zodat het badge nooit over de tekst valt */
 .ev{padding-top:64px}
 .ev.big{padding-top:80px}
+
+/* ===== Live-sportkaarten, herzien =====
+   Eén rustige, merkeigen achtergrond voor elke kaart. De clublogo's leveren de
+   kleur, het vlak zelf niet. Dat volgt de huisstijlregel dat rood en oranje
+   alleen semantisch zijn (live-badge) en cyaan het enige accent is. */
+.ev::before{background:
+  radial-gradient(120% 85% at 85% 0%, rgba(31,216,255,.10), transparent 62%),
+  linear-gradient(160deg,#191D26 0%,#12151C 52%,#0B0D12 100%)}
+.ev::after{background:linear-gradient(180deg,rgba(11,13,18,0) 45%,rgba(11,13,18,.5) 100%)}
+.ev:hover{border-color:rgba(31,216,255,.45)}
+/* Lange clubnamen vallen nooit meer buiten de kaart, maar breken ook niet
+   middenin een woord: break-word breekt alleen als één woord zelf te breed is. */
+.ev .teams{overflow-wrap:break-word;word-break:normal;max-width:100%}
+.ev.s .teams,.ev.m .teams{font-size:26px}
+/* competitielogo als beeldanker bij events zonder twee clubs (UFC, Formule 1) */
+.ev .crests.one img{width:52px;height:52px;padding:6px}
+.ev.big .crests.one img{width:72px;height:72px;padding:8px}
+/* Clubnamen onder elkaar, met "tegen" als eigen regel. Zo krijgt elke naam de
+   volle breedte en breekt er nooit een woord middenin. */
+.ev .teams em{display:block;margin:6px 0;font-size:14px;color:var(--text-mute)}
+.ev.big .teams em{font-size:18px;margin:10px 0}
