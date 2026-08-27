@@ -97,3 +97,111 @@
   });
   if(fine)addEventListener('mousemove',function(e){mx=(e.clientX/innerWidth-.5)*2;my=(e.clientY/innerHeight-.5)*2},{passive:true});
 })();
+
+/* ===== Live sport: TheSportsDB ===== */
+(function(){
+  var sportSection=document.getElementById('sport');
+  if(!sportSection)return;
+  var C=window.NOVA_CONFIG||{};
+  var KEY=C.sportsApiKey||'123';
+  /* Eredivisie, Belgian Pro League, UEFA Champions League, UFC, Formule 1 */
+  var LEAGUES=[4337,4338,4480,4443,4370];
+  var ART=['art-ajax','art-psv','art-ufc','art-f1','art-fey','art-cl','art-pl','art-ufc2'];
+  var CACHE_KEY='nova_sport_cache_v1',CACHE_MS=60*60*1000; /* 1 uur, respecteert de 30 req/min-limiet van de gratis sleutel */
+  var DAGEN=['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+  var DAGEN_KORT=['zo','ma','di','wo','do','vr','za'];
+  var MAANDEN=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+
+  function pad(n){return (n<10?'0':'')+n}
+  /* TheSportsDB geeft dateEvent/strTime doorgaans in UTC; we tonen dit in de tijdzone van de bezoeker (NL/BE = Europe/Amsterdam) */
+  function toDate(ev){return new Date(ev.dateEvent+'T'+(ev.strTime||'19:00:00')+'Z')}
+  function fmtWhen(ev){
+    var d=toDate(ev);
+    if(isNaN(d.getTime()))return ev.dateEvent||'';
+    var dag=DAGEN[d.getDay()];
+    return dag.charAt(0).toUpperCase()+dag.slice(1)+' '+d.getDate()+' '+MAANDEN[d.getMonth()]+', '+pad(d.getHours())+':'+pad(d.getMinutes())+' uur';
+  }
+  function badgeInfo(ev){
+    var now=Date.now(),start=toDate(ev).getTime();
+    if(!isNaN(start)){
+      if(now>=start && now<=start+3*60*60*1000)return{cls:' live',txt:'Nu live'};
+      var days=(start-now)/86400000;
+      if(days<7)return{cls:'',txt:'Dit weekend'};
+      if(days<14)return{cls:'',txt:'Volgend weekend'};
+    }
+    return{cls:'',txt:'Binnenkort'};
+  }
+  function teamsHtml(ev){
+    if(ev.strHomeTeam&&ev.strAwayTeam)return esc(ev.strHomeTeam)+'<em>tegen</em>'+esc(ev.strAwayTeam);
+    return esc(ev.strEvent||'')
+  }
+  function teamsPlain(ev){
+    if(ev.strHomeTeam&&ev.strAwayTeam)return ev.strHomeTeam+' tegen '+ev.strAwayTeam;
+    return ev.strEvent||''
+  }
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function crestsHtml(ev){
+    if(ev.strHomeTeamBadge&&ev.strAwayTeamBadge){
+      return '<span class="crests"><img src="'+ev.strHomeTeamBadge+'" alt="" loading="lazy" onerror="this.parentElement.remove()"><em>vs</em><img src="'+ev.strAwayTeamBadge+'" alt="" loading="lazy" onerror="this.parentElement.remove()"></span>';
+    }
+    return '';
+  }
+  /* voor evenementen zonder twee teams (UFC, F1) gebruiken we, indien aanwezig, de echte eventfoto als achtergrond in plaats van de kleurverloop-placeholder */
+  function artAttr(ev,fallbackClass){
+    if(ev.strThumb){
+      return ' class="ev '+fallbackClass.split(' ')[0]+' rv" style="--art:linear-gradient(180deg,rgba(11,13,18,.1),rgba(11,13,18,.94)),url(\''+ev.strThumb+'\') center/cover"';
+    }
+    return ' class="ev '+fallbackClass+' rv"';
+  }
+  function fetchLeague(id){
+    return fetch('https://www.thesportsdb.com/api/v1/json/'+encodeURIComponent(KEY)+'/eventsnextleague.php?id='+id)
+      .then(function(r){return r.ok?r.json():null})
+      .then(function(j){return (j&&j.events)||[]})
+      .catch(function(){return[]});
+  }
+  function render(events){
+    var bento=sportSection.querySelector('.bento'),agenda=sportSection.querySelector('.agenda');
+    if(!bento||!events.length)return; /* geen (bruikbare) data: de statische kaarten in index.html blijven gewoon staan */
+    events.sort(function(a,b){return(a.dateEvent+(a.strTime||'')).localeCompare(b.dateEvent+(b.strTime||''))});
+    var top=events.slice(0,6);
+    var sizeCls=['big','m','m','s','s','s'];
+    bento.innerHTML=top.map(function(ev,i){
+      var cls=sizeCls[i]+' '+ART[i%ART.length];
+      var attr=artAttr(ev,cls);
+      var b=badgeInfo(ev);
+      var crest=i===0?'<span class="crest"></span>':'';
+      var btn=i===0?'<span class="btn primary">Probeer nu 24 uur gratis</span>':'';
+      return '<a'+attr+' href="#gratis" data-proef>'+crest+
+        '<span class="badge'+b.cls+'">'+b.txt+'</span>'+
+        crestsHtml(ev)+
+        '<span class="comp">'+esc(ev.strLeague||'')+'</span>'+
+        '<span class="teams">'+teamsHtml(ev)+'</span>'+
+        '<span class="when">'+esc(fmtWhen(ev))+(ev.strVenue?', '+esc(ev.strVenue):'')+'</span>'+btn+'</a>';
+    }).join('');
+    if(agenda){
+      agenda.innerHTML=events.slice(0,4).map(function(ev){
+        var d=toDate(ev);
+        var label=isNaN(d.getTime())?'':DAGEN_KORT[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()];
+        return '<a class="ag" href="#gratis" data-proef><span class="d">'+label+'</span><div><b>'+esc(teamsPlain(ev))+'</b><small>'+esc(ev.strLeague||'')+(ev.strTime?', '+ev.strTime.slice(0,5)+' uur':'')+'</small></div></a>';
+      }).join('');
+    }
+    /* dynamisch ingevoegde kaarten missen de scroll-reveal van bij het laden: gewoon meteen zichtbaar tonen */
+    sportSection.querySelectorAll('.rv').forEach(function(el){el.classList.add('in')});
+  }
+  function load(){
+    try{
+      var cached=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');
+      if(cached&&(Date.now()-cached.t)<CACHE_MS&&cached.events&&cached.events.length){render(cached.events);return}
+    }catch(e){}
+    Promise.all(LEAGUES.map(fetchLeague)).then(function(lists){
+      var today=new Date().toISOString().slice(0,10);
+      var events=[].concat.apply([],lists).filter(function(ev){return ev&&ev.dateEvent&&ev.dateEvent>=today});
+      if(events.length){
+        try{localStorage.setItem(CACHE_KEY,JSON.stringify({t:Date.now(),events:events}))}catch(e){}
+        render(events);
+      }
+      /* geen (toegankelijke) events voor deze sleutel/competities: de statische kaarten blijven staan, geen lege sectie */
+    });
+  }
+  load();
+})();
