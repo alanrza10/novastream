@@ -123,6 +123,10 @@ section{padding:96px 0;position:relative}
 .art-cl{--art:linear-gradient(135deg,#0a2a6e 0%,#061a44 50%,#0B0D12 100%)}
 .art-pl{--art:linear-gradient(135deg,#3d0b5e 0%,#170426 50%,#0B0D12 100%)}
 .art-ufc2{--art:linear-gradient(135deg,#b8860b 0%,#3d2c04 50%,#0B0D12 100%)}
+.ev .crests{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ev .crests img{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 2px 8px rgba(0,0,0,.6));background:rgba(255,255,255,.06);border-radius:8px;padding:4px}
+.ev.big .crests img{width:52px;height:52px;padding:6px}
+.ev .crests em{font-style:normal;color:var(--text-mute);font-size:12px}
 .agenda{margin-top:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 .ag{border:1px solid var(--border);border-radius:var(--r-md);padding:16px 20px;background:var(--surface);display:flex;gap:16px;align-items:center;transition:border-color .2s}
 .ag:hover{border-color:rgba(31,216,255,.5)}
