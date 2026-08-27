@@ -32,15 +32,16 @@
   /* rekentool */
   var calc=document.getElementById('bespaar');
   if(calc){
-    var NOVA=99.99/12,now=document.getElementById('c-now'),save=document.getElementById('c-save'),savem=document.getElementById('c-savem'),big=save.parentElement;
+    var NOVA_JAAR=99.99,now=document.getElementById('c-now'),save=document.getElementById('c-save'),big=save.parentElement;
     var fmt=function(n){return n.toLocaleString('nl-NL',{minimumFractionDigits:2,maximumFractionDigits:2})};
     var fmt0=function(n){return Math.round(n).toLocaleString('nl-NL')};
     var cur={now:0,save:0};
     function upd(){
       var t=0;calc.querySelectorAll('.ck input:checked').forEach(function(i){t+=parseFloat(i.value)});
-      var sm=Math.max(0,t-NOVA),sy=sm*12,from={now:cur.now,save:cur.save},s0=performance.now();
+      /* de vinkjes zijn maandprijzen; we rekenen alles om naar een jaarbedrag, zodat de vergelijking met €99,99 per jaar klopt */
+      var tj=t*12,sy=Math.max(0,tj-NOVA_JAAR),from={now:cur.now,save:cur.save},s0=performance.now();
       big.classList.add('pop');setTimeout(function(){big.classList.remove('pop')},250);
-      (function f(n){var p=Math.min(1,(n-s0)/600),e=1-Math.pow(1-p,3);var a=from.now+(t-from.now)*e,b=from.save+(sy-from.save)*e;now.textContent=fmt(a);save.textContent=fmt0(b);savem.textContent=fmt(b/12);if(p<1)requestAnimationFrame(f);else{cur.now=t;cur.save=sy}})(s0);
+      (function f(n){var p=Math.min(1,(n-s0)/600),e=1-Math.pow(1-p,3);var a=from.now+(tj-from.now)*e,b=from.save+(sy-from.save)*e;now.textContent=fmt(a);save.textContent=fmt0(b);if(p<1)requestAnimationFrame(f);else{cur.now=tj;cur.save=sy}})(s0);
     }
     calc.querySelectorAll('.ck input').forEach(function(i){i.addEventListener('change',upd)});
     upd();
