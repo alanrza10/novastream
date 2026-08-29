@@ -433,3 +433,7 @@ h1.words.in span:nth-child(2){transition-delay:.1s}h1.words.in span:nth-child(3)
    volle breedte en breekt er nooit een woord middenin. */
 .ev .teams em{display:block;margin:6px 0;font-size:14px;color:var(--text-mute)}
 .ev.big .teams em{font-size:18px;margin:10px 0}
+/* koopmodus: extra velden staan als eigen blokje in het formulier */
+.koopvelden{display:grid;gap:14px;padding:16px 0 2px;border-top:1px solid var(--border);margin-top:2px}
+.koopvelden[hidden]{display:none}
+#f-factuur{color:var(--accent);font-weight:700;letter-spacing:.04em;cursor:default;background:rgba(31,216,255,.06);border-color:rgba(31,216,255,.35)}
