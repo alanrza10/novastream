@@ -53,8 +53,8 @@ section{padding:96px 0;position:relative}
 .nav.scrolled{background:rgba(11,13,18,.82);backdrop-filter:blur(14px);border-color:var(--border)}
 .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:76px;gap:24px}
 .logo{display:inline-flex;align-items:center;gap:10px}
-.logo .mark{width:28px;height:28px;border-radius:50%;border:2px solid var(--text);position:relative;flex:none}
-.logo .mark::after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:var(--accent);top:-3px;right:-3px;box-shadow:0 0 10px rgba(31,216,255,.8)}
+.logo .mark{width:28px;height:28px;border-radius:9px;border:2px solid var(--text);position:relative;flex:none}
+.logo .mark::after{content:"";position:absolute;left:8px;top:6px;width:0;height:0;border-left:10px solid var(--accent);border-top:6px solid transparent;border-bottom:6px solid transparent;filter:drop-shadow(0 0 6px rgba(31,216,255,.55))}
 .logo .word{font-size:20px;letter-spacing:-.02em;line-height:1;white-space:nowrap}
 .logo .word b{font-weight:800;font-stretch:125%}
 .logo .word span{font-weight:400;color:var(--text-soft);margin-left:5px}
