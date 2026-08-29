@@ -437,3 +437,17 @@ h1.words.in span:nth-child(2){transition-delay:.1s}h1.words.in span:nth-child(3)
 .koopvelden{display:grid;gap:14px;padding:16px 0 2px;border-top:1px solid var(--border);margin-top:2px}
 .koopvelden[hidden]{display:none}
 #f-factuur{color:var(--accent);font-weight:700;letter-spacing:.04em;cursor:default;background:rgba(31,216,255,.06);border-color:rgba(31,216,255,.35)}
+
+/* Het akkoordvakje. In .f staat appearance:none op alle invoervelden, waardoor het
+   native vinkje verdween: je klikte wel, maar zag niets gebeuren. Daarom hier een
+   eigen aangevinkte staat, in dezelfde stijl als de vinkjes in de rekentool. */
+.f .chk{cursor:pointer}
+.f .chk input{appearance:none;-webkit-appearance:none;width:22px;height:22px;margin:0;padding:0;
+  border:1px solid var(--text-mute);border-radius:6px;background:var(--bg);position:relative;
+  flex:none;cursor:pointer;transition:background .15s,border-color .15s,box-shadow .15s}
+.f .chk input:hover{border-color:var(--accent)}
+.f .chk input:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,216,255,.25)}
+.f .chk input:checked{background:var(--accent);border-color:var(--accent)}
+.f .chk input:checked::after{content:"";position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306121A' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E") center/14px no-repeat}
+.f .chk input.err{border-color:var(--live);box-shadow:0 0 0 3px rgba(255,59,92,.2)}
