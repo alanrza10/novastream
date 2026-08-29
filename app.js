@@ -62,18 +62,63 @@
 
   /* ===== Gratis-proef flow: formulier -> CRM -> WhatsApp ===== */
   var C=window.NOVA_CONFIG||{},modal=document.getElementById('proef'),form=document.getElementById('proef-form'),msg=document.getElementById('proef-msg'),waBtn=document.getElementById('proef-wa'),lastFocus=null;
-  function openModal(plan){modal.classList.remove('sent');form.reset();form.plan.value=plan||'Gratis proef 24 uur';document.getElementById('proef-submit').textContent='Probeer nu 24 uur gratis';msg.textContent='';lastFocus=document.activeElement;modal.classList.add('open');document.body.style.overflow='hidden';setTimeout(function(){form.naam.focus()},50)}
+  var koopWrap=modal.querySelector('.koopvelden'),modalTitle=document.getElementById('proef-t'),
+      modalEyebrow=modal.querySelector('.eyebrow'),modalIntro=modal.querySelector('.box>p'),koopModus=false;
+
+  /* Factuurnummer. Loopt op vanaf 33761 en telt één op per minuut sinds de start van
+     de verkoop, zodat twee bezoekers vrijwel nooit hetzelfde nummer krijgen. Een echt
+     sluitende nummering vraagt een server; zie KOPPELING.md. */
+  var FACTUUR_START=C.factuurStart||33761,
+      VERKOOP_START=Date.parse(C.verkoopStart||'2026-08-29T00:00:00Z');
+  function factuurnummer(){
+    return String(FACTUUR_START+Math.max(0,Math.floor((Date.now()-VERKOOP_START)/60000)));
+  }
+
+  /* IBAN-controle volgens de officiële 97-toets, zodat een typefout er meteen uit komt */
+  function ibanGeldig(v){
+    v=(v||'').replace(/\s+/g,'').toUpperCase();
+    if(!/^[A-Z]{2}[0-9]{2}[A-Z0-9]{10,30}$/.test(v))return false;
+    var her=v.slice(4)+v.slice(0,4), num='';
+    for(var i=0;i<her.length;i++){var c=her.charCodeAt(i);num+=(c>=65&&c<=90)?(c-55):her[i]}
+    var rest=0;
+    for(var j=0;j<num.length;j++){rest=(rest*10+ +num[j])%97}
+    return rest===1;
+  }
+
+  function openModal(plan,koop){
+    koopModus=!!koop;
+    modal.classList.remove('sent');form.reset();
+    form.plan.value=plan||'Gratis proef 24 uur';
+    koopWrap.hidden=!koopModus;
+    if(koopModus){
+      form.factuur.value=factuurnummer();
+      modalEyebrow.textContent='Vooraf betaald, verlengt nooit vanzelf';
+      modalTitle.textContent='Bestellen: '+(plan||'').replace('Abonnement ','');
+      modalIntro.textContent='Vul je gegevens in. Je krijgt de betaalinstructies en je activatiecode via WhatsApp.';
+      document.getElementById('proef-submit').textContent='Bestelling plaatsen';
+    }else{
+      modalEyebrow.textContent='24 uur gratis, stopt vanzelf';
+      modalTitle.textContent='Probeer nu 24 uur gratis';
+      modalIntro.textContent='Vul je gegevens in, dan sturen we je binnen 5 minuten je activatiecode.';
+      document.getElementById('proef-submit').textContent='Probeer nu 24 uur gratis';
+    }
+    msg.textContent='';lastFocus=document.activeElement;modal.classList.add('open');
+    document.body.style.overflow='hidden';setTimeout(function(){form.naam.focus()},50)
+  }
   function closeModal(){modal.classList.remove('open');document.body.style.overflow='';if(lastFocus)lastFocus.focus()}
   document.querySelectorAll('[data-proef]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();openModal(a.dataset.plan?'Abonnement '+a.dataset.plan:'')})});
+  document.querySelectorAll('[data-koop]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();openModal('Abonnement '+a.dataset.plan,true)})});
   modal.querySelectorAll('[data-close]').forEach(function(el){el.addEventListener('click',closeModal)});
   addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('open'))closeModal()});
   function waUrl(text){return 'https://wa.me/'+(C.whatsapp||'').replace(/\D/g,'')+'?text='+encodeURIComponent(text)}
   document.querySelectorAll('[data-wa]').forEach(function(a){a.href=waUrl('Hoi Odysstream, ik heb een vraag.');a.target='_blank';a.rel='noopener'});
   function lead(d){
-    var payload={naam:d.naam,email:d.email,telefoon:d.telefoon,plan:d.plan,bron:'website',pagina:location.href,tijd:new Date().toISOString()};
+    var payload={naam:d.naam,email:d.email,telefoon:d.telefoon,plan:d.plan,
+      bron:d.koop?'website bestelling':'website gratis proef',pagina:location.href,tijd:new Date().toISOString()};
+    if(d.koop){payload.factuurnummer=d.factuur;payload.tenaamstelling=d.tenaamstelling;payload.iban=d.iban}
     var jobs=[];
     if(C.crm==='hubspot'&&C.hubspotPortalId&&C.hubspotFormId){
-      var hs={fields:[{name:'firstname',value:d.naam},{name:'email',value:d.email},{name:'phone',value:d.telefoon},{name:'message',value:'Bron: website. Plan: '+d.plan}],context:{pageUri:location.href,pageName:document.title},legalConsentOptions:{consent:{consentToProcess:true,text:'Ik ga akkoord met de algemene voorwaarden en het privacybeleid van Odysstream (odysstream.nl/voorwaarden, odysstream.nl/privacy).'}}};
+      var hs={fields:[{name:'firstname',value:d.naam},{name:'email',value:d.email},{name:'phone',value:d.telefoon},{name:'message',value:'Bron: website. Plan: '+d.plan+(d.koop?('\nBESTELLING\nFactuurnummer: '+d.factuur+'\nTenaamstelling: '+d.tenaamstelling+'\nIBAN: '+d.iban):'')}],context:{pageUri:location.href,pageName:document.title},legalConsentOptions:{consent:{consentToProcess:true,text:'Ik ga akkoord met de algemene voorwaarden en het privacybeleid van Odysstream (odysstream.nl/voorwaarden, odysstream.nl/privacy).'}}};
       jobs.push(fetch('https://api'+(C.hubspotRegion?'-'+C.hubspotRegion:'')+'.hsforms.com/submissions/v3/integration/submit/'+C.hubspotPortalId+'/'+C.hubspotFormId,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(hs),keepalive:true}));
     }
     if(C.leadWebhook){jobs.push(fetch(C.leadWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}))}
@@ -82,19 +127,36 @@
   }
   form.addEventListener('submit',function(e){
     e.preventDefault();msg.textContent='';
-    var d={naam:form.naam.value.trim(),email:form.email.value.trim(),telefoon:form.telefoon.value.trim(),plan:form.plan.value};
+    var d={naam:form.naam.value.trim(),email:form.email.value.trim(),telefoon:form.telefoon.value.trim(),plan:form.plan.value,koop:koopModus};
+    if(koopModus){d.factuur=form.factuur.value;d.tenaamstelling=form.tenaamstelling.value.trim();
+      d.iban=form.iban.value.replace(/\s+/g,'').toUpperCase()}
     var bad=[];form.querySelectorAll('input').forEach(function(i){i.classList.remove('err')});
     if(d.naam.length<2){bad.push('naam')}
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)){bad.push('email')}
     if(d.telefoon.replace(/\D/g,'').length<9){bad.push('telefoon')}
+    if(koopModus&&d.tenaamstelling.length<2){bad.push('tenaamstelling')}
+    if(koopModus&&!ibanGeldig(d.iban)){bad.push('iban')}
     if(!form.akkoord.checked){bad.push('akkoord')}
-    if(bad.length){bad.forEach(function(n){form[n].classList.add('err')});msg.textContent=bad[0]==='akkoord'?'Vink de voorwaarden aan om verder te gaan.':'Controleer je '+({naam:'naam',email:'e-mailadres',telefoon:'telefoonnummer'})[bad[0]]+'.';form[bad[0]].focus();return}
+    if(bad.length){bad.forEach(function(n){form[n].classList.add('err')});
+      msg.textContent=bad[0]==='akkoord'?'Vink de voorwaarden aan om verder te gaan.':
+        (bad[0]==='iban'?'Dit IBAN klopt niet. Controleer het even.':
+        'Controleer je '+({naam:'naam',email:'e-mailadres',telefoon:'telefoonnummer',tenaamstelling:'tenaamstelling'})[bad[0]]+'.');
+      form[bad[0]].focus();return}
     var btn=document.getElementById('proef-submit');btn.disabled=true;btn.textContent='Even geduld...';
-    var text='Hoi Odysstream! Ik wil graag '+(d.plan.indexOf('Abonnement')===0?'het '+d.plan.toLowerCase():'de 24 uur gratis proef')+' starten.\nNaam: '+d.naam+'\nE-mail: '+d.email;
+    /* De IBAN gaat bewust NIET mee in de WhatsApp-link: die zou dan in de URL en in het
+       chatverloop belanden. Alan vindt hem bij de bestelling in het CRM. */
+    var text = koopModus
+      ? 'Hoi Odysstream! Ik wil graag '+d.plan.toLowerCase()+' bestellen.\nFactuurnummer: '+d.factuur+'\nNaam: '+d.naam+'\nE-mail: '+d.email+'\nMijn rekeninggegevens heb ik op de site ingevuld.'
+      : 'Hoi Odysstream! Ik wil graag de 24 uur gratis proef starten.\nNaam: '+d.naam+'\nE-mail: '+d.email;
     var url=waUrl(text);waBtn.href=url;
     var win=null;try{win=window.open('',
       '_blank')}catch(x){}
-    lead(d).then(function(){modal.classList.add('sent');btn.disabled=false;btn.textContent='Probeer nu 24 uur gratis';if(win){win.location=url}else{location.href=url}});
+    lead(d).then(function(){
+      var doneT=modal.querySelector('.done h3'),doneP=modal.querySelector('.done p');
+      if(koopModus){doneT.textContent='Bestelling ontvangen';
+        doneP.textContent='Je factuurnummer is '+d.factuur+'. Verstuur het bericht in WhatsApp, dan krijg je de betaalinstructies.'}
+      else{doneT.textContent='Bijna klaar!';doneP.textContent='Verstuur het bericht in WhatsApp en je code komt eraan.'}
+      modal.classList.add('sent');btn.disabled=false;btn.textContent=koopModus?'Bestelling plaatsen':'Probeer nu 24 uur gratis';if(win){win.location=url}else{location.href=url}});
   });
   if(fine)addEventListener('mousemove',function(e){mx=(e.clientX/innerWidth-.5)*2;my=(e.clientY/innerHeight-.5)*2},{passive:true});
 })();
