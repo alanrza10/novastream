@@ -32,14 +32,14 @@
   /* rekentool */
   var calc=document.getElementById('bespaar');
   if(calc){
-    var NOVA_JAAR=99.99,now=document.getElementById('c-now'),save=document.getElementById('c-save'),big=save.parentElement;
+    var JAARPRIJS=99.99,now=document.getElementById('c-now'),save=document.getElementById('c-save'),big=save.parentElement;
     var fmt=function(n){return n.toLocaleString('nl-NL',{minimumFractionDigits:2,maximumFractionDigits:2})};
     var fmt0=function(n){return Math.round(n).toLocaleString('nl-NL')};
     var cur={now:0,save:0};
     function upd(){
       var t=0;calc.querySelectorAll('.ck input:checked').forEach(function(i){t+=parseFloat(i.value)});
       /* de vinkjes zijn maandprijzen; we rekenen alles om naar een jaarbedrag, zodat de vergelijking met €99,99 per jaar klopt */
-      var tj=t*12,sy=Math.max(0,tj-NOVA_JAAR),from={now:cur.now,save:cur.save},s0=performance.now();
+      var tj=t*12,sy=Math.max(0,tj-JAARPRIJS),from={now:cur.now,save:cur.save},s0=performance.now();
       big.classList.add('pop');setTimeout(function(){big.classList.remove('pop')},250);
       (function f(n){var p=Math.min(1,(n-s0)/600),e=1-Math.pow(1-p,3);var a=from.now+(tj-from.now)*e,b=from.save+(sy-from.save)*e;now.textContent=fmt(a);save.textContent=fmt0(b);if(p<1)requestAnimationFrame(f);else{cur.now=tj;cur.save=sy}})(s0);
     }
@@ -61,7 +61,7 @@
   requestAnimationFrame(frame);
 
   /* ===== Gratis-proef flow: formulier -> CRM -> WhatsApp ===== */
-  var C=window.NOVA_CONFIG||{},modal=document.getElementById('proef'),form=document.getElementById('proef-form'),msg=document.getElementById('proef-msg'),waBtn=document.getElementById('proef-wa'),lastFocus=null;
+  var C=window.THUISPLAY_CONFIG||{},modal=document.getElementById('proef'),form=document.getElementById('proef-form'),msg=document.getElementById('proef-msg'),waBtn=document.getElementById('proef-wa'),lastFocus=null;
   var koopWrap=modal.querySelector('.koopvelden'),modalTitle=document.getElementById('proef-t'),
       modalEyebrow=modal.querySelector('.eyebrow'),modalIntro=modal.querySelector('.box>p'),koopModus=false;
 
@@ -113,18 +113,18 @@
   modal.querySelectorAll('.chk a').forEach(function(a){a.addEventListener('click',function(e){e.stopPropagation()})});
   addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('open'))closeModal()});
   function waUrl(text){return 'https://wa.me/'+(C.whatsapp||'').replace(/\D/g,'')+'?text='+encodeURIComponent(text)}
-  document.querySelectorAll('[data-wa]').forEach(function(a){a.href=waUrl('Hoi Odysstream, ik heb een vraag.');a.target='_blank';a.rel='noopener'});
+  document.querySelectorAll('[data-wa]').forEach(function(a){a.href=waUrl('Hoi Thuisplay, ik heb een vraag.');a.target='_blank';a.rel='noopener'});
   function lead(d){
     var payload={naam:d.naam,email:d.email,telefoon:d.telefoon,plan:d.plan,
-      bron:d.koop?'website bestelling':'website gratis proef',pagina:location.href,tijd:new Date().toISOString()};
+      merk:C.merk||'Thuisplay',bron:d.koop?'website bestelling':'website gratis proef',pagina:location.href,tijd:new Date().toISOString()};
     if(d.koop){payload.factuurnummer=d.factuur;payload.tenaamstelling=d.tenaamstelling;payload.iban=d.iban}
     var jobs=[];
     if(C.crm==='hubspot'&&C.hubspotPortalId&&C.hubspotFormId){
-      var hs={fields:[{name:'firstname',value:d.naam},{name:'email',value:d.email},{name:'phone',value:d.telefoon},{name:'message',value:'Bron: website. Plan: '+d.plan+(d.koop?('\nBESTELLING\nFactuurnummer: '+d.factuur+'\nTenaamstelling: '+d.tenaamstelling+'\nIBAN: '+d.iban):'')}],context:{pageUri:location.href,pageName:document.title},legalConsentOptions:{consent:{consentToProcess:true,text:'Ik ga akkoord met de algemene voorwaarden en het privacybeleid van Odysstream (odysstream.nl/voorwaarden, odysstream.nl/privacy).'}}};
+      var hs={fields:[{name:'firstname',value:d.naam},{name:'email',value:d.email},{name:'phone',value:d.telefoon},{name:'message',value:'Merk: '+(C.merk||'Thuisplay')+'. Bron: website. Plan: '+d.plan+(d.koop?('\nBESTELLING\nFactuurnummer: '+d.factuur+'\nTenaamstelling: '+d.tenaamstelling+'\nIBAN: '+d.iban):'')}],context:{pageUri:location.href,pageName:document.title},legalConsentOptions:{consent:{consentToProcess:true,text:'Ik ga akkoord met de algemene voorwaarden en het privacybeleid van Thuisplay (thuisplay.nl/voorwaarden, thuisplay.nl/privacy).'}}};
       jobs.push(fetch('https://api'+(C.hubspotRegion?'-'+C.hubspotRegion:'')+'.hsforms.com/submissions/v3/integration/submit/'+C.hubspotPortalId+'/'+C.hubspotFormId,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(hs),keepalive:true}));
     }
     if(C.leadWebhook){jobs.push(fetch(C.leadWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}))}
-    if(!jobs.length){try{var l=JSON.parse(localStorage.getItem('nova_leads')||'[]');l.push(payload);localStorage.setItem('nova_leads',JSON.stringify(l))}catch(e){}console.log('[Nova] lead (CRM nog niet gekoppeld):',payload)}
+    if(!jobs.length){try{var l=JSON.parse(localStorage.getItem('thuisplay_leads')||'[]');l.push(payload);localStorage.setItem('thuisplay_leads',JSON.stringify(l))}catch(e){}console.log('[Thuisplay] lead (CRM nog niet gekoppeld):',payload)}
     return Promise.allSettled(jobs);
   }
   form.addEventListener('submit',function(e){
@@ -148,8 +148,8 @@
     /* De IBAN gaat bewust NIET mee in de WhatsApp-link: die zou dan in de URL en in het
        chatverloop belanden. Alan vindt hem bij de bestelling in het CRM. */
     var text = koopModus
-      ? 'Hoi Odysstream! Ik wil graag '+d.plan.toLowerCase()+' bestellen.\nFactuurnummer: '+d.factuur+'\nNaam: '+d.naam+'\nE-mail: '+d.email+'\nMijn rekeninggegevens heb ik op de site ingevuld.'
-      : 'Hoi Odysstream! Ik wil graag de 24 uur gratis proef starten.\nNaam: '+d.naam+'\nE-mail: '+d.email;
+      ? 'Hoi Thuisplay! Ik wil graag '+d.plan.toLowerCase()+' bestellen.\nFactuurnummer: '+d.factuur+'\nNaam: '+d.naam+'\nE-mail: '+d.email+'\nMijn rekeninggegevens heb ik op de site ingevuld.'
+      : 'Hoi Thuisplay! Ik wil graag de 24 uur gratis proef starten.\nNaam: '+d.naam+'\nE-mail: '+d.email;
     var url=waUrl(text);waBtn.href=url;
     var win=null;try{win=window.open('',
       '_blank')}catch(x){}
@@ -167,11 +167,11 @@
 (function(){
   var sportSection=document.getElementById('sport');
   if(!sportSection)return;
-  var C=window.NOVA_CONFIG||{};
+  var C=window.THUISPLAY_CONFIG||{};
   var KEY=C.sportsApiKey||'123';
   /* Eredivisie, Belgian Pro League, UEFA Champions League, UFC, Formule 1 */
   var LEAGUES=[4337,4338,4480,4443,4370];
-  var CACHE_KEY='nova_sport_cache_v3',CACHE_MS=60*60*1000; /* 1 uur cache */
+  var CACHE_KEY='thuisplay_sport_cache_v3',CACHE_MS=60*60*1000; /* 1 uur cache */
   var DAGEN=['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
   var DAGEN_KORT=['zo','ma','di','wo','do','vr','za'];
   var MAANDEN=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
