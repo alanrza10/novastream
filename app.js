@@ -109,6 +109,8 @@
   document.querySelectorAll('[data-proef]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();openModal(a.dataset.plan?'Abonnement '+a.dataset.plan:'')})});
   document.querySelectorAll('[data-koop]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();openModal('Abonnement '+a.dataset.plan,true)})});
   modal.querySelectorAll('[data-close]').forEach(function(el){el.addEventListener('click',closeModal)});
+  /* links naar voorwaarden en privacy in het akkoordlabel mogen het vakje niet omzetten */
+  modal.querySelectorAll('.chk a').forEach(function(a){a.addEventListener('click',function(e){e.stopPropagation()})});
   addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('open'))closeModal()});
   function waUrl(text){return 'https://wa.me/'+(C.whatsapp||'').replace(/\D/g,'')+'?text='+encodeURIComponent(text)}
   document.querySelectorAll('[data-wa]').forEach(function(a){a.href=waUrl('Hoi Odysstream, ik heb een vraag.');a.target='_blank';a.rel='noopener'});
