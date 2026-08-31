@@ -62,40 +62,29 @@
 
   /* ===== Gratis-proef flow: formulier -> CRM -> WhatsApp ===== */
   var C=window.THUISPLAY_CONFIG||{},modal=document.getElementById('proef'),form=document.getElementById('proef-form'),msg=document.getElementById('proef-msg'),waBtn=document.getElementById('proef-wa'),lastFocus=null;
-  var koopWrap=modal.querySelector('.koopvelden'),modalTitle=document.getElementById('proef-t'),
+  var modalTitle=document.getElementById('proef-t'),
       modalEyebrow=modal.querySelector('.eyebrow'),modalIntro=modal.querySelector('.box>p'),koopModus=false;
 
-  /* Factuurnummer. Loopt op vanaf 33761 en telt één op per minuut sinds de start van
-     de verkoop, zodat twee bezoekers vrijwel nooit hetzelfde nummer krijgen. Een echt
-     sluitende nummering vraagt een server; zie KOPPELING.md. */
-  var FACTUUR_START=C.factuurStart||33761,
+  /* Referentienummer. Begint bij een getal van vijf cijfers en telt één op per minuut
+     sinds de start van de verkoop, dus het loopt altijd op en twee bezoekers krijgen
+     vrijwel nooit hetzelfde nummer. Een nummering die per bestelling precies één
+     ophoogt kan niet zonder server; zie KOPPELING.md. */
+  var REF_START=C.referentieStart||C.factuurStart||63418,
       VERKOOP_START=Date.parse(C.verkoopStart||'2026-08-29T00:00:00Z');
-  function factuurnummer(){
-    return String(FACTUUR_START+Math.max(0,Math.floor((Date.now()-VERKOOP_START)/60000)));
+  function referentienummer(){
+    return String(REF_START+Math.max(0,Math.floor((Date.now()-VERKOOP_START)/60000)));
   }
-
-  /* IBAN-controle volgens de officiële 97-toets, zodat een typefout er meteen uit komt */
-  function ibanGeldig(v){
-    v=(v||'').replace(/\s+/g,'').toUpperCase();
-    if(!/^[A-Z]{2}[0-9]{2}[A-Z0-9]{10,30}$/.test(v))return false;
-    var her=v.slice(4)+v.slice(0,4), num='';
-    for(var i=0;i<her.length;i++){var c=her.charCodeAt(i);num+=(c>=65&&c<=90)?(c-55):her[i]}
-    var rest=0;
-    for(var j=0;j<num.length;j++){rest=(rest*10+ +num[j])%97}
-    return rest===1;
-  }
+  var PRIJZEN={'3 maanden':'39,99','6 maanden':'59,99','12 maanden':'99,99'};
 
   function openModal(plan,koop){
     koopModus=!!koop;
     modal.classList.remove('sent');form.reset();
     form.plan.value=plan||'Gratis proef 24 uur';
-    koopWrap.hidden=!koopModus;
     if(koopModus){
-      form.factuur.value=factuurnummer();
       modalEyebrow.textContent='Vooraf betaald, verlengt nooit vanzelf';
       modalTitle.textContent='Bestellen: '+(plan||'').replace('Abonnement ','');
-      modalIntro.textContent='Vul je gegevens in. Je krijgt de betaalinstructies en je activatiecode via WhatsApp.';
-      document.getElementById('proef-submit').textContent='Bestelling plaatsen';
+      modalIntro.textContent='Vul je gegevens in. Op de volgende stap zie je naar welke rekening je overmaakt.';
+      document.getElementById('proef-submit').textContent='Naar de betaalgegevens';
     }else{
       modalEyebrow.textContent='24 uur gratis, stopt vanzelf';
       modalTitle.textContent='Probeer nu 24 uur gratis';
@@ -117,10 +106,10 @@
   function lead(d){
     var payload={naam:d.naam,email:d.email,telefoon:d.telefoon,plan:d.plan,
       merk:C.merk||'Thuisplay',bron:d.koop?'website bestelling':'website gratis proef',pagina:location.href,tijd:new Date().toISOString()};
-    if(d.koop){payload.factuurnummer=d.factuur;payload.tenaamstelling=d.tenaamstelling;payload.iban=d.iban}
+    if(d.koop){payload.referentienummer=d.ref;payload.bedrag=d.bedrag}
     var jobs=[];
     if(C.crm==='hubspot'&&C.hubspotPortalId&&C.hubspotFormId){
-      var hs={fields:[{name:'firstname',value:d.naam},{name:'email',value:d.email},{name:'phone',value:d.telefoon},{name:'message',value:'Merk: '+(C.merk||'Thuisplay')+'. Bron: website. Plan: '+d.plan+(d.koop?('\nBESTELLING\nFactuurnummer: '+d.factuur+'\nTenaamstelling: '+d.tenaamstelling+'\nIBAN: '+d.iban):'')}],context:{pageUri:location.href,pageName:document.title},legalConsentOptions:{consent:{consentToProcess:true,text:'Ik ga akkoord met de algemene voorwaarden en het privacybeleid van Thuisplay (thuisplay.nl/voorwaarden, thuisplay.nl/privacy).'}}};
+      var hs={fields:[{name:'firstname',value:d.naam},{name:'email',value:d.email},{name:'phone',value:d.telefoon},{name:'message',value:'Merk: '+(C.merk||'Thuisplay')+'. Bron: website. Plan: '+d.plan+(d.koop?('\nBESTELLING\nReferentienummer: '+d.ref+'\nBedrag: EUR '+d.bedrag+'\nWacht op overboeking.'):'')}],context:{pageUri:location.href,pageName:document.title},legalConsentOptions:{consent:{consentToProcess:true,text:'Ik ga akkoord met de algemene voorwaarden en het privacybeleid van Thuisplay (thuisplay.nl/voorwaarden, thuisplay.nl/privacy).'}}};
       jobs.push(fetch('https://api'+(C.hubspotRegion?'-'+C.hubspotRegion:'')+'.hsforms.com/submissions/v3/integration/submit/'+C.hubspotPortalId+'/'+C.hubspotFormId,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(hs),keepalive:true}));
     }
     if(C.leadWebhook){jobs.push(fetch(C.leadWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}))}
@@ -129,36 +118,35 @@
   }
   form.addEventListener('submit',function(e){
     e.preventDefault();msg.textContent='';
+    var periode=(form.plan.value||'').replace('Abonnement ','');
     var d={naam:form.naam.value.trim(),email:form.email.value.trim(),telefoon:form.telefoon.value.trim(),plan:form.plan.value,koop:koopModus};
-    if(koopModus){d.factuur=form.factuur.value;d.tenaamstelling=form.tenaamstelling.value.trim();
-      d.iban=form.iban.value.replace(/\s+/g,'').toUpperCase()}
+    if(koopModus){d.ref=referentienummer();d.periode=periode;d.bedrag=PRIJZEN[periode]||'99,99'}
     var bad=[];form.querySelectorAll('input').forEach(function(i){i.classList.remove('err')});
     if(d.naam.length<2){bad.push('naam')}
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)){bad.push('email')}
     if(d.telefoon.replace(/\D/g,'').length<9){bad.push('telefoon')}
-    if(koopModus&&d.tenaamstelling.length<2){bad.push('tenaamstelling')}
-    if(koopModus&&!ibanGeldig(d.iban)){bad.push('iban')}
     if(!form.akkoord.checked){bad.push('akkoord')}
     if(bad.length){bad.forEach(function(n){form[n].classList.add('err')});
       msg.textContent=bad[0]==='akkoord'?'Vink de voorwaarden aan om verder te gaan.':
-        (bad[0]==='iban'?'Dit IBAN klopt niet. Controleer het even.':
-        'Controleer je '+({naam:'naam',email:'e-mailadres',telefoon:'telefoonnummer',tenaamstelling:'tenaamstelling'})[bad[0]]+'.');
+        'Controleer je '+({naam:'naam',email:'e-mailadres',telefoon:'telefoonnummer'})[bad[0]]+'.';
       form[bad[0]].focus();return}
     var btn=document.getElementById('proef-submit');btn.disabled=true;btn.textContent='Even geduld...';
-    /* De IBAN gaat bewust NIET mee in de WhatsApp-link: die zou dan in de URL en in het
-       chatverloop belanden. Alan vindt hem bij de bestelling in het CRM. */
-    var text = koopModus
-      ? 'Hoi Thuisplay! Ik wil graag '+d.plan.toLowerCase()+' bestellen.\nFactuurnummer: '+d.factuur+'\nNaam: '+d.naam+'\nE-mail: '+d.email+'\nMijn rekeninggegevens heb ik op de site ingevuld.'
-      : 'Hoi Thuisplay! Ik wil graag de 24 uur gratis proef starten.\nNaam: '+d.naam+'\nE-mail: '+d.email;
+
+    /* Bestelling: geen WhatsApp-venster, maar door naar de betaalpagina met het
+       referentienummer. Daar staat naar welke rekening het bedrag toe moet. */
+    if(koopModus){
+      lead(d).then(function(){
+        location.href='betalen.html?plan='+encodeURIComponent(d.periode)+'&ref='+encodeURIComponent(d.ref)+'&naam='+encodeURIComponent(d.naam);
+      });
+      return;
+    }
+    var text='Hoi Thuisplay! Ik wil graag de 24 uur gratis proef starten.\nNaam: '+d.naam+'\nE-mail: '+d.email;
     var url=waUrl(text);waBtn.href=url;
     var win=null;try{win=window.open('',
       '_blank')}catch(x){}
     lead(d).then(function(){
-      var doneT=modal.querySelector('.done h3'),doneP=modal.querySelector('.done p');
-      if(koopModus){doneT.textContent='Bestelling ontvangen';
-        doneP.textContent='Je factuurnummer is '+d.factuur+'. Verstuur het bericht in WhatsApp, dan krijg je de betaalinstructies.'}
-      else{doneT.textContent='Bijna klaar!';doneP.textContent='Verstuur het bericht in WhatsApp en je code komt eraan.'}
-      modal.classList.add('sent');btn.disabled=false;btn.textContent=koopModus?'Bestelling plaatsen':'Probeer nu 24 uur gratis';if(win){win.location=url}else{location.href=url}});
+      modal.classList.add('sent');btn.disabled=false;btn.textContent='Probeer nu 24 uur gratis';
+      if(win){win.location=url}else{location.href=url}});
   });
   if(fine)addEventListener('mousemove',function(e){mx=(e.clientX/innerWidth-.5)*2;my=(e.clientY/innerHeight-.5)*2},{passive:true});
 })();
@@ -169,9 +157,33 @@
   if(!sportSection)return;
   var C=window.THUISPLAY_CONFIG||{};
   var KEY=C.sportsApiKey||'123';
-  /* Eredivisie, Belgian Pro League, UEFA Champions League, UFC, Formule 1 */
-  var LEAGUES=[4337,4338,4480,4443,4370];
-  var CACHE_KEY='thuisplay_sport_cache_v3',CACHE_MS=60*60*1000; /* 1 uur cache */
+  /* NL + BE + de vier grote Europese competities + Europa- en Champions League + UFC + F1.
+     Zonder de buitenlandse competities zag je nooit Barcelona, Liverpool of Inter. */
+  var LEAGUES=[4337,4338,4328,4335,4332,4331,4480,4481,4443,4370];
+  /* TheSportsDB geeft de competitienaam in het Engels terug. De site is Nederlands. */
+  var COMP_NL={
+    'Dutch Eredivisie':'Eredivisie',
+    'Dutch Eerste Divisie':'Keuken Kampioen Divisie',
+    'Belgian Pro League':'Jupiler Pro League',
+    'Belgian First Division A':'Jupiler Pro League',
+    'English Premier League':'Premier League',
+    'Spanish La Liga':'La Liga',
+    'Italian Serie A':'Serie A',
+    'German Bundesliga':'Bundesliga',
+    'French Ligue 1':'Ligue 1',
+    'UEFA Champions League':'Champions League',
+    'UEFA Europa League':'Europa League',
+    'UEFA Europa Conference League':'Conference League',
+    'Formula 1':'Formule 1',
+    'UFC':'UFC'
+  };
+  function compNaam(ev){
+    var n=ev.strLeague||'';
+    if(COMP_NL[n])return COMP_NL[n];
+    /* onbekende competitie: haal er in elk geval het landvoorvoegsel af */
+    return n.replace(/^(Dutch|English|Spanish|Italian|German|French|Belgian|Portuguese|Scottish)\s+/,'');
+  }
+  var CACHE_KEY='thuisplay_sport_cache_v4',CACHE_MS=20*60*1000; /* 20 minuten cache */
   var DAGEN=['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
   var DAGEN_KORT=['zo','ma','di','wo','do','vr','za'];
   var MAANDEN=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
@@ -233,7 +245,20 @@
     var bento=sportSection.querySelector('.bento'),agenda=sportSection.querySelector('.agenda');
     if(!bento||!events.length)return; /* geen (bruikbare) data: de statische kaarten in index.html blijven gewoon staan */
     events.sort(function(a,b){return(a.dateEvent+(a.strTime||'')).localeCompare(b.dateEvent+(b.strTime||''))});
-    var top=events.slice(0,6);
+    /* Op een drukke zaterdag komen de eerste tien wedstrijden uit dezelfde competitie.
+       Daarom eerst spreiden: hooguit zoveel per competitie, daarna aanvullen op tijd. */
+    function spreid(lijst,max,perComp){
+      var uit=[],tel={},i;
+      for(i=0;i<lijst.length&&uit.length<max;i++){
+        var k=lijst[i].strLeague||'';
+        if((tel[k]||0)>=perComp)continue;
+        tel[k]=(tel[k]||0)+1;uit.push(lijst[i]);
+      }
+      for(i=0;i<lijst.length&&uit.length<max;i++){if(uit.indexOf(lijst[i])<0)uit.push(lijst[i])}
+      return uit;
+    }
+    var top=spreid(events,6,1);
+    var rest=events.filter(function(ev){return top.indexOf(ev)<0});
     var sizeCls=['big','m','m','s','s','s'];
     bento.innerHTML=top.map(function(ev,i){
       var attr=' class="ev '+sizeCls[i]+' rv"';
@@ -243,28 +268,48 @@
       return '<a'+attr+' href="#gratis" data-proef>'+crest+
         '<span class="badge'+b.cls+'">'+b.txt+'</span>'+
         crestsHtml(ev)+
-        '<span class="comp">'+esc(ev.strLeague||'')+'</span>'+
+        '<span class="comp">'+esc(compNaam(ev))+'</span>'+
         '<span class="teams">'+teamsHtml(ev)+'</span>'+
         '<span class="when">'+esc(fmtWhen(ev))+(ev.strVenue?', '+esc(ev.strVenue):'')+'</span>'+btn+'</a>';
     }).join('');
     if(agenda){
-      agenda.innerHTML=events.slice(0,4).map(function(ev){
+      agenda.innerHTML=spreid(rest.length>=4?rest:events,4,2).map(function(ev){
         var d=toDate(ev);
         var label=isNaN(d.getTime())?'':DAGEN_KORT[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()];
-        return '<a class="ag" href="#gratis" data-proef><span class="d">'+label+'</span><div><b>'+esc(teamsPlain(ev))+'</b><small>'+esc(ev.strLeague||'')+(ev.strTime?', '+ev.strTime.slice(0,5)+' uur':'')+'</small></div></a>';
+        return '<a class="ag" href="#gratis" data-proef><span class="d">'+label+'</span><div><b>'+esc(teamsPlain(ev))+'</b><small>'+esc(compNaam(ev))+(ev.strTime?', '+ev.strTime.slice(0,5)+' uur':'')+'</small></div></a>';
       }).join('');
     }
     /* dynamisch ingevoegde kaarten missen de scroll-reveal van bij het laden: gewoon meteen zichtbaar tonen */
     sportSection.querySelectorAll('.rv').forEach(function(el){el.classList.add('in')});
   }
+  /* Filteren op de echte begintijd, niet op de datumtekst. Een wedstrijd blijft staan
+     tot drie uur na de aftrap (dan is hij afgelopen) en verdwijnt daarna. Ook de
+     inhoud van de cache gaat hier nog een keer doorheen: anders toont een bezoeker
+     met een oude cache alsnog de wedstrijd van gisteren. */
+  function nogTeGaan(ev){
+    if(!ev||!ev.dateEvent)return false;
+    var d=toDate(ev);
+    if(isNaN(d.getTime()))return false;
+    return d.getTime()+3*60*60*1000>Date.now();
+  }
   function load(){
     try{
       var cached=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');
-      if(cached&&(Date.now()-cached.t)<CACHE_MS&&cached.events&&cached.events.length){render(cached.events);return}
+      if(cached&&(Date.now()-cached.t)<CACHE_MS&&cached.events){
+        var gz={};
+        var vers=cached.events.filter(nogTeGaan).filter(function(ev){
+          var k=ev.idEvent||(ev.strEvent+ev.dateEvent);
+          if(gz[k])return false; gz[k]=1; return true;
+        });
+        if(vers.length){render(vers);return}
+      }
     }catch(e){}
     Promise.all(LEAGUES.map(fetchLeague)).then(function(lists){
-      var today=new Date().toISOString().slice(0,10);
-      var events=[].concat.apply([],lists).filter(function(ev){return ev&&ev.dateEvent&&ev.dateEvent>=today});
+      var gezien={};
+      var events=[].concat.apply([],lists).filter(nogTeGaan).filter(function(ev){
+        var k=ev.idEvent||(ev.strEvent+ev.dateEvent);
+        if(gezien[k])return false; gezien[k]=1; return true;
+      });
       if(events.length){
         try{localStorage.setItem(CACHE_KEY,JSON.stringify({t:Date.now(),events:events}))}catch(e){}
         render(events);
