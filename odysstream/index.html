@@ -13,7 +13,9 @@ window.ODYSSTREAM_CONFIG = {
   hubspotFormId: "049f154e-e25c-4e6c-b2eb-407860ebda93",
   leadWebhook: "",
   sportsApiKey: "2780818560",      /* zelfde TheSportsDB-sleutel, die mag op beide sites */
-  factuurStart: 51204,             /* bewust een andere reeks dan Thuisplay, anders lopen de nummers door elkaar */
+  referentieStart: 51204,           /* eerste referentienummer, vijf cijfers; telt op per minuut vanaf verkoopStart */
+  tenaamstelling: "[TENAAMSTELLING]",  /* zoals de naam op je zakelijke rekening staat */
+  iban: "[IBAN INVULLEN]",             /* de rekening waar klanten naartoe overmaken */
   verkoopStart: "2026-08-29T00:00:00Z"
 };
 </script>
@@ -55,7 +57,7 @@ window.ODYSSTREAM_CONFIG = {
     <div class="copy">
       <div class="pills rv"><span class="livepill"><i></i><b>Za 5 sep, 20:00</b> Ajax tegen PSV, live in HD</span><span class="pricepill"><b>€99,99</b> per jaar voor alles</span></div>
       <h1 class="rv d1 words"><span>Alles</span> <span>kijken.</span><br><span class="ac">Stream</span> <span>direct.</span></h1>
-      <p class="lead rv d2">Live sport, de nieuwste films en complete series in 4K-kwaliteit. Eén abonnement in plaats van vier. Probeer het een dag helemaal gratis en beslis daarna pas.</p>
+      <p class="lead rv d2">Live sport, de nieuwste films en complete series in 4K-kwaliteit. Eén vast bedrag per jaar zonder losse abonnementen. Probeer het een dag helemaal gratis en beslis daarna pas.</p>
       <div class="btn-row rv d3">
         <a class="btn primary lg" href="#gratis" data-proef>Probeer nu 24 uur gratis</a>
         <a class="btn secondary lg" href="#films">Bekijk het aanbod</a>
@@ -78,7 +80,7 @@ window.ODYSSTREAM_CONFIG = {
         <span class="eyebrow rv">Rekentool</span>
         <h2 class="rv d1">Wat betaal je nu voor al je abonnementen?</h2>
         <p class="rv d2">Vink aan wat je nu hebt. Odysstream vervangt ze allemaal, sport inbegrepen, voor €99,99 per jaar.</p>
-        <div class="calc-grid rv d3"><label class="ck"><input type="checkbox" value="15.99" checked><b>Netflix</b><small>€15,99</small></label><label class="ck"><input type="checkbox" value="11.99" checked><b>Videoland</b><small>€11,99</small></label><label class="ck"><input type="checkbox" value="10.99"><b>Disney+</b><small>€10,99</small></label><label class="ck"><input type="checkbox" value="11.99"><b>HBO Max</b><small>€11,99</small></label><label class="ck"><input type="checkbox" value="4.99"><b>Prime Video</b><small>€4,99</small></label><label class="ck"><input type="checkbox" value="9.99"><b>Apple TV+</b><small>€9,99</small></label><label class="ck"><input type="checkbox" value="21.99"><b>Viaplay</b><small>€21,99</small></label><label class="ck"><input type="checkbox" value="9.99"><b>SkyShowtime</b><small>€9,99</small></label><label class="ck"><input type="checkbox" value="9.95"><b>NLZIET</b><small>€9,95</small></label><label class="ck"><input type="checkbox" value="14.99" checked><b>ESPN Compleet</b><small>€14,99</small></label><label class="ck"><input type="checkbox" value="16.95"><b>Ziggo Sport Totaal</b><small>€16,95</small></label><label class="ck"><input type="checkbox" value="11.9"><b>F1 TV Pro</b><small>€11,90</small></label><label class="ck"><input type="checkbox" value="5.0"><b>Eurosport (via HBO Max)</b><small>€5,00</small></label><label class="ck"><input type="checkbox" value="9.99"><b>UFC Fight Pass</b><small>€9,99</small></label><label class="ck"><input type="checkbox" value="24.99"><b>DAZN</b><small>€24,99</small></label><label class="ck"><input type="checkbox" value="4.99"><b>Canal+</b><small>€4,99</small></label><label class="ck"><input type="checkbox" value="13.5" checked><b>Ziggo TV</b><small>€13,50</small></label><label class="ck"><input type="checkbox" value="12.75"><b>KPN TV</b><small>€12,75</small></label><label class="ck"><input type="checkbox" value="12.5"><b>Odido TV</b><small>€12,50</small></label><label class="ck"><input type="checkbox" value="15.0"><b>Delta TV</b><small>€15,00</small></label><label class="ck"><input type="checkbox" value="15.0"><b>Telenet TV (BE)</b><small>€15,00</small></label><label class="ck"><input type="checkbox" value="18.0"><b>Proximus Pickx (BE)</b><small>€18,00</small></label></div>
+        <div class="calc-grid rv d3"><label class="ck" title="Netflix" style="--brand:#E50914"><input type="checkbox" value="15.99" checked aria-label="Netflix"><span class="ic" aria-hidden="true">N</span><b>Netflix</b><small>€15,99</small></label><label class="ck" title="Videoland" style="--brand:#F5451E"><input type="checkbox" value="11.99" checked aria-label="Videoland"><span class="ic" aria-hidden="true">VL</span><b>Videoland</b><small>€11,99</small></label><label class="ck" title="Disney+" style="--brand:#3C6CF0"><input type="checkbox" value="10.99" aria-label="Disney+"><span class="ic" aria-hidden="true">D+</span><b>Disney+</b><small>€10,99</small></label><label class="ck" title="HBO Max" style="--brand:#9B6BFF"><input type="checkbox" value="11.99" aria-label="HBO Max"><span class="ic" aria-hidden="true">HB</span><b>HBO Max</b><small>€11,99</small></label><label class="ck" title="Prime Video" style="--brand:#3AAEE0"><input type="checkbox" value="4.99" aria-label="Prime Video"><span class="ic" aria-hidden="true">PV</span><b>Prime Video</b><small>€4,99</small></label><label class="ck" title="Apple TV+" style="--brand:#C9CDD4"><input type="checkbox" value="9.99" aria-label="Apple TV+"><span class="ic" aria-hidden="true">TV</span><b>Apple TV+</b><small>€9,99</small></label><label class="ck" title="Viaplay" style="--brand:#FE365F"><input type="checkbox" value="21.99" aria-label="Viaplay"><span class="ic" aria-hidden="true">VP</span><b>Viaplay</b><small>€21,99</small></label><label class="ck" title="SkyShowtime" style="--brand:#6F7BFF"><input type="checkbox" value="9.99" aria-label="SkyShowtime"><span class="ic" aria-hidden="true">SS</span><b>SkyShowtime</b><small>€9,99</small></label><label class="ck" title="NLZIET" style="--brand:#F0653E"><input type="checkbox" value="9.95" aria-label="NLZIET"><span class="ic" aria-hidden="true">NL</span><b>NLZIET</b><small>€9,95</small></label><label class="ck" title="ESPN Compleet" style="--brand:#E63946"><input type="checkbox" value="14.99" checked aria-label="ESPN Compleet"><span class="ic" aria-hidden="true">ES</span><b>ESPN</b><small>€14,99</small></label><label class="ck" title="Ziggo Sport Totaal" style="--brand:#F48C00"><input type="checkbox" value="16.95" aria-label="Ziggo Sport Totaal"><span class="ic" aria-hidden="true">ZS</span><b>Ziggo Sport</b><small>€16,95</small></label><label class="ck" title="F1 TV Pro" style="--brand:#FF4136"><input type="checkbox" value="11.9" aria-label="F1 TV Pro"><span class="ic" aria-hidden="true">F1</span><b>F1 TV</b><small>€11,90</small></label><label class="ck" title="Eurosport" style="--brand:#4D8BFF"><input type="checkbox" value="5.0" aria-label="Eurosport"><span class="ic" aria-hidden="true">EU</span><b>Eurosport</b><small>€5,00</small></label><label class="ck" title="UFC Fight Pass" style="--brand:#E04141"><input type="checkbox" value="9.99" aria-label="UFC Fight Pass"><span class="ic" aria-hidden="true">UFC</span><b>UFC Pass</b><small>€9,99</small></label><label class="ck" title="DAZN" style="--brand:#D8DDE6"><input type="checkbox" value="24.99" aria-label="DAZN"><span class="ic" aria-hidden="true">DZ</span><b>DAZN</b><small>€24,99</small></label><label class="ck" title="Canal+" style="--brand:#C9CDD4"><input type="checkbox" value="4.99" aria-label="Canal+"><span class="ic" aria-hidden="true">C+</span><b>Canal+</b><small>€4,99</small></label><label class="ck" title="Ziggo TV" style="--brand:#F48C00"><input type="checkbox" value="13.5" checked aria-label="Ziggo TV"><span class="ic" aria-hidden="true">Z</span><b>Ziggo TV</b><small>€13,50</small></label><label class="ck" title="KPN TV" style="--brand:#3CC46A"><input type="checkbox" value="12.75" aria-label="KPN TV"><span class="ic" aria-hidden="true">KPN</span><b>KPN TV</b><small>€12,75</small></label><label class="ck" title="Odido TV" style="--brand:#5C8CFF"><input type="checkbox" value="12.5" aria-label="Odido TV"><span class="ic" aria-hidden="true">OD</span><b>Odido TV</b><small>€12,50</small></label><label class="ck" title="Delta TV" style="--brand:#FF5C7A"><input type="checkbox" value="15.0" aria-label="Delta TV"><span class="ic" aria-hidden="true">DL</span><b>Delta TV</b><small>€15,00</small></label><label class="ck" title="Telenet TV (BE)" style="--brand:#F5A623"><input type="checkbox" value="15.0" aria-label="Telenet TV (BE)"><span class="ic" aria-hidden="true">TN</span><b>Telenet</b><small>€15,00</small></label><label class="ck" title="Proximus Pickx (BE)" style="--brand:#A47BFF"><input type="checkbox" value="18.0" aria-label="Proximus Pickx (BE)"><span class="ic" aria-hidden="true">PX</span><b>Proximus</b><small>€18,00</small></label></div>
         <p class="sub">Richtprijzen augustus 2026, standaardabonnement zonder reclame. Prijzen van providers verschillen per pakket.</p>
       </div>
       <div class="calc-r rv d2">
@@ -104,22 +106,22 @@ window.ODYSSTREAM_CONFIG = {
 <section id="sport">
   <div class="wrap">
     <div class="row-head rv-l">
-      <div class="sec-head"><span class="eyebrow">Live sport</span><h2>Dit weekend en volgende week live</h2><p>Eredivisie, Champions League, Formule 1, UFC en meer. Alles in 4K, zonder vertraging.</p></div>
+      <div class="sec-head"><span class="eyebrow">Live sport</span><h2>Dit weekend en volgende week live</h2><p>Eredivisie, Premier League, La Liga, Serie A, Champions League, Formule 1 en UFC. Alles in 4K, zonder vertraging.</p></div>
       <a class="link" href="#gratis" data-proef>Probeer nu 24 uur gratis</a>
     </div>
     <div class="bento">
-      <a class="ev big art-ajax rv" href="#gratis" data-proef><span class="crest"></span><span class="badge">De Topper</span><span class="comp">Eredivisie, speelronde 5</span><span class="teams">Ajax<em>tegen</em>PSV</span><span class="when">Zaterdag 5 september, 20:00 uur, Johan Cruijff ArenA</span><span class="btn primary">Probeer nu 24 uur gratis</span></a>
-      <a class="ev m art-ufc rv d1" href="#gratis" data-proef><span class="badge live">Dit weekend</span><span class="comp">UFC Fight Night</span><span class="teams">Nurmagomedov<em>vs</em>Song</span><span class="when">Nacht van zaterdag 29 op zondag 30 augustus</span></a>
-      <a class="ev m art-psv rv d2" href="#gratis" data-proef><span class="badge live">Dit weekend</span><span class="comp">Eredivisie, speelronde 4</span><span class="teams">Utrecht<em>tegen</em>PSV</span><span class="when">Zondag 30 augustus, 12:15 uur</span></a>
-      <a class="ev s art-fey rv d1" href="#gratis" data-proef><span class="badge live">Dit weekend</span><span class="comp">Eredivisie</span><span class="teams">Telstar<em>tegen</em>Ajax</span><span class="when">Zondag 30 augustus, 16:45 uur</span></a>
-      <a class="ev s art-f1 rv d2" href="#gratis" data-proef><span class="badge">Volgend weekend</span><span class="comp">Formule 1</span><span class="teams">GP Italië</span><span class="when">Zondag 6 september, 15:00 uur, Monza</span></a>
-      <a class="ev s art-cl rv d3" href="#gratis" data-proef><span class="badge">Binnenkort</span><span class="comp">Champions League</span><span class="teams">Speelronde 1</span><span class="when">8 tot en met 10 september, loting 27 augustus</span></a>
+      <a class="ev big art-ajax rv" href="#gratis" data-proef><span class="crest"></span><span class="badge">Elk weekend</span><span class="comp">Eredivisie</span><span class="teams">Ajax, PSV<em>en</em>Feyenoord</span><span class="when">Elke speelronde compleet, van de zaterdagavond tot de zondagmiddag</span><span class="btn primary">Probeer nu 24 uur gratis</span></a>
+      <a class="ev m art-ufc rv d1" href="#gratis" data-proef><span class="badge live">Elke main card</span><span class="comp">UFC</span><span class="teams">Elk gevecht</span><span class="when">Ook de nachtelijke kaarten, gewoon live</span></a>
+      <a class="ev m art-psv rv d2" href="#gratis" data-proef><span class="badge">Elke speelronde</span><span class="comp">Premier League</span><span class="teams">Liverpool<em>en</em>Arsenal</span><span class="when">Alle wedstrijden uit Engeland</span></a>
+      <a class="ev s art-fey rv d1" href="#gratis" data-proef><span class="badge">Elke Clásico</span><span class="comp">La Liga</span><span class="teams">Barcelona<em>en</em>Real Madrid</span><span class="when">Het hele Spaanse seizoen</span></a>
+      <a class="ev s art-f1 rv d2" href="#gratis" data-proef><span class="badge">Elke race</span><span class="comp">Formule 1</span><span class="teams">Elke Grand Prix</span><span class="when">Kwalificatie en race, het hele seizoen</span></a>
+      <a class="ev s art-cl rv d3" href="#gratis" data-proef><span class="badge">Midweeks</span><span class="comp">Champions League</span><span class="teams">Alle speelrondes</span><span class="when">Van de eerste ronde tot de finale</span></a>
     </div>
     <div class="agenda rv stagger">
-      <a class="ag" href="#gratis" data-proef><span class="d">Zo 30 aug</span><div><b>Feyenoord tegen ADO Den Haag</b><small>Eredivisie, 14:30 uur</small></div></a>
-      <a class="ag" href="#gratis" data-proef><span class="d">Za 5 sep</span><div><b>UFC Fight Night: Hooker tegen Parnasse</b><small>Nacht van zaterdag op zondag</small></div></a>
-      <a class="ag" href="#gratis" data-proef><span class="d">Zo 13 sep</span><div><b>Formule 1: GP van Madrid</b><small>Nieuw circuit, debuut op de kalender</small></div></a>
-      <a class="ag" href="#gratis" data-proef><span class="d">Za 19 sep</span><div><b>UFC 331: Van tegen Pantoja 2</b><small>Titelgevecht, main card</small></div></a>
+      <a class="ag" href="#gratis" data-proef><span class="d">Weekend</span><div><b>Eredivisie en Jupiler Pro League</b><small>Alle wedstrijden, zaterdag en zondag</small></div></a>
+      <a class="ag" href="#gratis" data-proef><span class="d">Weekend</span><div><b>Premier League, La Liga en Serie A</b><small>De grote Europese competities compleet</small></div></a>
+      <a class="ag" href="#gratis" data-proef><span class="d">Midweek</span><div><b>Champions League en Europa League</b><small>Dinsdag, woensdag en donderdag</small></div></a>
+      <a class="ag" href="#gratis" data-proef><span class="d">Nacht</span><div><b>UFC en Formule 1</b><small>Main cards en elke Grand Prix</small></div></a>
     </div>
   </div>
 </section>
@@ -203,20 +205,12 @@ window.ODYSSTREAM_CONFIG = {
 
 <section>
   <div class="wrap">
-    <div class="sec-head rv-l"><span class="eyebrow">Waarom Odysstream</span><h2>Wat je hier niet tegenkomt</h2><p>De markt zit vol aanbieders die prijzen alleen in een DM noemen en je onder druk zetten. Zo doen wij het niet.</p></div>
-    <div class="compare">
-      <div class="card them rv"><h3>Elders</h3><ul>
-        <li>Prijzen alleen op aanvraag via DM</li>
-        <li>Betalen met crypto of een vage link</li>
-        <li>Aftelklokken en "nog 3 plekken"</li>
-        <li>Abonnement verlengt stiekem</li>
-        <li>Geen voorwaarden, geen privacybeleid</li>
-        <li>Eerst betalen, dan pas zien of het werkt</li>
-        <li>Vier abonnementen naast elkaar, €60 per maand of meer</li>
-      </ul></div>
-      <div class="card us rv d1"><h3>Bij Odysstream</h3><ul>
+    <div class="sec-head rv-l"><span class="eyebrow">Waarom Odysstream</span><h2>Hoe wij het doen</h2><p>Geen prijs die je eerst in een DM moet opvragen, geen aftelklok en geen abonnement dat stiekem doorloopt. Dit is wat je krijgt.</p></div>
+    <div class="compare one">
+      <div class="card us rv"><ul>
         <li>Alle prijzen gewoon op de site</li>
-        <li>Alles in 4K-kwaliteit</li><li>Support via WhatsApp, een mens antwoordt</li>
+        <li>Alles in 4K-kwaliteit</li>
+        <li>Support via WhatsApp, een mens antwoordt</li>
         <li>Geen druk, geen nepschaarste</li>
         <li>Vooraf betaald, verlengt nooit vanzelf</li>
         <li>Duidelijke voorwaarden en privacy</li>
@@ -298,14 +292,6 @@ window.ODYSSTREAM_CONFIG = {
         <label>Telefoon (WhatsApp)<input type="tel" name="telefoon" autocomplete="tel" placeholder="06 12345678" required></label>
       </div>
       <input type="hidden" name="plan" value="Gratis proef 24 uur">
-      <div class="koopvelden" hidden>
-        <label>Tenaamstelling rekening<input type="text" name="tenaamstelling" autocomplete="name" placeholder="Zoals op je rekening staat"></label>
-        <div class="row">
-          <label>IBAN<input type="text" name="iban" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="NL00 BANK 0123 4567 89"></label>
-          <label>Factuurnummer<input type="text" name="factuur" id="f-factuur" readonly tabindex="-1"></label>
-        </div>
-        <p class="fine" style="text-align:left;margin:2px 0 0">Je IBAN gebruiken we alleen om je betaling aan je bestelling te koppelen. Vermeld het factuurnummer bij je overboeking.</p>
-      </div>
       <label class="chk"><input type="checkbox" name="akkoord" required><span>Ik ga akkoord met de <a href="voorwaarden.html" target="_blank">voorwaarden</a> en het <a href="privacy.html" target="_blank">privacybeleid</a>. Geen automatische verlenging.</span></label>
       <div class="msg" id="proef-msg"></div>
       <button class="btn primary lg" type="submit" id="proef-submit">Probeer nu 24 uur gratis</button>
@@ -320,7 +306,7 @@ window.ODYSSTREAM_CONFIG = {
   </div>
 </div>
 
-<div class="sticky"><small><b style="color:var(--text)">24 uur gratis</b><br>Daarna €99,99 per jaar voor alles</small><a class="btn primary sm" href="#gratis" data-proef>Probeer nu 24 uur gratis</a></div>
+<div class="sticky"><small><b style="color:var(--text)">24 uur gratis</b><br>Daarna €99,99 per jaar</small><a class="btn primary sm" href="#gratis" data-proef>Probeer 24 uur gratis</a></div>
 
 <script src="app.js" defer></script>
 </body>
