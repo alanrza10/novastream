@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0A0E1A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2712%27 fill=%27none%27 stroke=%27%23F4F2ED%27 stroke-width=%273%27/%3E%3Ccircle cx=%2726%27 cy=%276%27 r=%275%27 fill=%27%23E8B54A%27/%3E%3C/svg%3E">
+<title>Betalen: Odysstream</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<!--FONT-INLINE-->
+<style>
+:root{--bg:#0A0E1A;--surface:#121829;--border:#2A3450;--text:#F4F2ED;--text-soft:#A5A9BC;--text-mute:#6A7089;--accent:#E8B54A;--on-accent:#1A1405;--font:'Archivo','Archivo Variable',system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--text);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--border)}
+a:hover{text-decoration-color:var(--accent)}
+.nav{border-bottom:1px solid var(--border)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px}
+.wrap{max-width:800px;margin:0 auto;padding:0 24px}
+.logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.logo .mark{width:28px;height:28px;border-radius:50%;border:2px solid var(--text);position:relative;flex:none}
+.logo .mark::after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:var(--accent);top:-3px;right:-3px;box-shadow:0 0 10px rgba(232,181,74,.8)}
+.logo .word{font-size:20px;letter-spacing:-.02em;line-height:1;white-space:nowrap}
+.logo .word b{font-weight:800;font-stretch:125%}
+.logo .word span{font-weight:400;color:var(--text-soft);margin-left:5px}
+.back{font-size:14px;font-weight:600;text-decoration:none;color:var(--text-soft)}
+.back:hover{color:var(--text)}
+main{padding:64px 0 96px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-stretch:110%;color:var(--accent)}
+h1{font-size:48px;font-weight:700;font-stretch:125%;letter-spacing:-.025em;line-height:1.05;margin:12px 0 8px}
+.meta{color:var(--text-mute);font-size:14px;margin-bottom:40px}
+.note{border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:16px 20px;background:var(--surface);font-size:14px;color:var(--text-soft);margin-bottom:40px}
+.note b{color:var(--text)}
+h2{font-size:24px;font-weight:600;letter-spacing:-.02em;margin:48px 0 12px;font-stretch:110%}
+h2:first-of-type{margin-top:0}
+p{color:var(--text-soft);margin-bottom:14px;max-width:70ch}
+ul{margin:0 0 14px 20px;color:var(--text-soft);max-width:70ch}
+li{margin-bottom:6px}
+strong{color:var(--text);font-weight:600}
+.toc{display:grid;gap:6px;margin-bottom:48px;padding:24px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+.toc a{text-decoration:none;color:var(--text-soft);font-size:14px}
+.toc a:hover{color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0 20px}
+th,td{text-align:left;padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;color:var(--text-soft)}
+th{color:var(--text);font-weight:600}
+footer{border-top:1px solid var(--border);padding:32px 0;font-size:13px;color:var(--text-mute)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{color:var(--text-soft);text-decoration:none}
+@media (max-width:768px){h1{font-size:34px}main{padding:40px 0 64px}table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}td,th{min-width:140px}}
+
+.intro{font-size:18px;color:var(--text-soft);margin-bottom:32px;max-width:60ch}
+.intro b{color:var(--text);font-weight:600}
+.paybox{border:1px solid var(--border);border-radius:16px;background:var(--surface);padding:8px 24px 20px;margin-bottom:16px}
+.prow{display:grid;grid-template-columns:170px 1fr auto;align-items:center;gap:12px;padding:16px 0;border-top:1px solid var(--border)}
+.prow:first-child{border-top:0}
+.prow .k{font-size:14px;color:var(--text-mute)}
+.prow .v{font-size:19px;font-weight:600;color:var(--text);word-break:break-word}
+.prow .v.mono{font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.prow .v.groot{font-size:32px;font-weight:800;font-stretch:110%;letter-spacing:-.02em}
+.prow.ref .v{color:var(--accent)}
+.cp{appearance:none;border:1px solid var(--border);background:transparent;color:var(--text-soft);font:inherit;font-size:13px;font-weight:600;padding:8px 14px;border-radius:99px;cursor:pointer;transition:border-color .15s,color .15s}
+.cp:hover{border-color:var(--accent);color:var(--text)}
+.cp.ok{border-color:var(--accent);color:var(--accent)}
+.fine{font-size:13px;color:var(--text-mute);margin:14px 0 0;max-width:none}
+.steps{counter-reset:s;list-style:none;margin:0 0 40px;padding:0}
+.steps li{counter-increment:s;position:relative;padding:0 0 20px 46px;color:var(--text-soft);max-width:60ch}
+.steps li::before{content:counter(s);position:absolute;left:0;top:-2px;width:30px;height:30px;border-radius:50%;border:1px solid var(--border);display:grid;place-items:center;font-size:14px;font-weight:700;color:var(--accent);background:var(--surface)}
+.steps b{color:var(--text)}
+.wa{display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#062B14;font-weight:700;font-size:16px;padding:16px 28px;border-radius:99px;text-decoration:none}
+.wa:hover{filter:brightness(1.06)}
+.leeg{text-align:center;padding:40px 0}
+@media (max-width:640px){
+  .prow{grid-template-columns:1fr auto;gap:6px 12px}
+  .prow .k{grid-column:1/-1}
+  .prow .v.groot{font-size:28px}
+  h1{font-size:30px}
+}
+</style>
+<script>
+/* Odysstream koppelingen. Houd dit blok gelijk aan het blok boven in index.html:
+   tenaamstelling, iban, whatsapp en referentieStart worden hier gebruikt. */
+window.ODYSSTREAM_CONFIG = {
+  merk: "Odysstream",               /* komt mee in elke lead, zodat je Odysstream en Thuisplay uit elkaar houdt */
+  whatsapp: "31600000000",         /* eigen zakelijk WhatsApp-nummer voor Odysstream, internationaal zonder + of spaties */
+  crm: "hubspot",                  /* "hubspot" of "none" */
+  hubspotRegion: "eu1",
+  hubspotPortalId: "149180645",    /* zelfde HubSpot-account; het merkveld houdt de leads uit elkaar */
+  hubspotFormId: "049f154e-e25c-4e6c-b2eb-407860ebda93",
+  leadWebhook: "",
+  sportsApiKey: "2780818560",      /* zelfde TheSportsDB-sleutel, die mag op beide sites */
+  referentieStart: 51204,           /* eerste referentienummer, vijf cijfers; telt op per minuut vanaf verkoopStart */
+  tenaamstelling: "[TENAAMSTELLING]",  /* zoals de naam op je zakelijke rekening staat */
+  iban: "[IBAN INVULLEN]",             /* de rekening waar klanten naartoe overmaken */
+  verkoopStart: "2026-08-29T00:00:00Z"
+};
+</script>
+</head>
+<body>
+<header class="nav"><div class="wrap"><a class="logo" href="index.html"><span class="mark"></span><span class="word"><b>ODYS</b><span>STREAM</span></span></a><a class="back" href="index.html">Terug naar de site</a></div></header>
+<main><div class="wrap">
+
+<div id="bestelling" hidden>
+<span class="eyebrow">Stap 2 van 2</span>
+<h1>Maak het bedrag over</h1>
+<p class="intro">Je bestelling staat genoteerd<span id="v-hallo"></span>. Maak het bedrag hieronder over en zet het referentienummer in de omschrijving. Zodra we de betaling zien, sturen we je activatiecode via WhatsApp.</p>
+
+<div class="paybox">
+  <div class="prow"><span class="k">Wat je bestelt</span><span class="v" id="v-plan">12 maanden</span><span></span></div>
+  <div class="prow"><span class="k">Bedrag</span><span class="v groot" id="v-bedrag">&euro;99,99</span><button class="cp" type="button" data-cp="v-bedragkaal">Kopieer</button></div>
+  <div class="prow"><span class="k">Tenaamstelling</span><span class="v" id="v-tnv">-</span><button class="cp" type="button" data-cp="v-tnv">Kopieer</button></div>
+  <div class="prow"><span class="k">IBAN</span><span class="v mono" id="v-iban">-</span><button class="cp" type="button" data-cp="v-iban">Kopieer</button></div>
+  <div class="prow ref"><span class="k">Referentienummer</span><span class="v mono" id="v-ref">-</span><button class="cp" type="button" data-cp="v-ref">Kopieer</button></div>
+  <p class="fine">Zet het referentienummer in de omschrijving van je overboeking. Daaraan koppelen wij jouw betaling aan jouw bestelling. Schrijf het even over of maak een schermafbeelding van deze pagina.</p>
+</div>
+
+<div class="note" id="nog-invullen" hidden><b>Let op:</b> de rekeninggegevens staan nog niet ingevuld op deze site. Neem contact op via WhatsApp, dan krijg je ze direct.</div>
+
+<h2>Wat er nu gebeurt</h2>
+<ol class="steps">
+  <li><b>Jij maakt het bedrag over</b> naar de rekening hierboven, met het referentienummer in de omschrijving.</li>
+  <li><b>Wij zien de betaling binnen</b> en koppelen die aan jouw bestelling. Meestal dezelfde werkdag, bij een overboeking in het weekend op maandag.</li>
+  <li><b>Je krijgt je activatiecode</b> via WhatsApp, met een korte uitleg voor jouw apparaat. Binnen vijf minuten kijk je.</li>
+</ol>
+
+<p class="intro" style="font-size:16px">Klaar met overmaken? Laat het ons even weten, dan houden we het in de gaten.</p>
+<a class="wa" id="wa-link" href="#" target="_blank" rel="noopener">Stuur een bericht via WhatsApp</a>
+
+<p class="fine" style="margin-top:32px">Vragen over je bestelling? Stuur gerust een bericht. Je hebt <a href="voorwaarden.html">14 dagen herroepingsrecht</a>; kijk je in die periode al, dan gelden de voorwaarden die daarbij horen.</p>
+</div>
+
+<div id="geen" class="leeg" hidden>
+<span class="eyebrow">Geen bestelling gevonden</span>
+<h1>Deze pagina hoort bij een bestelling</h1>
+<p class="intro" style="margin:16px auto 28px">Kies eerst een periode op de site, dan komen je referentienummer en de betaalgegevens hier automatisch te staan.</p>
+<a class="wa" href="index.html#prijzen" style="background:var(--accent);color:var(--on-accent)">Naar de abonnementen</a>
+</div>
+
+</div></main>
+<footer><div class="wrap"><span>2026 Odysstream</span><span><a href="voorwaarden.html">Algemene voorwaarden</a> &nbsp;&middot;&nbsp; <a href="privacy.html">Privacybeleid</a> &nbsp;&middot;&nbsp; <a href="index.html#faq">Contact</a></span></div></footer>
+<script>
+(function(){
+  var C=window.ODYSSTREAM_CONFIG||{};
+  var q=new URLSearchParams(location.search);
+  var ref=(q.get('ref')||'').replace(/[^0-9]/g,'');
+  var plan=(q.get('plan')||'').slice(0,20);
+  var naam=(q.get('naam')||'').replace(/[<>&"]/g,'').slice(0,40);
+  var PRIJZEN={'3 maanden':'39,99','6 maanden':'59,99','12 maanden':'99,99'};
+  if(!ref){document.getElementById('geen').hidden=false;return}
+  document.getElementById('bestelling').hidden=false;
+  var bedrag=PRIJZEN[plan]||'99,99';
+  var tnv=C.tenaamstelling||'', iban=(C.iban||'').toUpperCase();
+  var ingevuld=tnv&&iban&&tnv.indexOf('[')<0&&iban.indexOf('[')<0;
+  function zet(id,v){var el=document.getElementById(id);if(el)el.textContent=v}
+  zet('v-plan',plan?('Abonnement '+plan):'Abonnement');
+  zet('v-bedrag','€ '+bedrag);
+  zet('v-tnv',ingevuld?tnv:'nog niet ingevuld');
+  zet('v-iban',ingevuld?iban.replace(/(.{4})/g,'$1 ').trim():'nog niet ingevuld');
+  zet('v-ref',ref);
+  if(naam)zet('v-hallo',', '+naam);
+  if(!ingevuld)document.getElementById('nog-invullen').hidden=false;
+  document.title='Betalen: referentie '+ref+' - Odysstream';
+  var tekst='Hoi Odysstream! Ik heb zojuist '+(plan?plan:'een abonnement')+' besteld.\nReferentienummer: '+ref+'\nBedrag: EUR '+bedrag+(naam?('\nNaam: '+naam):'');
+  document.getElementById('wa-link').href='https://wa.me/'+String(C.whatsapp||'').replace(/\D/g,'')+'?text='+encodeURIComponent(tekst);
+  /* kale waarden om te kopiëren, zonder euroteken of spaties */
+  var kaal={'v-bedragkaal':bedrag.replace(',','.'),'v-tnv':tnv,'v-iban':iban,'v-ref':ref};
+  document.querySelectorAll('.cp').forEach(function(b){
+    b.addEventListener('click',function(){
+      var id=b.dataset.cp, w=kaal[id]!==undefined?kaal[id]:(document.getElementById(id)||{}).textContent;
+      if(!w)return;
+      var klaar=function(){var t=b.textContent;b.textContent='Gekopieerd';b.classList.add('ok');setTimeout(function(){b.textContent=t;b.classList.remove('ok')},1600)};
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(w).then(klaar,function(){})}
+      else{var ta=document.createElement('textarea');ta.value=w;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');klaar()}catch(e){}document.body.removeChild(ta)}
+    });
+  });
+})();
+</script>
+</body>
+</html>
