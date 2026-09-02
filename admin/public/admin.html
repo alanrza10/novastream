@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Beheer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0E1013;--surface:#15181D;--surface-2:#1C2027;--border:#262B33;--text:#F2F4F8;--soft:#9AA3B2;--mute:#5F6878;--ok:#3FCB7A;--err:#FF5C5C;--accent:#F2F4F8;--r:10px;--font:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:dark}
+body{background:var(--bg);color:var(--text);font:15px/1.5 var(--font);min-height:100vh}
+a{color:inherit}
+button,input,textarea,select{font:inherit;color:inherit}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+header{border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:5}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+header h1{font-size:15px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+header h1 i{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+header h1 span{color:var(--mute);font-weight:400}
+.link{background:none;border:0;color:var(--soft);cursor:pointer;font-size:14px}
+.link:hover{color:var(--text)}
+.intro{margin:24px 0 20px;color:var(--soft);font-size:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:16px}
+.card h2{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin-bottom:14px}
+.card p.uitleg{color:var(--soft);font-size:13.5px;margin:-8px 0 14px}
+.veld{display:grid;gap:6px;margin-bottom:14px}
+.veld:last-child{margin-bottom:0}
+.veld label{font-size:13px;font-weight:600;color:var(--soft)}
+.veld small{color:var(--mute);font-size:12.5px}
+input[type=text]{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;outline:0}
+input[type=text]:focus{border-color:var(--accent)}
+input.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.02em}
+.rij{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.rij{grid-template-columns:1fr}}
+.lijst{display:grid;gap:8px}
+.item{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 10px}
+.item .pst{width:44px;height:64px;border-radius:5px;object-fit:cover;background:var(--surface-2)}
+.item .info{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;min-width:0}
+.item .info input{padding:7px 10px;font-size:14px}
+.item .info .breed{grid-column:1/-1}
+.item .knoppen{display:grid;gap:4px}
+.ik{border:1px solid var(--border);background:var(--surface);border-radius:6px;width:30px;height:28px;cursor:pointer;color:var(--soft);font-size:13px;line-height:1}
+.ik:hover{color:var(--text);border-color:var(--soft)}
+.ik.weg:hover{color:var(--err);border-color:var(--err)}
+.toevoegen{margin-top:10px;border:1px dashed var(--border);background:none;border-radius:8px;padding:10px;width:100%;cursor:pointer;color:var(--soft)}
+.toevoegen:hover{color:var(--text);border-color:var(--soft)}
+.leeg{color:var(--mute);font-size:13.5px;padding:6px 0}
+.balk{position:sticky;bottom:0;background:linear-gradient(180deg,rgba(14,16,19,0),var(--bg) 30%);padding:20px 0 24px;display:flex;align-items:center;gap:14px;justify-content:flex-end}
+.btn{border:0;border-radius:999px;padding:11px 20px;font-weight:700;cursor:pointer;background:var(--text);color:#0E1013}
+.btn[disabled]{opacity:.5;cursor:default}
+.status{font-size:14px;color:var(--soft);white-space:pre-line;flex:1}
+.status.ok{color:var(--ok)}.status.err{color:var(--err)}
+.login{max-width:380px;margin:12vh auto 0;padding:0 20px}
+.login h1{font-size:24px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px;display:flex;align-items:center;gap:12px}
+.login h1 i{width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+.login p{color:var(--soft);margin-bottom:20px}
+.login input[type=password]{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;outline:0;margin-bottom:12px}
+.login input[type=password]:focus{border-color:var(--soft)}
+.login .btn{width:100%}
+.login .fout{color:var(--err);font-size:14px;margin-top:10px;min-height:1.5em}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<div id="login" class="login" hidden>
+  <h1><i></i><span id="loginnaam">Beheer</span></h1>
+  <p>Log in om de instellingen van deze site te wijzigen.</p>
+  <form id="loginform">
+    <input type="password" name="wachtwoord" placeholder="Wachtwoord" autocomplete="current-password" required autofocus>
+    <button class="btn" type="submit">Inloggen</button>
+    <div class="fout" id="loginfout"></div>
+  </form>
+</div>
+
+<div id="paneel" hidden>
+  <header><div class="wrap"><h1><i></i><span id="merknaam"></span> Beheer</h1><button class="link" id="uitloggen" type="button">Uitloggen</button></div></header>
+  <main class="wrap">
+    <p class="intro">Alles wat je hier opslaat staat direct op de site. Dit portaal beheert alleen <b id="merknaam2"></b>.</p>
+    <form id="f" autocomplete="off">
+      <div class="card">
+        <h2>Contact en betaling</h2>
+        <div class="rij">
+          <div class="veld"><label for="whatsapp">WhatsApp-nummer</label><input type="text" id="whatsapp" name="whatsapp" class="mono" inputmode="numeric" placeholder="31612345678"><small>Internationaal, zonder + of spaties. Wordt gebruikt voor alle WhatsApp-knoppen en de proef- en bestelberichten.</small></div>
+          <div class="veld"><label for="tenaamstelling">Tenaamstelling rekening</label><input type="text" id="tenaamstelling" name="tenaamstelling" placeholder="Bedrijfsnaam B.V."><small>Zoals de naam op je zakelijke rekening staat.</small></div>
+        </div>
+        <div class="veld"><label for="iban">IBAN</label><input type="text" id="iban" name="iban" class="mono" placeholder="NL00 BANK 0123 4567 89"><small>Staat op de betaalpagina bij een bestelling. Wordt gecontroleerd op het controlegetal.</small></div>
+      </div>
+
+      <div class="card">
+        <h2>Advertentiepixels</h2>
+        <p class="uitleg">Vul het ID in en de pixel wordt automatisch op elke pagina geplaatst. Leeg laten schakelt de pixel uit. Bij een verstuurd proef- of bestelformulier sturen we ook een Lead-gebeurtenis mee.</p>
+        <div class="rij">
+          <div class="veld"><label for="pixelFacebook">Facebook / Meta pixel-ID</label><input type="text" id="pixelFacebook" name="pixelFacebook" class="mono" inputmode="numeric" placeholder="123456789012345"><small>Meta Events Manager, bij de gegevensbron: alleen de cijfers.</small></div>
+          <div class="veld"><label for="pixelTiktok">TikTok pixel-ID</label><input type="text" id="pixelTiktok" name="pixelTiktok" class="mono" placeholder="CABC123DEF456GHI"><small>TikTok Ads Manager, Assets, Events: de code achter "Pixel ID".</small></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Films</h2>
+        <p class="uitleg">De rij "De nieuwste films" op de site. Posterlink: een https-link naar een staande afbeelding (bijvoorbeeld een TMDB-poster, klik met rechts op de poster en kies "Afbeeldingsadres kopiëren"). Lege lijst: de site houdt de vaste posters.</p>
+        <div class="lijst" id="films"></div>
+        <button class="toevoegen" type="button" data-add="films">+ Film toevoegen</button>
+      </div>
+
+      <div class="card">
+        <h2>Series</h2>
+        <p class="uitleg">De rij "Series die iedereen kijkt". Werkt hetzelfde als films.</p>
+        <div class="lijst" id="series"></div>
+        <button class="toevoegen" type="button" data-add="series">+ Serie toevoegen</button>
+      </div>
+
+      <div class="balk"><div class="status" id="status"></div><button class="btn" type="submit" id="opslaan">Opslaan</button></div>
+    </form>
+  </main>
+</div>
+
+<script>
+(function(){
+  var merk='',naam='',data=null,vuil=false;
+  var API=location.pathname.replace(/admin\/?(index\.html)?$/,'')+'api/';
+  var $=function(id){return document.getElementById(id)};
+  function api(p,opt){return fetch(p,Object.assign({credentials:'same-origin',headers:{'Content-Type':'application/json'}},opt||{})).then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.fout||('Fout '+r.status));return j})})}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+  /* ---- inloggen ---- */
+  $('loginform').addEventListener('submit',function(e){
+    e.preventDefault();$('loginfout').textContent='';
+    api(API+'login',{method:'POST',body:JSON.stringify({wachtwoord:this.wachtwoord.value})}).then(start).catch(function(er){$('loginfout').textContent=er.message});
+  });
+  $('uitloggen').addEventListener('click',function(){api(API+'logout',{method:'POST'}).then(function(){location.reload()})});
+
+  function start(){
+    api(API+'sessie').then(function(s){
+      merk=s.merk;naam=s.naam||'';
+      document.documentElement.style.setProperty('--accent',s.kleur||'#F2F4F8');
+      document.title='Beheer '+naam;
+      $('loginnaam').textContent=naam;$('merknaam').textContent=naam;$('merknaam2').textContent=naam;
+      if(!s.open)$('loginfout').textContent='Dit portaal heeft nog geen wachtwoord. Stel het in op de server: node server.js wachtwoord '+merk;
+      if(!s.ingelogd){$('login').hidden=false;$('paneel').hidden=true;return}
+      $('login').hidden=true;$('paneel').hidden=false;
+      laad();
+    }).catch(function(er){$('login').hidden=false;$('loginfout').textContent=er.message});
+  }
+  function laad(){
+    zetStatus('');
+    api(API+'instellingen').then(function(d){data=d;vul()}).catch(function(er){zetStatus(er.message,'err')});
+  }
+  function vul(){
+    ['whatsapp','tenaamstelling','iban','pixelFacebook','pixelTiktok'].forEach(function(k){$(k).value=data[k]||''});
+    tekenLijst('films');tekenLijst('series');
+  }
+  function tekenLijst(k){
+    var el=$(k),l=data[k]||[];
+    if(!l.length){el.innerHTML='<div class="leeg">Nog niets toegevoegd. De site toont dan de vaste posters.</div>';return}
+    el.innerHTML=l.map(function(f,i){
+      return '<div class="item" data-i="'+i+'">'+
+        '<img class="pst" src="'+esc(f.poster)+'" alt="" onerror="this.removeAttribute(\'src\')">'+
+        '<div class="info">'+
+          '<input type="text" data-k="titel" placeholder="Titel" value="'+esc(f.titel)+'">'+
+          '<input type="text" data-k="sub" placeholder="Ondertitel, bijv. Actie, 2026" value="'+esc(f.sub)+'">'+
+          '<input type="text" class="breed" data-k="poster" placeholder="https://... (posterlink)" value="'+esc(f.poster)+'">'+
+          '<input type="text" data-k="label" placeholder="Label, bijv. Nieuw (mag leeg)" value="'+esc(f.label)+'">'+
+        '</div>'+
+        '<div class="knoppen"><button class="ik" type="button" data-do="op" title="Omhoog">&uarr;</button><button class="ik" type="button" data-do="neer" title="Omlaag">&darr;</button><button class="ik weg" type="button" data-do="weg" title="Verwijderen">&times;</button></div>'+
+      '</div>';
+    }).join('');
+    el.querySelectorAll('input').forEach(function(inp){inp.addEventListener('input',function(){
+      var i=+inp.closest('.item').dataset.i;data[k][i][inp.dataset.k]=inp.value;vuil=true;
+      if(inp.dataset.k==='poster'){var img=inp.closest('.item').querySelector('.pst');img.src=inp.value}
+    })});
+    el.querySelectorAll('[data-do]').forEach(function(b){b.addEventListener('click',function(){
+      var i=+b.closest('.item').dataset.i,l=data[k];
+      if(b.dataset.do==='weg')l.splice(i,1);
+      if(b.dataset.do==='op'&&i>0){var t=l[i-1];l[i-1]=l[i];l[i]=t}
+      if(b.dataset.do==='neer'&&i<l.length-1){var u=l[i+1];l[i+1]=l[i];l[i]=u}
+      vuil=true;tekenLijst(k);
+    })});
+  }
+  document.querySelectorAll('[data-add]').forEach(function(b){b.addEventListener('click',function(){
+    var k=b.dataset.add;data[k]=data[k]||[];data[k].push({titel:'',sub:'',poster:'',label:k==='films'?'Nieuw':'Nieuw seizoen'});vuil=true;tekenLijst(k);
+    var laatste=$(k).querySelector('.item:last-child input');if(laatste)laatste.focus();
+  })});
+  ['whatsapp','tenaamstelling','iban','pixelFacebook','pixelTiktok'].forEach(function(k){$(k).addEventListener('input',function(){data[k]=$(k).value;vuil=true})});
+
+  function zetStatus(t,cls){var s=$('status');s.textContent=t;s.className='status'+(cls?' '+cls:'')}
+  $('f').addEventListener('submit',function(e){
+    e.preventDefault();
+    $('opslaan').disabled=true;zetStatus('Opslaan...');
+    api(API+'instellingen',{method:'PUT',body:JSON.stringify(data)}).then(function(r){
+      data=r.instellingen;vuil=false;vul();zetStatus('Opgeslagen. De site gebruikt de nieuwe instellingen direct.','ok');
+    }).catch(function(er){zetStatus(er.message,'err')}).then(function(){$('opslaan').disabled=false});
+  });
+  addEventListener('beforeunload',function(e){if(vuil){e.preventDefault();e.returnValue=''}});
+  start();
+})();
+</script>
+</body>
+</html>
