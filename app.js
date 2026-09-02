@@ -254,7 +254,7 @@
   };
   function norm(s){
     s=String(s||'').toLowerCase();
-    try{s=s.normalize('NFD').replace(/[\\u0300-\\u036f]/g,'')}catch(e){}
+    try{s=s.normalize('NFD').replace(/[̀-ͯ]/g,'')}catch(e){}
     return s;
   }
   function gewicht(naam){
