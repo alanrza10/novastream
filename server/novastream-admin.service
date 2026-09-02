@@ -1,0 +1,17 @@
+# systemd: zorgt dat het adminpanel altijd draait en na een herstart vanzelf terugkomt.
+# Zet dit bestand in /etc/systemd/system/novastream-admin.service
+[Unit]
+Description=Adminpanel Odysstream / Thuisplay / SpitsTV
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/novastream/admin
+ExecStart=/usr/bin/node /var/www/novastream/admin/server.js
+Restart=always
+RestartSec=3
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

@@ -9,8 +9,15 @@ Drie merken, één repo. Zelfde teksten en werking, eigen naam, kleuren en beeld
 Per site:
 
 - `index.html`, `style.css`, `app.js`, `logos.svg`: de site
+- `instellingen.js`: haalt de instellingen uit het beheerportaal op (WhatsApp, IBAN, pixels, films en series)
 - `betalen.html`: betaalpagina
 - `voorwaarden.html`, `privacy.html`: juridische pagina's
+
+Beheer en hosting:
+
+- `admin/`: het beheerprogramma; elk merk heeft op zijn eigen domein een eigen portaal op `/admin/` met een eigen wachtwoord
+- `server/`: Nginx-configuratie, systemd-service en deploy-script voor de VPS
+- `INSTALLATIE.md`: stap voor stap de VPS inrichten
 
 Documentatie (geldt voor alle merken):
 

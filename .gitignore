@@ -1,0 +1,5 @@
+# geheimen en gegevens van het adminpanel horen niet in de repo
+admin/config.json
+admin/data/
+node_modules/
+.DS_Store
