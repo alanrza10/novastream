@@ -28,7 +28,7 @@ git clone https://github.com/alanrza10/novastream.git /var/www/novastream
 chown -R www-data:www-data /var/www/novastream
 ```
 
-Later bijwerken gaat met `sudo /var/www/novastream/server/deploy.sh` (haalt de nieuwste versie van GitHub, herstart het beheerprogramma en herlaadt Nginx).
+Later bijwerken gaat met `sudo bash /var/www/novastream/server/deploy.sh` (haalt de nieuwste versie van GitHub, herstart het beheerprogramma en herlaadt Nginx).
 
 ## 3. Beheerportalen: wachtwoorden en service
 
@@ -103,6 +103,6 @@ Alles staat direct live na Opslaan; de site haalt bij elk bezoek `instellingen.j
 
 **Een back-up van de instellingen?** Kopieer de map `admin/data/`. Dat zijn gewone JSON-bestanden.
 
-**Site bijwerken na een wijziging op GitHub?** `sudo /var/www/novastream/server/deploy.sh`. De instellingen in `admin/data/` en `config.json` blijven staan.
+**Site bijwerken na een wijziging op GitHub?** `sudo bash /var/www/novastream/server/deploy.sh`. De instellingen in `admin/data/` en `config.json` blijven staan.
 
 **Werkt het portaal niet?** `systemctl status novastream-admin` en `journalctl -u novastream-admin -n 50`. Meestal: geen wachtwoord ingesteld, of de map `admin/data` is niet schrijfbaar voor `www-data` (`chown -R www-data:www-data /var/www/novastream`).

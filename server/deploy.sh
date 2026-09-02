@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Nieuwe versie van de sites ophalen van GitHub en live zetten. Draai op de VPS:  sudo /var/www/novastream/server/deploy.sh
+# Nieuwe versie van de sites ophalen van GitHub en live zetten. Draai op de VPS:  sudo bash /var/www/novastream/server/deploy.sh
 set -euo pipefail
 cd /var/www/novastream
 git fetch -q origin main
