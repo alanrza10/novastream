@@ -235,6 +235,62 @@
      promotieposters met tekst en logo's er al in gedrukt; die botsen met onze eigen
      kop en snijden lelijk af. Elke kaart krijgt dezelfde rustige merkachtergrond
      (zie style.css) en de club- of competitielogo's leveren het beeld. */
+  /* Kijkerstrekkers. De site moet de wedstrijden tonen waar mensen voor inschakelen,
+     niet de eerstvolgende in de lijst (dat was op een zaterdag Heracles tegen NAC).
+     Gewicht 3: de clubs die iedereen kent en die kijkcijfers trekken. 2: subtop en
+     grote buitenlandse namen. Alles wat hier niet staat telt 1 mee. Matching gaat op
+     een stukje van de naam, in kleine letters en zonder accenten, want TheSportsDB
+     schrijft "PSV Eindhoven", "Inter Milan", "Atletico Madrid". */
+  var TOP={
+    'ajax':3,'psv':3,'feyenoord':3,
+    'real madrid':3,'barcelona':3,'manchester city':3,'man city':3,'liverpool':3,
+    'manchester united':3,'man united':3,'arsenal':3,'chelsea':3,'bayern':3,
+    'paris saint':3,'paris sg':3,'inter':3,'juventus':3,'milan':3,
+    'club brugge':3,'anderlecht':3,
+    'az alkmaar':2,'twente':2,'utrecht':2,
+    'atletico':2,'dortmund':2,'leverkusen':2,'tottenham':2,'newcastle':2,'aston villa':2,
+    'napoli':2,'roma':2,'atalanta':2,'sevilla':2,'marseille':2,
+    'genk':2,'antwerp':2,'standard':2,'union saint':2,'union sg':2
+  };
+  function norm(s){
+    s=String(s||'').toLowerCase();
+    try{s=s.normalize('NFD').replace(/[̀-ͯ]/g,'')}catch(e){}
+    return s;
+  }
+  function gewicht(naam){
+    var n=norm(naam),best=1,k;
+    for(k in TOP){if(n.indexOf(k)>=0&&TOP[k]>best)best=TOP[k]}
+    return best;
+  }
+  /* Thuispubliek: de Eredivisie telt even zwaar als de Champions League, de Belgische competitie iets minder. */
+  var COMP_BONUS={'UEFA Champions League':2,'UEFA Europa League':1,'Dutch Eredivisie':2,'Belgian Pro League':1,'Belgian First Division A':1};
+  /* Hoe hoger, hoe eerder op de site. Bij gelijke score wint de eerstvolgende. */
+  function score(ev){
+    var s=0,lg=ev.strLeague||'',n=norm(ev.strEvent),d=toDate(ev);
+    var dagen=isNaN(d.getTime())?99:(d.getTime()-Date.now())/86400000;
+    if(ev.strHomeTeam&&ev.strAwayTeam){
+      var h=gewicht(ev.strHomeTeam),a=gewicht(ev.strAwayTeam);
+      s=h+a+(COMP_BONUS[lg]||0);
+      if(h>=3&&a>=3)s+=2;      /* topper: twee grote namen tegenover elkaar */
+      else if(h>=2&&a>=2)s+=1; /* subtop onderling: ook leuk, maar geen Clasico */
+    }else if(lg==='UFC'){
+      s=/ufc\s*\d{3}/.test(n)?6:3;   /* genummerd event (UFC 3xx) trekt meer dan een Fight Night */
+      if(s>3&&dagen<=7)s+=2;       /* het grote event van dit weekend hoort erbij */
+    }else if(lg==='Formula 1'){
+      if(/practice|qualifying|sprint|training|kwalificatie/.test(n))s=1;
+      else{s=/dutch|netherlands|zandvoort/.test(n)?7:5;if(dagen<=7)s+=2}   /* raceweekend: Verstappen trekt kijkers */
+    }else{
+      s=2;
+    }
+    /* Wat ver weg is, mag pas later naar voren: de site gaat over deze en volgende week. */
+    if(dagen>14)s-=2;
+    if(dagen>28)s-=4;
+    return s;
+  }
+  function isTopper(ev){
+    if(!(ev.strHomeTeam&&ev.strAwayTeam))return false;
+    return gewicht(ev.strHomeTeam)>=3&&gewicht(ev.strAwayTeam)>=3;
+  }
   function fetchLeague(id){
     return fetch('https://www.thesportsdb.com/api/v1/json/'+encodeURIComponent(KEY)+'/eventsnextleague.php?id='+id)
       .then(function(r){return r.ok?r.json():null})
@@ -244,9 +300,16 @@
   function render(events){
     var bento=sportSection.querySelector('.bento'),agenda=sportSection.querySelector('.agenda');
     if(!bento||!events.length)return; /* geen (bruikbare) data: de statische kaarten in index.html blijven gewoon staan */
-    events.sort(function(a,b){return(a.dateEvent+(a.strTime||'')).localeCompare(b.dateEvent+(b.strTime||''))});
-    /* Op een drukke zaterdag komen de eerste tien wedstrijden uit dezelfde competitie.
-       Daarom eerst spreiden: hooguit zoveel per competitie, daarna aanvullen op tijd. */
+    /* Eerst op kijkerstrekkers, dan op tijd. Zie score() hierboven. */
+    var sc={};
+    events.forEach(function(ev){sc[ev.idEvent||(ev.strEvent+ev.dateEvent)]=score(ev)});
+    function key(ev){return ev.idEvent||(ev.strEvent+ev.dateEvent)}
+    events.sort(function(a,b){
+      var d=sc[key(b)]-sc[key(a)];
+      if(d)return d;
+      return(a.dateEvent+(a.strTime||'')).localeCompare(b.dateEvent+(b.strTime||''));
+    });
+    /* Niet zes keer dezelfde competitie: hooguit zoveel per competitie, daarna aanvullen op score. */
     function spreid(lijst,max,perComp){
       var uit=[],tel={},i;
       for(i=0;i<lijst.length&&uit.length<max;i++){
@@ -257,7 +320,7 @@
       for(i=0;i<lijst.length&&uit.length<max;i++){if(uit.indexOf(lijst[i])<0)uit.push(lijst[i])}
       return uit;
     }
-    var top=spreid(events,6,1);
+    var top=spreid(events,6,2);
     var rest=events.filter(function(ev){return top.indexOf(ev)<0});
     var sizeCls=['big','m','m','s','s','s'];
     bento.innerHTML=top.map(function(ev,i){
@@ -265,15 +328,18 @@
       var b=badgeInfo(ev);
       var crest=i===0?'<span class="crest"></span>':'';
       var btn=i===0?'<span class="btn primary">Probeer nu 24 uur gratis</span>':'';
+      var topper=isTopper(ev)?'<span class="badge topper">Topper</span>':'';
       return '<a'+attr+' href="#gratis" data-proef>'+crest+
-        '<span class="badge'+b.cls+'">'+b.txt+'</span>'+
+        '<span class="badge'+b.cls+'">'+b.txt+'</span>'+topper+
         crestsHtml(ev)+
         '<span class="comp">'+esc(compNaam(ev))+'</span>'+
         '<span class="teams">'+teamsHtml(ev)+'</span>'+
         '<span class="when">'+esc(fmtWhen(ev))+(ev.strVenue?', '+esc(ev.strVenue):'')+'</span>'+btn+'</a>';
     }).join('');
     if(agenda){
-      agenda.innerHTML=spreid(rest.length>=4?rest:events,4,2).map(function(ev){
+      var ag=spreid(rest.length>=4?rest:events,4,2);
+      ag.sort(function(a,b){return(a.dateEvent+(a.strTime||'')).localeCompare(b.dateEvent+(b.strTime||''))});
+      agenda.innerHTML=ag.map(function(ev){
         var d=toDate(ev);
         var label=isNaN(d.getTime())?'':DAGEN_KORT[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()];
         return '<a class="ag" href="#gratis" data-proef><span class="d">'+label+'</span><div><b>'+esc(teamsPlain(ev))+'</b><small>'+esc(compNaam(ev))+(ev.strTime?', '+ev.strTime.slice(0,5)+' uur':'')+'</small></div></a>';
