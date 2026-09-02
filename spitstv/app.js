@@ -95,14 +95,22 @@
     document.body.style.overflow='hidden';setTimeout(function(){form.naam.focus()},50)
   }
   function closeModal(){modal.classList.remove('open');document.body.style.overflow='';if(lastFocus)lastFocus.focus()}
-  document.querySelectorAll('[data-proef]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();openModal(a.dataset.plan?'Abonnement '+a.dataset.plan:'')})});
-  document.querySelectorAll('[data-koop]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();openModal('Abonnement '+a.dataset.plan,true)})});
+  /* één luisteraar voor alle proef- en koopknoppen, ook voor kaarten en posters die later worden ingevoegd (sport, films uit het beheerpaneel) */
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('[data-proef],[data-koop]');if(!a)return;
+    e.preventDefault();
+    if(a.hasAttribute('data-koop'))openModal('Abonnement '+a.dataset.plan,true);
+    else openModal(a.dataset.plan?'Abonnement '+a.dataset.plan:'');
+  });
   modal.querySelectorAll('[data-close]').forEach(function(el){el.addEventListener('click',closeModal)});
   /* links naar voorwaarden en privacy in het akkoordlabel mogen het vakje niet omzetten */
   modal.querySelectorAll('.chk a').forEach(function(a){a.addEventListener('click',function(e){e.stopPropagation()})});
   addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('open'))closeModal()});
   function waUrl(text){return 'https://wa.me/'+(C.whatsapp||'').replace(/\D/g,'')+'?text='+encodeURIComponent(text)}
-  document.querySelectorAll('[data-wa]').forEach(function(a){a.href=waUrl('Hoi SpitsTV, ik heb een vraag.');a.target='_blank';a.rel='noopener'});
+  function zetWaLinks(){document.querySelectorAll('[data-wa]').forEach(function(a){a.href=waUrl('Hoi SpitsTV, ik heb een vraag.');a.target='_blank';a.rel='noopener'})}
+  zetWaLinks();
+  /* nummer uit het beheerpaneel kan later binnenkomen: links dan opnieuw zetten */
+  document.addEventListener('instellingen-geladen',zetWaLinks);
   function lead(d){
     var payload={naam:d.naam,email:d.email,telefoon:d.telefoon,plan:d.plan,
       merk:C.merk||'SpitsTV',bron:d.koop?'website bestelling':'website gratis proef',pagina:location.href,tijd:new Date().toISOString()};
@@ -114,6 +122,7 @@
     }
     if(C.leadWebhook){jobs.push(fetch(C.leadWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}))}
     if(!jobs.length){try{var l=JSON.parse(localStorage.getItem('spitstv_leads')||'[]');l.push(payload);localStorage.setItem('spitstv_leads',JSON.stringify(l))}catch(e){}console.log('[SpitsTV] lead (CRM nog niet gekoppeld):',payload)}
+    if(window.pixelLead)window.pixelLead(d.koop?'bestelling':'gratis proef');
     return Promise.allSettled(jobs);
   }
   form.addEventListener('submit',function(e){
