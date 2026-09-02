@@ -6,7 +6,7 @@ Getest uitgangspunt: Ubuntu 22.04 of 24.04, VPS 15 (1 core, 1,5 GB) is ruim vold
 
 ## 0. Vooraf: DNS
 
-Zet bij je domeinregistrar voor elk domein een A-record (en AAAA als de VPS IPv6 heeft) naar het IP-adres van de VPS, voor zowel `domein.nl` als `www.domein.nl`. Doe dit eerst; certbot (stap 5) kan pas een certificaat maken als de domeinen naar de server wijzen.
+Zet bij je domeinregistrar voor elk domein een A-record (en AAAA als de VPS IPv6 heeft) naar het IP-adres van de VPS, voor zowel `domein.com` als `www.domein.com`. Doe dit eerst; certbot (stap 5) kan pas een certificaat maken als de domeinen naar de server wijzen.
 
 ## 1. Server klaarmaken
 
@@ -54,7 +54,7 @@ systemctl status novastream-admin --no-pager     # moet "active (running)" zegge
 
 ## 4. Nginx
 
-Vervang in `server/nginx-sites.conf` de voorbeelddomeinen (`odysstream.nl`, `thuisplay.nl`, `spitstv.nl`) door je echte domeinen, zowel in het `map`-blok bovenin als in de drie `server_name`-regels. Dan:
+Vervang in `server/nginx-sites.conf` de voorbeelddomeinen (`odysstream.com`, `thuisplay.com`, `spitstv.com`) door je echte domeinen, zowel in het `map`-blok bovenin als in de drie `server_name`-regels. Dan:
 
 ```bash
 cp /var/www/novastream/server/novastream-gedeeld.conf /etc/nginx/snippets/
@@ -64,20 +64,20 @@ rm -f /etc/nginx/sites-enabled/default
 nginx -t && systemctl reload nginx
 ```
 
-Nu werken de drie sites op http. Controleer: open `http://jouwdomein.nl/` en `http://jouwdomein.nl/admin/`.
+Nu werken de drie sites op http. Controleer: open `http://jouwdomein.com/` en `http://jouwdomein.com/admin/`.
 
 ## 5. SSL (https) met Let's Encrypt
 
 ```bash
 apt install -y certbot python3-certbot-nginx
-certbot --nginx -d odysstream.nl -d www.odysstream.nl -d thuisplay.nl -d www.thuisplay.nl -d spitstv.nl -d www.spitstv.nl
+certbot --nginx -d odysstream.com -d www.odysstream.com -d thuisplay.com -d www.thuisplay.com -d spitstv.com -d www.spitstv.com
 ```
 
 Kies bij de vraag voor doorsturen naar https (redirect). Certbot past de Nginx-blokken zelf aan en verlengt de certificaten automatisch.
 
 ## 6. Instellingen invullen
 
-Ga per domein naar `https://jouwdomein.nl/admin/`, log in met het wachtwoord van dat merk, en vul in:
+Ga per domein naar `https://jouwdomein.com/admin/`, log in met het wachtwoord van dat merk, en vul in:
 
 - WhatsApp-nummer (internationaal, zonder + of spaties)
 - Tenaamstelling en IBAN (komen op de betaalpagina)
