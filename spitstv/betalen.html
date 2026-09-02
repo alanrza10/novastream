@@ -140,6 +140,7 @@ window.SPITSTV_CONFIG = {
 
 </div></main>
 <footer><div class="wrap"><span>2026 SpitsTV</span><span><a href="voorwaarden.html">Algemene voorwaarden</a> &nbsp;&middot;&nbsp; <a href="privacy.html">Privacybeleid</a> &nbsp;&middot;&nbsp; <a href="index.html#faq">Contact</a></span></div></footer>
+<script src="instellingen.js" defer></script>
 <script>
 (function(){
   var C=window.SPITSTV_CONFIG||{};
@@ -151,21 +152,27 @@ window.SPITSTV_CONFIG = {
   if(!ref){document.getElementById('geen').hidden=false;return}
   document.getElementById('bestelling').hidden=false;
   var bedrag=PRIJZEN[plan]||'124,99';
-  var tnv=C.tenaamstelling||'', iban=(C.iban||'').toUpperCase();
-  var ingevuld=tnv&&iban&&tnv.indexOf('[')<0&&iban.indexOf('[')<0;
   function zet(id,v){var el=document.getElementById(id);if(el)el.textContent=v}
-  zet('v-plan',plan?('Abonnement '+plan):'Abonnement');
-  zet('v-bedrag','€ '+bedrag);
-  zet('v-tnv',ingevuld?tnv:'nog niet ingevuld');
-  zet('v-iban',ingevuld?iban.replace(/(.{4})/g,'$1 ').trim():'nog niet ingevuld');
-  zet('v-ref',ref);
-  if(naam)zet('v-hallo',', '+naam);
-  if(!ingevuld)document.getElementById('nog-invullen').hidden=false;
-  document.title='Betalen: referentie '+ref+' - SpitsTV';
-  var tekst='Hoi SpitsTV! Ik heb zojuist '+(plan?plan:'een abonnement')+' besteld.\nReferentienummer: '+ref+'\nBedrag: EUR '+bedrag+(naam?('\nNaam: '+naam):'');
-  document.getElementById('wa-link').href='https://wa.me/'+String(C.whatsapp||'').replace(/\D/g,'')+'?text='+encodeURIComponent(tekst);
-  /* kale waarden om te kopiëren, zonder euroteken of spaties */
-  var kaal={'v-bedragkaal':bedrag.replace(',','.'),'v-tnv':tnv,'v-iban':iban,'v-ref':ref};
+  var kaal={};
+  /* IBAN, tenaamstelling en WhatsApp-nummer kunnen uit het beheerpaneel komen; die komen iets later binnen, dus dit blok draait dan nog een keer */
+  function pasToe(){
+    var tnv=C.tenaamstelling||'', iban=(C.iban||'').toUpperCase();
+    var ingevuld=tnv&&iban&&tnv.indexOf('[')<0&&iban.indexOf('[')<0;
+    zet('v-plan',plan?('Abonnement '+plan):'Abonnement');
+    zet('v-bedrag','€ '+bedrag);
+    zet('v-tnv',ingevuld?tnv:'nog niet ingevuld');
+    zet('v-iban',ingevuld?iban.replace(/(.{4})/g,'$1 ').trim():'nog niet ingevuld');
+    zet('v-ref',ref);
+    if(naam)zet('v-hallo',', '+naam);
+    document.getElementById('nog-invullen').hidden=!!ingevuld;
+    document.title='Betalen: referentie '+ref+' - SpitsTV';
+    var tekst='Hoi SpitsTV! Ik heb zojuist '+(plan?plan:'een abonnement')+' besteld.\nReferentienummer: '+ref+'\nBedrag: EUR '+bedrag+(naam?('\nNaam: '+naam):'');
+    document.getElementById('wa-link').href='https://wa.me/'+String(C.whatsapp||'').replace(/\D/g,'')+'?text='+encodeURIComponent(tekst);
+    /* kale waarden om te kopiëren, zonder euroteken of spaties */
+    kaal['v-bedragkaal']=bedrag.replace(',','.');kaal['v-tnv']=tnv;kaal['v-iban']=iban;kaal['v-ref']=ref;
+  }
+  pasToe();
+  document.addEventListener('instellingen-geladen',pasToe);
   document.querySelectorAll('.cp').forEach(function(b){
     b.addEventListener('click',function(){
       var id=b.dataset.cp, w=kaal[id]!==undefined?kaal[id]:(document.getElementById(id)||{}).textContent;
