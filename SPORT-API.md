@@ -26,15 +26,29 @@ Om echte data te krijgen:
 
 Zonder die stap blijft de sectie gewoon werken zoals nu: met de handmatig ingevulde wedstrijden.
 
+## Welke wedstrijden bovenaan komen: de kijkerstrekkers
+
+De site toont niet de eerstvolgende wedstrijden uit de lijst, maar de wedstrijden waar mensen voor inschakelen. Elke wedstrijd krijgt in `app.js` een score:
+
+- Elk team telt mee met gewicht 3 (Ajax, PSV, Feyenoord, Real Madrid, Barcelona, City, Liverpool, United, Arsenal, Chelsea, Bayern, PSG, Inter, Juventus, Milan, Club Brugge, Anderlecht), 2 (subtop: AZ, Twente, Utrecht, Atlético, Dortmund, Leverkusen, Tottenham, Newcastle, Aston Villa, Napoli, Roma, Atalanta, Sevilla, Marseille, Genk, Antwerp, Standard, Union) of 1 (alle andere).
+- Twee clubs met gewicht 3 tegenover elkaar: +2 en het label "Topper" op de kaart. Twee clubs met minstens gewicht 2: +1.
+- Competitie: Champions League +2, Eredivisie +2 (thuispubliek), Europa League +1, Belgische competitie +1.
+- UFC: een genummerd event (UFC 3xx) telt 6, een Fight Night 3. Formule 1: een Grand Prix 5, de Dutch GP 7; trainingen en kwalificaties 1. Valt het event in de komende zeven dagen, dan +2.
+- Meer dan twee weken vooruit: -2. Meer dan vier weken: -4.
+
+De zes hoogste scores komen in de kaarten (hooguit twee per competitie, de hoogste als grote kaart), de vier daarna in de agenda-strook, die wel op datum staat. Bij gelijke score wint de eerstvolgende wedstrijd.
+
+Een club toevoegen of zwaarder laten wegen: pas de lijst `TOP` bovenin het sportblok in `app.js` aan. De sleutel is een stukje van de teamnaam zoals TheSportsDB die schrijft, in kleine letters en zonder accenten ("psv" vangt "PSV Eindhoven", "atletico" vangt "Atlético Madrid").
+
 ## Competities aanpassen
 
 In `app.js`, bovenaan het sportblok:
 
 ```js
-var LEAGUES=[4337,4338,4480,4443,4370];
+var LEAGUES=[4337,4338,4328,4335,4332,4331,4480,4481,4443,4370];
 ```
 
-Dit zijn de TheSportsDB-ID's voor Eredivisie, Belgische Pro League, Champions League, UFC en Formule 1. Een competitie toevoegen of verwijderen kan door een ID toe te voegen of weg te halen. ID's van andere competities vind je door op thesportsdb.com naar de competitiepagina te gaan; het nummer staat in de URL.
+Dit zijn de TheSportsDB-ID's voor Eredivisie, Belgische Pro League, Premier League, La Liga, Serie A, Bundesliga, Champions League, Europa League, UFC en Formule 1. Een competitie toevoegen of verwijderen kan door een ID toe te voegen of weg te halen. ID's van andere competities vind je door op thesportsdb.com naar de competitiepagina te gaan; het nummer staat in de URL.
 
 ## "Live" is geen seconde-voor-seconde livescore
 
