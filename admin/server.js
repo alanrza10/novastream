@@ -95,8 +95,16 @@ function noteerPoging(ip){const l=pogingen.get(ip)||[];l.push(Date.now());poging
 /* ---------- instellingen ---------- */
 const LEEG={whatsapp:'',tenaamstelling:'',iban:'',pixelFacebook:'',pixelTiktok:'',films:[],series:[]};
 function pad(merk){return path.join(CONFIG.dataMap,merk+'.json')}
+/* De films en series waarmee de site begint (standaard.json, overgenomen uit de site zelf).
+   Zolang de lijsten in het portaal nog nooit zijn opgeslagen, zie je die in het portaal,
+   zodat je kunt verwijderen en toevoegen in plaats van vanaf nul beginnen. */
+function standaard(){try{return JSON.parse(fs.readFileSync(path.join(HIER,'standaard.json'),'utf8'))}catch(e){return {films:[],series:[]}}}
 function leesInstellingen(merk){
-  try{return Object.assign({},LEEG,JSON.parse(fs.readFileSync(pad(merk),'utf8')))}catch(e){return Object.assign({},LEEG)}
+  let d={};
+  try{d=JSON.parse(fs.readFileSync(pad(merk),'utf8'))}catch(e){}
+  const uit=Object.assign({},LEEG,d);
+  if(!d.filmsAangepast){const st=standaard();uit.films=st.films||[];uit.series=st.series||[]}
+  return uit;
 }
 function schrijfInstellingen(merk,obj){
   const tmp=pad(merk)+'.tmp';
@@ -202,6 +210,7 @@ const server=http.createServer(async (req,res)=>{
         const body=await leesBody(req);
         const {uit,fouten}=valideer(body);
         if(fouten.length)return stuurJson(res,400,{fout:fouten.join('\n'),fouten});
+        uit.filmsAangepast=true; /* vanaf nu gelden de lijsten uit het portaal, ook als ze leeg zijn */
         schrijfInstellingen(merk,uit);
         return stuurJson(res,200,{ok:true,instellingen:uit});
       }

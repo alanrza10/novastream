@@ -101,7 +101,7 @@ input.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacin
 
       <div class="card">
         <h2>Films</h2>
-        <p class="uitleg">De rij "De nieuwste films" op de site. Posterlink: een https-link naar een staande afbeelding (bijvoorbeeld een TMDB-poster, klik met rechts op de poster en kies "Afbeeldingsadres kopiëren"). Lege lijst: de site houdt de vaste posters.</p>
+        <p class="uitleg">De rij "De nieuwste films" op de site. Posterlink: een https-link naar een staande afbeelding (bijvoorbeeld een TMDB-poster, klik met rechts op de poster en kies "Afbeeldingsadres kopiëren"). De lijst begint met wat er nu op de site staat; verwijder en voeg toe wat je wilt. Haal je alles weg, dan verdwijnt de rij van de site.</p>
         <div class="lijst" id="films"></div>
         <button class="toevoegen" type="button" data-add="films">+ Film toevoegen</button>
       </div>
@@ -155,7 +155,7 @@ input.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacin
   }
   function tekenLijst(k){
     var el=$(k),l=data[k]||[];
-    if(!l.length){el.innerHTML='<div class="leeg">Nog niets toegevoegd. De site toont dan de vaste posters.</div>';return}
+    if(!l.length){el.innerHTML='<div class="leeg">Leeg. Deze rij staat dan niet op de site.</div>';return}
     el.innerHTML=l.map(function(f,i){
       return '<div class="item" data-i="'+i+'">'+
         '<img class="pst" src="'+esc(f.poster)+'" alt="" onerror="this.removeAttribute(\'src\')">'+
