@@ -49,8 +49,11 @@
     var sec=document.getElementById('films');if(!sec)return;
     var blokken=sec.querySelectorAll('.rails > div');
     [['films',0],['series',1]].forEach(function(p){
-      var lijst=i[p[0]];if(!Array.isArray(lijst)||!lijst.length)return;
+      var lijst=i[p[0]];if(!Array.isArray(lijst))return;
       var blok=blokken[p[1]];if(!blok)return;
+      /* lege lijst: alleen leegmaken als de lijst bewust in het portaal is opgeslagen; anders blijven de vaste posters staan */
+      if(!lijst.length){if(i.filmsAangepast)blok.hidden=true;return}
+      blok.hidden=false;
       var rail=blok.querySelector('.rail');if(!rail)return;
       rail.innerHTML=lijst.filter(function(f){return f&&f.titel&&f.poster}).map(poster).join('');
       try{rail.scrollLeft=0}catch(e){}
